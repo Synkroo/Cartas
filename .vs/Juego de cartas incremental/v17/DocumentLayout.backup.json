@@ -1,0 +1,256 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|d:\\unity\\proyectos\\juego de cartas incremental\\assets\\scripts\\uimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\uimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|D:\\Unity\\Proyectos\\Juego de cartas incremental\\assets\\scripts\\stats scripts\\battleui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\stats scripts\\battleui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|D:\\Unity\\Proyectos\\Juego de cartas incremental\\assets\\scripts\\managers\\battlemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\managers\\battlemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|D:\\Unity\\Proyectos\\Juego de cartas incremental\\assets\\scripts\\card scripts\\cardview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\card scripts\\cardview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|D:\\Unity\\Proyectos\\Juego de cartas incremental\\assets\\scripts\\stats scripts\\modifystatseffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\stats scripts\\modifystatseffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|D:\\Unity\\Proyectos\\Juego de cartas incremental\\assets\\scripts\\stats scripts\\statmodifier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\stats scripts\\statmodifier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|D:\\Unity\\Proyectos\\Juego de cartas incremental\\assets\\scripts\\efectos codigo\\draweffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\efectos codigo\\draweffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|D:\\Unity\\Proyectos\\Juego de cartas incremental\\assets\\scripts\\card scripts\\cardhoverdetector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\card scripts\\cardhoverdetector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|D:\\Unity\\Proyectos\\Juego de cartas incremental\\assets\\scripts\\card scripts\\cardhover.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\card scripts\\cardhover.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|D:\\Unity\\Proyectos\\Juego de cartas incremental\\assets\\scripts\\handlayout.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\handlayout.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|D:\\Unity\\Proyectos\\Juego de cartas incremental\\assets\\scripts\\stats scripts\\stats.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\stats scripts\\stats.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|D:\\Unity\\Proyectos\\Juego de cartas incremental\\assets\\scripts\\stats scripts\\stattype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\stats scripts\\stattype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 10,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BattleManager.cs",
+              "DocumentMoniker": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Managers\\BattleManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Managers\\BattleManager.cs",
+              "ToolTip": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Managers\\BattleManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Managers\\BattleManager.cs",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAYwGsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-06T10:26:11.669Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:133:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:134:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:135:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:136:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UIManager.cs",
+              "DocumentMoniker": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\UIManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\UIManager.cs",
+              "ToolTip": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\UIManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\UIManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T10:31:46.325Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "DrawEffect.cs",
+              "DocumentMoniker": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Efectos Codigo\\DrawEffect.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Efectos Codigo\\DrawEffect.cs",
+              "ToolTip": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Efectos Codigo\\DrawEffect.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Efectos Codigo\\DrawEffect.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T10:18:00.841Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CardView.cs",
+              "DocumentMoniker": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Card Scripts\\CardView.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Card Scripts\\CardView.cs",
+              "ToolTip": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Card Scripts\\CardView.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Card Scripts\\CardView.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAYwDIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T10:16:27.78Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "CardHoverDetector.cs",
+              "DocumentMoniker": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Card Scripts\\CardHoverDetector.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Card Scripts\\CardHoverDetector.cs",
+              "ToolTip": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Card Scripts\\CardHoverDetector.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Card Scripts\\CardHoverDetector.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T10:22:02.847Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "HandLayout.cs",
+              "DocumentMoniker": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\HandLayout.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\HandLayout.cs",
+              "ToolTip": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\HandLayout.cs",
+              "RelativeToolTip": "Assets\\Scripts\\HandLayout.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAYwD4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T10:13:33.209Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "CardHover.cs",
+              "DocumentMoniker": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Card Scripts\\CardHover.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Card Scripts\\CardHover.cs",
+              "ToolTip": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Card Scripts\\CardHover.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Card Scripts\\CardHover.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAIwCgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T10:11:32.143Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "BattleUI.cs",
+              "DocumentMoniker": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Stats Scripts\\BattleUI.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Stats Scripts\\BattleUI.cs",
+              "ToolTip": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Stats Scripts\\BattleUI.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Stats Scripts\\BattleUI.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T10:04:40.279Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "StatType.cs",
+              "DocumentMoniker": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Stats Scripts\\StatType.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Stats Scripts\\StatType.cs",
+              "ToolTip": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Stats Scripts\\StatType.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Stats Scripts\\StatType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T10:03:27.489Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Stats.cs",
+              "DocumentMoniker": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Stats Scripts\\Stats.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Stats Scripts\\Stats.cs",
+              "ToolTip": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Stats Scripts\\Stats.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Stats Scripts\\Stats.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T10:03:26.911Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "StatModifier.cs",
+              "DocumentMoniker": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Stats Scripts\\StatModifier.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Stats Scripts\\StatModifier.cs",
+              "ToolTip": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Stats Scripts\\StatModifier.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Stats Scripts\\StatModifier.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T10:03:26.302Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ModifyStatsEffect.cs",
+              "DocumentMoniker": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Stats Scripts\\ModifyStatsEffect.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Stats Scripts\\ModifyStatsEffect.cs",
+              "ToolTip": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Stats Scripts\\ModifyStatsEffect.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Stats Scripts\\ModifyStatsEffect.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAYwDoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T10:03:25.133Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
