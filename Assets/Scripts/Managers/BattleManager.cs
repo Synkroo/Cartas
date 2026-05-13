@@ -1,68 +1,131 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
+    [Header("Player")]
     public Entity player;
-    public Entity enemy;
 
+    [Header("Enemy")]
+    public Enemy enemy;
+
+    public List<EnemyData> enemyWave = new List<EnemyData>();
+    private int currentEnemyIndex = 0;
+
+    [Header("Systems")]
     public DeckManager deckManager;
+    public TurnManager turnManager;
+    public UIManager uiManager;
+    public DeckViewerUI deckViewer;
 
+    [Header("Hand")]
     public Transform handParent;
     public GameObject cardPrefab;
-
-    public UIManager uiManager;
 
     void Start()
     {
         player.Initialize();
-        enemy.Initialize();
+        uiManager.Init(this);
+
+        deckManager.OnDeckChanged += RefreshDeckUI;
+
+        ShuffleEnemyWave();
+        SpawnEnemy();
 
         deckManager.InitializeDeck();
 
-        uiManager.Init(this);
-
-        StartTurn();
+        turnManager.battle = this;
+        turnManager.StartGame();
     }
 
-    public void StartTurn()
+    void RefreshDeckUI()
     {
-        player.stats.mana = player.stats.maxMana;
-
-        deckManager.DrawCards(4);
-
-        RenderHand();
-        UpdateUI();
+        deckViewer?.ShowDiscard();
     }
 
     public void DrawCards(int amount)
     {
         deckManager.DrawCards(amount);
-
         RenderHand();
         UpdateUI();
     }
 
     public void PlayCard(Card card)
     {
-        if (player.stats.mana < card.data.cost)
+        if (card == null) return;
+
+        Card playedCard = card;
+
+        if (player.stats.mana < playedCard.data.cost)
             return;
 
-        player.stats.mana -= card.data.cost;
+        player.stats.mana -= playedCard.data.cost;
 
-        foreach (var effect in card.data.effects)
+        foreach (var effect in playedCard.data.effects)
         {
-            effect.Apply(this);
+            if (effect != null)
+                effect.Apply(this);
         }
 
-        deckManager.hand.Remove(card);
-        deckManager.discard.Add(card);
+        deckManager.hand.Remove(playedCard);
+        deckManager.discard.Add(playedCard);
 
         RenderHand();
         UpdateUI();
+
+        deckViewer.ShowDiscard();
     }
 
-    void RenderHand()
+    void SpawnEnemy()
+    {
+        if (currentEnemyIndex >= enemyWave.Count)
+        {
+            Debug.Log("🏆 Has derrotado todos los enemigos");
+            return;
+        }
+
+        enemy = new Enemy();
+        enemy.Initialize(enemyWave[currentEnemyIndex]);
+        currentEnemyIndex++;
+
+        uiManager.SetEnemySprite(enemy.data.sprite);
+        UpdateUI();
+    }
+
+    public void DamageEnemy(int damage)
+    {
+        if (enemy == null) return;
+
+        enemy.currentHealth -= damage;
+
+        if (enemy.currentHealth <= 0)
+        {
+            enemy.currentHealth = 0;
+            EnemyDeath();
+        }
+
+        UpdateUI();
+    }
+
+    void EnemyDeath()
+    {
+        turnManager.NextRound();
+        SpawnEnemy();
+    }
+
+    void ShuffleEnemyWave()
+    {
+        for (int i = 0; i < enemyWave.Count; i++)
+        {
+            EnemyData temp = enemyWave[i];
+            int randomIndex = Random.Range(i, enemyWave.Count);
+            enemyWave[i] = enemyWave[randomIndex];
+            enemyWave[randomIndex] = temp;
+        }
+    }
+
+    public void RenderHand()
     {
         StopAllCoroutines();
         StartCoroutine(RenderRoutine());
@@ -80,28 +143,12 @@ public class BattleManager : MonoBehaviour
         foreach (var card in deckManager.hand)
         {
             GameObject obj = Instantiate(cardPrefab, handParent);
-
-            CardView view = obj.GetComponent<CardView>();
-            view.Setup(card, this);
+            obj.GetComponent<CardView>().Setup(card, this);
         }
-
-        yield return null;
     }
 
     public void UpdateUI()
     {
         uiManager.Refresh();
-    }
-
-    public void EnemyTurn()
-    {
-        int damage = 10;
-
-        int finalDamage = Mathf.Max(0, damage - player.stats.armor);
-
-        player.stats.health -= finalDamage;
-        player.stats.Clamp();
-
-        UpdateUI();
     }
 }

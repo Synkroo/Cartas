@@ -18,14 +18,20 @@ public class ModifyStatsEffect : CardEffect
 
     void ApplyToTarget(BattleManager battle, StatModifier mod)
     {
-        if (mod.target == StatModifier.Target.Player || mod.target == StatModifier.Target.Both)
-            Apply(battle.player.stats, mod);
+        if (mod.target == StatModifier.Target.Player ||
+            mod.target == StatModifier.Target.Both)
+        {
+            ApplyPlayerStat(battle.player.stats, mod);
+        }
 
-        if (mod.target == StatModifier.Target.Enemy || mod.target == StatModifier.Target.Both)
-            Apply(battle.enemy.stats, mod);
+        if (mod.target == StatModifier.Target.Enemy ||
+            mod.target == StatModifier.Target.Both)
+        {
+            ApplyEnemyStat(battle, mod);
+        }
     }
 
-    void Apply(Stats stats, StatModifier mod)
+    void ApplyPlayerStat(Stats stats, StatModifier mod)
     {
         int value = mod.operation == StatModifier.Operation.Add
             ? mod.amount
@@ -55,5 +61,34 @@ public class ModifyStatsEffect : CardEffect
         }
 
         stats.Clamp();
+    }
+    void ApplyEnemyStat(BattleManager battle, StatModifier mod)
+    {
+        if (battle.enemy == null)
+            return;
+
+        int value = mod.operation == StatModifier.Operation.Add
+            ? mod.amount
+            : -mod.amount;
+
+        switch (mod.stat)
+        {
+            case StatType.Health:
+
+                battle.enemy.currentHealth += value;
+
+                battle.enemy.currentHealth = Mathf.Clamp(
+                    battle.enemy.currentHealth,
+                    0,
+                    battle.enemy.data.maxHealth
+                );
+
+                if (battle.enemy.currentHealth <= 0)
+                {
+                    battle.DamageEnemy(999999);
+                }
+
+                break;
+        }
     }
 }

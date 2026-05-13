@@ -8,6 +8,8 @@ public class CardView : MonoBehaviour
     public TextMeshProUGUI costText;
     public Image artworkImage;
 
+    public bool interactable = true;
+
     private Card card;
     private BattleManager battleManager;
     private Button button;
@@ -33,6 +35,9 @@ public class CardView : MonoBehaviour
 
     public void OnClick()
     {
+        if (!interactable)
+            return;
+
         if (battleManager == null || card == null)
             return;
 

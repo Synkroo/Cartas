@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
+  m_Name: Prueba 1
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  enemyName: Facking dragon blanco de ojos azules
+  maxHealth: 2000
+  minDamage: 5
+  maxDamage: 10
+  sprite: {fileID: 4631623571575152567, guid: 2ebdcc366015439458c86c9e2bbc82d1, type: 3}

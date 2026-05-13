@@ -1,14 +1,18 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    [Header("UI")]
+    [Header("Player UI")]
     public TextMeshProUGUI playerHpText;
     public TextMeshProUGUI playerManaText;
     public TextMeshProUGUI playerArmorText;
 
+    [Header("Enemy UI")]
     public TextMeshProUGUI enemyHpText;
+
+    public Image enemyImage;
 
     private BattleManager battle;
 
@@ -20,7 +24,6 @@ public class UIManager : MonoBehaviour
     public void Refresh()
     {
         var player = battle.player;
-        var enemy = battle.enemy;
 
         playerHpText.text =
             player.stats.health + " / " + player.stats.maxHealth;
@@ -31,7 +34,25 @@ public class UIManager : MonoBehaviour
         playerArmorText.text =
             player.stats.armor.ToString();
 
-        enemyHpText.text =
-            enemy.stats.health + " / " + enemy.stats.maxHealth;
+        if (battle.enemy != null)
+        {
+            enemyHpText.text =
+                battle.enemy.currentHealth + " / " +
+                battle.enemy.data.maxHealth;
+        }
+        else
+        {
+            enemyHpText.text = "-";
+        }
+    }
+
+    public void SetEnemySprite(Sprite sprite)
+    {
+        if (enemyImage == null)
+            return;
+
+        enemyImage.sprite = sprite;
+
+        enemyImage.enabled = sprite != null;
     }
 }
