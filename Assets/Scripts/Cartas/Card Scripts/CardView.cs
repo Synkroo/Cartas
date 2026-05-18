@@ -1,46 +1,50 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using JuegoDeCartas.Managers;
 
-public class CardView : MonoBehaviour
+namespace JuegoDeCartas.Cards
 {
-    public TextMeshProUGUI nameText;
-    public TextMeshProUGUI costText;
-    public Image artworkImage;
-
-    public bool interactable = true;
-
-    private Card card;
-    private BattleManager battleManager;
-    private Button button;
-
-    void Awake()
+    public class CardView : MonoBehaviour
     {
-        button = GetComponent<Button>();
+        public TextMeshProUGUI nameText;
+        public TextMeshProUGUI costText;
+        public Image artworkImage;
 
-        if (button != null)
+        public bool interactable = true;
+
+        private Card card;
+        private BattleManager battleManager;
+        private Button button;
+
+        void Awake()
         {
-            button.onClick.AddListener(OnClick);
+            button = GetComponent<Button>();
+
+            if (button != null)
+            {
+                button.onClick.AddListener(OnClick);
+            }
         }
-    }
 
-    public void Setup(Card newCard, BattleManager manager)
-    {
-        card = newCard;
-        battleManager = manager;
+        public void Setup(Card newCard, BattleManager manager)
+        {
+            card = newCard;
+            battleManager = manager;
 
-        nameText.text = card.data.cardName;
-        costText.text = card.data.cost.ToString();
-    }
+            nameText.text = card.data.cardName;
+            costText.text = card.data.cost.ToString();
+        }
 
-    public void OnClick()
-    {
-        if (!interactable)
-            return;
+        public void OnClick()
+        {
+            if (!interactable)
+                return;
 
-        if (battleManager == null || card == null)
-            return;
+            if (battleManager == null || card == null)
+                return;
 
-        battleManager.PlayCard(card);
+            battleManager.PlayCard(card);
+        }
     }
 }

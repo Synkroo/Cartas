@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
+using JuegoDeCartas.Managers;
 
-public abstract class CardEffect : ScriptableObject
+namespace JuegoDeCartas.Cards
 {
-    public abstract void Apply(BattleManager battle);
+    public abstract class CardEffect : ScriptableObject
+    {
+        public abstract void Apply(BattleManager battle);
+    }
 }

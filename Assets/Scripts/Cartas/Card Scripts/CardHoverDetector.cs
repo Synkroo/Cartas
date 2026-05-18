@@ -1,22 +1,25 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardHoverDetector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+namespace JuegoDeCartas.Cards
 {
-    private CardHover hover;
-
-    void Awake()
+    public class CardHoverDetector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        hover = GetComponent<CardHover>();
-    }
+        private CardHover hover;
 
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        hover.SetHover(true);
-    }
+        void Awake()
+        {
+            hover = GetComponent<CardHover>();
+        }
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        hover.SetHover(false);
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            hover.SetHover(true);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            hover.SetHover(false);
+        }
     }
 }

@@ -1,21 +1,24 @@
-﻿[System.Serializable]
-public class StatModifier
+﻿namespace JuegoDeCartas.Stats
 {
-    public enum Target
+    [System.Serializable]
+    public class StatModifier
     {
-        Player,
-        Enemy,
-        Both
-    }
+        public enum Target
+        {
+            Player,
+            Enemy,
+            Both
+        }
 
-    public enum Operation
-    {
-        Add,
-        Remove
-    }
+        public enum Operation
+        {
+            Add,
+            Remove
+        }
 
-    public Target target;
-    public StatType stat;
-    public Operation operation;
-    public int amount;
+        public Target target;
+        public StatType stat;
+        public Operation operation;
+        public int amount;
+    }
 }

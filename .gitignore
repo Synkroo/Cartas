@@ -21,3 +21,6 @@ MemoryCaptures/
 *.mdb
 *.opendb
 *.VC.db
+.vs/
+.opencode/
+ProjectSettings/Packages/

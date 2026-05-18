@@ -1,154 +1,151 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using JuegoDeCartas.Cards;
+using JuegoDeCartas.Enemies;
+using JuegoDeCartas.UI;
 
-public class BattleManager : MonoBehaviour
+namespace JuegoDeCartas.Managers
 {
-    [Header("Player")]
-    public Entity player;
-
-    [Header("Enemy")]
-    public Enemy enemy;
-
-    public List<EnemyData> enemyWave = new List<EnemyData>();
-    private int currentEnemyIndex = 0;
-
-    [Header("Systems")]
-    public DeckManager deckManager;
-    public TurnManager turnManager;
-    public UIManager uiManager;
-    public DeckViewerUI deckViewer;
-
-    [Header("Hand")]
-    public Transform handParent;
-    public GameObject cardPrefab;
-
-    void Start()
+    public class BattleManager : MonoBehaviour
     {
-        player.Initialize();
-        uiManager.Init(this);
+        [Header("Player")]
+        public Entity player;
 
-        deckManager.OnDeckChanged += RefreshDeckUI;
+        [Header("Enemy")]
+        public Enemy enemy;
 
-        ShuffleEnemyWave();
-        SpawnEnemy();
+        public List<EnemyData> enemyWave = new List<EnemyData>();
+        private int currentEnemyIndex = 0;
 
-        deckManager.InitializeDeck();
+        [Header("Systems")]
+        public DeckManager deckManager;
+        public TurnManager turnManager;
+        public UIManager uiManager;
+        public DeckViewerUI deckViewer;
 
-        turnManager.battle = this;
-        turnManager.StartGame();
-    }
+        [Header("Hand")]
+        public Transform handParent;
+        public GameObject cardPrefab;
 
-    void RefreshDeckUI()
-    {
-        deckViewer?.ShowDiscard();
-    }
-
-    public void DrawCards(int amount)
-    {
-        deckManager.DrawCards(amount);
-        RenderHand();
-        UpdateUI();
-    }
-
-    public void PlayCard(Card card)
-    {
-        if (card == null) return;
-
-        Card playedCard = card;
-
-        if (player.stats.mana < playedCard.data.cost)
-            return;
-
-        player.stats.mana -= playedCard.data.cost;
-
-        foreach (var effect in playedCard.data.effects)
+        void OnDestroy()
         {
-            if (effect != null)
-                effect.Apply(this);
+            if (deckManager != null)
+                deckManager.OnDeckChanged -= RefreshDeckUI;
         }
 
-        deckManager.hand.Remove(playedCard);
-        deckManager.discard.Add(playedCard);
-
-        RenderHand();
-        UpdateUI();
-
-        deckViewer.ShowDiscard();
-    }
-
-    void SpawnEnemy()
-    {
-        if (currentEnemyIndex >= enemyWave.Count)
+        void Start()
         {
-            Debug.Log("🏆 Has derrotado todos los enemigos");
-            return;
+            uiManager.Init(this);
+
+            deckManager.OnDeckChanged += RefreshDeckUI;
+
+            ShuffleEnemyWave();
+            SpawnEnemy();
+
+            deckManager.InitializeDeck();
+
+            turnManager.battle = this;
+            turnManager.StartGame();
         }
 
-        enemy = new Enemy();
-        enemy.Initialize(enemyWave[currentEnemyIndex]);
-        currentEnemyIndex++;
-
-        uiManager.SetEnemySprite(enemy.data.sprite);
-        UpdateUI();
-    }
-
-    public void DamageEnemy(int damage)
-    {
-        if (enemy == null) return;
-
-        enemy.currentHealth -= damage;
-
-        if (enemy.currentHealth <= 0)
+        void RefreshDeckUI()
         {
-            enemy.currentHealth = 0;
-            EnemyDeath();
+            if (deckViewer != null && deckViewer.panel.activeSelf)
+                deckViewer.ShowRemaining();
         }
 
-        UpdateUI();
-    }
-
-    void EnemyDeath()
-    {
-        turnManager.NextRound();
-        SpawnEnemy();
-    }
-
-    void ShuffleEnemyWave()
-    {
-        for (int i = 0; i < enemyWave.Count; i++)
+        public void DrawCards(int amount)
         {
-            EnemyData temp = enemyWave[i];
-            int randomIndex = Random.Range(i, enemyWave.Count);
-            enemyWave[i] = enemyWave[randomIndex];
-            enemyWave[randomIndex] = temp;
+            deckManager.DrawCards(amount);
+            UpdateUI();
         }
-    }
 
-    public void RenderHand()
-    {
-        StopAllCoroutines();
-        StartCoroutine(RenderRoutine());
-    }
-
-    IEnumerator RenderRoutine()
-    {
-        yield return null;
-
-        foreach (Transform child in handParent)
-            Destroy(child.gameObject);
-
-        yield return null;
-
-        foreach (var card in deckManager.hand)
+        public void PlayCard(Card card)
         {
-            GameObject obj = Instantiate(cardPrefab, handParent);
-            obj.GetComponent<CardView>().Setup(card, this);
-        }
-    }
+            if (card == null) return;
 
-    public void UpdateUI()
-    {
-        uiManager.Refresh();
+            if (player.stats.mana < card.data.cost)
+                return;
+
+            player.stats.mana -= card.data.cost;
+
+            deckManager.hand.Remove(card);
+            deckManager.discard.Add(card);
+
+            foreach (var effect in card.data.effects)
+            {
+                if (effect != null)
+                    effect.Apply(this);
+            }
+
+            RenderHand();
+            UpdateUI();
+            deckViewer.ShowDiscard();
+        }
+
+        void SpawnEnemy()
+        {
+            if (currentEnemyIndex >= enemyWave.Count)
+            {
+                Debug.Log("🏆 Has derrotado todos los enemigos");
+                return;
+            }
+
+            enemy = new Enemy();
+            enemy.Initialize(enemyWave[currentEnemyIndex]);
+            currentEnemyIndex++;
+
+            uiManager.SetEnemySprite(enemy.data.sprite);
+            UpdateUI();
+        }
+
+        public void DamageEnemy(int damage)
+        {
+            if (enemy == null) return;
+
+            enemy.currentHealth -= damage;
+
+            if (enemy.currentHealth <= 0)
+            {
+                enemy.currentHealth = 0;
+                EnemyDeath();
+            }
+
+            UpdateUI();
+        }
+
+        void EnemyDeath()
+        {
+            turnManager.NextRound();
+            SpawnEnemy();
+        }
+
+        void ShuffleEnemyWave()
+        {
+            for (int i = 0; i < enemyWave.Count; i++)
+            {
+                EnemyData temp = enemyWave[i];
+                int randomIndex = Random.Range(i, enemyWave.Count);
+                enemyWave[i] = enemyWave[randomIndex];
+                enemyWave[randomIndex] = temp;
+            }
+        }
+
+        public void RenderHand()
+        {
+            foreach (Transform child in handParent)
+                Destroy(child.gameObject);
+
+            foreach (var card in deckManager.hand)
+            {
+                GameObject obj = Instantiate(cardPrefab, handParent);
+                obj.GetComponent<CardView>().Setup(card, this);
+            }
+        }
+
+        public void UpdateUI()
+        {
+            uiManager.Refresh();
+        }
     }
 }

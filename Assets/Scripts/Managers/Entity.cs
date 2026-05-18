@@ -1,10 +1,8 @@
-﻿[System.Serializable]
-public class Entity
+﻿namespace JuegoDeCartas.Managers
 {
-    public Stats stats = new Stats();
-
-    public void Initialize()
+    [System.Serializable]
+    public class Entity
     {
-        // opcional: valores base si quieres
+        public JuegoDeCartas.Stats.Stats stats = new JuegoDeCartas.Stats.Stats();
     }
 }

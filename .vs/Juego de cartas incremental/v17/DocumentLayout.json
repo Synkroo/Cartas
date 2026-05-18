@@ -3,7 +3,7 @@
   "WorkspaceRootPath": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|d:\\unity\\proyectos\\juego de cartas incremental\\assets\\scripts\\managers\\battlemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|D:\\Unity\\Proyectos\\Juego de cartas incremental\\assets\\scripts\\managers\\battlemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\managers\\battlemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -24,7 +24,7 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\Managers\\BattleManager.cs",
               "ToolTip": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Managers\\BattleManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\Managers\\BattleManager.cs",
-              "ViewState": "AgIAAE0AAAAAAAAAAAAIwDIAAAATAAAAAAAAAA==",
+              "ViewState": "AgIAAE0AAAAAAAAAAAAIwDIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-06T10:26:11.669Z",
               "IsPinned": true,

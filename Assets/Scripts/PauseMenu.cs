@@ -1,88 +1,91 @@
 using System.Collections;
 using UnityEngine;
 
-public class PauseMenu : MonoBehaviour
+namespace JuegoDeCartas.UI
 {
-    [Header("Menu")]
-    public GameObject optionsMenu;
-
-    [Header("Animation")]
-    public RectTransform menuTransform;
-
-    public float animationDuration = 0.25f;
-
-    private Vector3 closedScale = Vector3.zero;
-    private Vector3 openedScale = Vector3.one;
-
-    private Coroutine currentRoutine;
-
-    void Start()
+    public class PauseMenu : MonoBehaviour
     {
-        menuTransform.localScale = closedScale;
+        [Header("Menu")]
+        public GameObject optionsMenu;
 
-        optionsMenu.SetActive(false);
-    }
+        [Header("Animation")]
+        public RectTransform menuTransform;
 
-    public void OpenMenu()
-    {
-        optionsMenu.SetActive(true);
+        public float animationDuration = 0.25f;
 
-        if (currentRoutine != null)
-            StopCoroutine(currentRoutine);
+        private Vector3 closedScale = Vector3.zero;
+        private Vector3 openedScale = Vector3.one;
 
-        currentRoutine = StartCoroutine(ScaleMenu(openedScale));
-    }
+        private Coroutine currentRoutine;
 
-    public void ResumeGame()
-    {
-        if (currentRoutine != null)
-            StopCoroutine(currentRoutine);
-
-        currentRoutine = StartCoroutine(CloseRoutine());
-    }
-
-    IEnumerator CloseRoutine()
-    {
-        yield return StartCoroutine(ScaleMenu(closedScale));
-
-        optionsMenu.SetActive(false);
-    }
-
-    IEnumerator ScaleMenu(Vector3 targetScale)
-    {
-        Vector3 startScale = menuTransform.localScale;
-
-        float time = 0f;
-
-        while (time < animationDuration)
+        void Start()
         {
-            time += Time.unscaledDeltaTime;
+            menuTransform.localScale = closedScale;
 
-            float t = time / animationDuration;
-
-            menuTransform.localScale =
-                Vector3.Lerp(startScale, targetScale, t);
-
-            yield return null;
+            optionsMenu.SetActive(false);
         }
 
-        menuTransform.localScale = targetScale;
-    }
-    public void BackToMenu()
-    {
-        Debug.Log("Volver al menú");
-    }
+        public void OpenMenu()
+        {
+            optionsMenu.SetActive(true);
 
-    public void QuitGame()
-    {
+            if (currentRoutine != null)
+                StopCoroutine(currentRoutine);
+
+            currentRoutine = StartCoroutine(ScaleMenu(openedScale));
+        }
+
+        public void ResumeGame()
+        {
+            if (currentRoutine != null)
+                StopCoroutine(currentRoutine);
+
+            currentRoutine = StartCoroutine(CloseRoutine());
+        }
+
+        IEnumerator CloseRoutine()
+        {
+            yield return StartCoroutine(ScaleMenu(closedScale));
+
+            optionsMenu.SetActive(false);
+        }
+
+        IEnumerator ScaleMenu(Vector3 targetScale)
+        {
+            Vector3 startScale = menuTransform.localScale;
+
+            float time = 0f;
+
+            while (time < animationDuration)
+            {
+                time += Time.unscaledDeltaTime;
+
+                float t = time / animationDuration;
+
+                menuTransform.localScale =
+                    Vector3.Lerp(startScale, targetScale, t);
+
+                yield return null;
+            }
+
+            menuTransform.localScale = targetScale;
+        }
+        public void BackToMenu()
+        {
+            Debug.Log("Volver al menu");
+        }
+
+        public void QuitGame()
+        {
 #if UNITY_EDITOR
 
-        UnityEditor.EditorApplication.isPlaying = false;
+            UnityEditor.EditorApplication.isPlaying = false;
 
 #else
 
-        Application.Quit();
+            Application.Quit();
 
 #endif
+        }
     }
 }

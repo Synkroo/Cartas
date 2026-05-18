@@ -2,57 +2,60 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+namespace JuegoDeCartas.Managers
 {
-    [Header("Player UI")]
-    public TextMeshProUGUI playerHpText;
-    public TextMeshProUGUI playerManaText;
-    public TextMeshProUGUI playerArmorText;
-
-    [Header("Enemy UI")]
-    public TextMeshProUGUI enemyHpText;
-
-    public Image enemyImage;
-
-    private BattleManager battle;
-
-    public void Init(BattleManager battleManager)
+    public class UIManager : MonoBehaviour
     {
-        battle = battleManager;
-    }
+        [Header("Player UI")]
+        public TextMeshProUGUI playerHpText;
+        public TextMeshProUGUI playerManaText;
+        public TextMeshProUGUI playerArmorText;
 
-    public void Refresh()
-    {
-        var player = battle.player;
+        [Header("Enemy UI")]
+        public TextMeshProUGUI enemyHpText;
 
-        playerHpText.text =
-            player.stats.health + " / " + player.stats.maxHealth;
+        public Image enemyImage;
 
-        playerManaText.text =
-            player.stats.mana + " / " + player.stats.maxMana;
+        private BattleManager battle;
 
-        playerArmorText.text =
-            player.stats.armor.ToString();
-
-        if (battle.enemy != null)
+        public void Init(BattleManager battleManager)
         {
-            enemyHpText.text =
-                battle.enemy.currentHealth + " / " +
-                battle.enemy.data.maxHealth;
+            battle = battleManager;
         }
-        else
+
+        public void Refresh()
         {
-            enemyHpText.text = "-";
+            var player = battle.player;
+
+            playerHpText.text =
+                player.stats.health + " / " + player.stats.maxHealth;
+
+            playerManaText.text =
+                player.stats.mana + " / " + player.stats.maxMana;
+
+            playerArmorText.text =
+                player.stats.armor.ToString();
+
+            if (battle.enemy != null)
+            {
+                enemyHpText.text =
+                    battle.enemy.currentHealth + " / " +
+                    battle.enemy.maxHealth;
+            }
+            else
+            {
+                enemyHpText.text = "-";
+            }
         }
-    }
 
-    public void SetEnemySprite(Sprite sprite)
-    {
-        if (enemyImage == null)
-            return;
+        public void SetEnemySprite(Sprite sprite)
+        {
+            if (enemyImage == null)
+                return;
 
-        enemyImage.sprite = sprite;
+            enemyImage.sprite = sprite;
 
-        enemyImage.enabled = sprite != null;
+            enemyImage.enabled = sprite != null;
+        }
     }
 }

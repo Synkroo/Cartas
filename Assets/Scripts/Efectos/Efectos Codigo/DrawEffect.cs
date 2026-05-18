@@ -1,12 +1,17 @@
 ﻿using UnityEngine;
+using JuegoDeCartas.Cards;
+using JuegoDeCartas.Managers;
 
-[CreateAssetMenu(menuName = "Cards/Effects/Draw Cards")]
-public class DrawEffect : CardEffect
+namespace JuegoDeCartas.Effects
 {
-    public int amount;
-
-    public override void Apply(BattleManager battle)
+    [CreateAssetMenu(menuName = "Cards/Effects/Draw Cards")]
+    public class DrawEffect : CardEffect
     {
-        battle.DrawCards(amount);
+        public int amount;
+
+        public override void Apply(BattleManager battle)
+        {
+            battle.DrawCards(amount);
+        }
     }
 }

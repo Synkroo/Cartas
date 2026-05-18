@@ -1,0 +1,25 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "command": {
+    "unity": {
+      "template": "Ejecuta el script D:\\Unity\\Proyectos\\Juego de cartas incremental\\start_dev.ps1 para abrir Unity, VS Code, opencode y YouTube playlist. Espera a que termine cada proceso antes de continuar.",
+      "description": "Inicia entorno de desarrollo (Unity, VS Code, opencode, YouTube)"
+    }
+  },
+  "mcp": {
+    "playwright": {
+      "type": "local",
+      "command": [
+        "npx",
+        "@playwright/mcp@latest",
+        "--browser=firefox"
+      ],
+      "enabled": true
+    },
+    "unity-mcp": {
+      "type": "remote",
+      "url": "http://localhost:8080/mcp",
+      "enabled": true
+    }
+  }
+}

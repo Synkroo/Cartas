@@ -1,9 +1,12 @@
-﻿public class Card
+﻿namespace JuegoDeCartas.Cards
 {
-    public CardData data;
-
-    public Card(CardData data)
+    public class Card
     {
-        this.data = data;
+        public CardData data;
+
+        public Card(CardData data)
+        {
+            this.data = data;
+        }
     }
 }

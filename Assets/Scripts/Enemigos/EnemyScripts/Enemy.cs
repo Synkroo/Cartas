@@ -1,22 +1,24 @@
 ﻿using System;
 
-[Serializable]
-public class Enemy
+namespace JuegoDeCartas.Enemies
 {
-    public EnemyData data;
-
-    // SOLO estado runtime
-    public int currentHealth;
-
-    public void Initialize(EnemyData enemyData)
+    [Serializable]
+    public class Enemy
     {
-        data = enemyData;
+        public EnemyData data;
 
-        currentHealth = data.maxHealth;
-    }
+        public int currentHealth;
+        public int maxHealth;
+        public int damageModifier;
 
-    public bool IsDead()
-    {
-        return currentHealth <= 0;
+        public void Initialize(EnemyData enemyData)
+        {
+            data = enemyData;
+
+            maxHealth = data.maxHealth;
+            currentHealth = maxHealth;
+            damageModifier = 0;
+        }
+
     }
 }

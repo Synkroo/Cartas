@@ -1,60 +1,63 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class HandLayout : MonoBehaviour
+namespace JuegoDeCartas.UI
 {
-    public float baseSpacing = 100f;
-    public float falloff = 0.15f;
-
-    List<RectTransform> cards = new List<RectTransform>();
-
-    void LateUpdate()
+    public class HandLayout : MonoBehaviour
     {
-        RebuildList();
+        public float baseSpacing = 100f;
+        public float falloff = 0.15f;
 
-        int count = cards.Count;
-        if (count == 0) return;
+        List<RectTransform> cards = new List<RectTransform>();
 
-        float spacing = CalculateSpacing(count);
-        float startX = -((count - 1) * spacing) / 2f;
-
-        for (int i = 0; i < count; i++)
+        void LateUpdate()
         {
-            RectTransform card = cards[i];
+            RebuildList();
 
-            Vector2 targetPos = new Vector2(
-                startX + i * spacing,
-                0
-            );
+            int count = cards.Count;
+            if (count == 0) return;
 
-            card.anchoredPosition = targetPos;
+            float spacing = CalculateSpacing(count);
+            float startX = -((count - 1) * spacing) / 2f;
+
+            for (int i = 0; i < count; i++)
+            {
+                RectTransform card = cards[i];
+
+                Vector2 targetPos = new Vector2(
+                    startX + i * spacing,
+                    0
+                );
+
+                card.anchoredPosition = targetPos;
+            }
         }
-    }
 
-    void RebuildList()
-    {
-        cards.Clear();
-
-        for (int i = 0; i < transform.childCount; i++)
+        void RebuildList()
         {
-            RectTransform rt =
-                transform.GetChild(i).GetComponent<RectTransform>();
+            cards.Clear();
 
-            if (rt != null)
-                cards.Add(rt);
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                RectTransform rt =
+                    transform.GetChild(i).GetComponent<RectTransform>();
+
+                if (rt != null)
+                    cards.Add(rt);
+            }
         }
-    }
 
-    float CalculateSpacing(int count)
-    {
-        if (count <= 1)
-            return 0f;
+        float CalculateSpacing(int count)
+        {
+            if (count <= 1)
+                return 0f;
 
-        if (count <= 5)
-            return baseSpacing;
+            if (count <= 5)
+                return baseSpacing;
 
-        float x = count - 5f;
+            float x = count - 5f;
 
-        return baseSpacing / (1f + falloff * x);
+            return baseSpacing / (1f + falloff * x);
+        }
     }
 }

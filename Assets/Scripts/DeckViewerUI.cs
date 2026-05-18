@@ -1,64 +1,69 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using JuegoDeCartas.Managers;
+using JuegoDeCartas.Cards;
 
-public class DeckViewerUI : MonoBehaviour
+namespace JuegoDeCartas.UI
 {
-    [Header("References")]
-    public BattleManager battle;
-
-    public GameObject panel;
-
-    public Transform contentParent;
-
-    public GameObject cardPrefab;
-
-    public void Open()
+    public class DeckViewerUI : MonoBehaviour
     {
-        panel.SetActive(true);
+        [Header("References")]
+        public BattleManager battle;
 
-        ShowRemaining();
-    }
+        public GameObject panel;
 
-    public void Close()
-    {
-        panel.SetActive(false);
-    }
+        public Transform contentParent;
 
-    public void ShowRemaining()
-    {
-        RenderCards(battle.deckManager.deck);
-    }
+        public GameObject cardPrefab;
 
-    public void ShowDiscard()
-    {
-        RenderCards(battle.deckManager.discard);
-    }
-
-    void RenderCards(List<Card> cards)
-    {
-        foreach (Transform child in contentParent)
+        public void Open()
         {
-            Destroy(child.gameObject);
+            panel.SetActive(true);
+
+            ShowRemaining();
         }
 
-        foreach (var card in cards)
+        public void Close()
         {
-            GameObject obj =
-                Instantiate(cardPrefab, contentParent);
+            panel.SetActive(false);
+        }
 
-            CardView view =
-                obj.GetComponent<CardView>();
+        public void ShowRemaining()
+        {
+            RenderCards(battle.deckManager.deck);
+        }
 
-            view.Setup(card, battle);
+        public void ShowDiscard()
+        {
+            RenderCards(battle.deckManager.discard);
+        }
 
-            view.interactable = false;
-
-            CardHover hover =
-                obj.GetComponent<CardHover>();
-
-            if (hover != null)
+        void RenderCards(List<Card> cards)
+        {
+            foreach (Transform child in contentParent)
             {
-                hover.enabled = false;
+                Destroy(child.gameObject);
+            }
+
+            foreach (var card in cards)
+            {
+                GameObject obj =
+                    Instantiate(cardPrefab, contentParent);
+
+                CardView view =
+                    obj.GetComponent<CardView>();
+
+                view.Setup(card, battle);
+
+                view.interactable = false;
+
+                CardHover hover =
+                    obj.GetComponent<CardHover>();
+
+                if (hover != null)
+                {
+                    hover.enabled = false;
+                }
             }
         }
     }

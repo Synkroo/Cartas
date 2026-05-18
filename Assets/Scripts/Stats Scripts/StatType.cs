@@ -1,9 +1,12 @@
-public enum StatType
+namespace JuegoDeCartas.Stats
 {
-    Health,
-    MaxHealth,
-    Mana,
-    MaxMana,
-    Damage,
-    Armor
+    public enum StatType
+    {
+        Health,
+        MaxHealth,
+        Mana,
+        MaxMana,
+        Damage,
+        Armor
+    }
 }
