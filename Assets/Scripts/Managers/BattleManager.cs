@@ -22,6 +22,7 @@ namespace JuegoDeCartas.Managers
         public TurnManager turnManager;
         public UIManager uiManager;
         public DeckViewerUI deckViewer;
+        public EndGameMenu endGameMenu;
 
         [Header("Hand")]
         public Transform handParent;
@@ -87,7 +88,7 @@ namespace JuegoDeCartas.Managers
         {
             if (currentEnemyIndex >= enemyWave.Count)
             {
-                Debug.Log("🏆 Has derrotado todos los enemigos");
+                enemy = null;
                 return;
             }
 
@@ -118,6 +119,31 @@ namespace JuegoDeCartas.Managers
         {
             turnManager.NextRound();
             SpawnEnemy();
+
+            if (enemy == null && endGameMenu != null)
+                endGameMenu.ShowVictory();
+        }
+
+        public void DamagePlayer(int damage)
+        {
+            if (player == null) return;
+
+            var stats = player.stats;
+            int remaining = damage;
+
+            if (stats.armor > 0)
+            {
+                int absorbed = Mathf.Min(stats.armor, remaining);
+                stats.armor -= absorbed;
+                remaining -= absorbed;
+            }
+
+            stats.health -= remaining;
+            stats.Clamp();
+            UpdateUI();
+
+            if (stats.health <= 0 && endGameMenu != null)
+                endGameMenu.ShowDefeat();
         }
 
         void ShuffleEnemyWave()

@@ -99,25 +99,8 @@ namespace JuegoDeCartas.Managers
 
         void ExecuteEnemyAttack()
         {
-            ApplyDamageToPlayer(pendingEnemyDamage);
+            battle.DamagePlayer(pendingEnemyDamage);
             battle.UpdateUI();
-        }
-
-        void ApplyDamageToPlayer(int damage)
-        {
-            var player = battle.player;
-
-            int remaining = damage;
-
-            if (player.stats.armor > 0)
-            {
-                int absorbed = Mathf.Min(player.stats.armor, remaining);
-                player.stats.armor -= absorbed;
-                remaining -= absorbed;
-            }
-
-            player.stats.health -= remaining;
-            player.stats.Clamp();
         }
 
         public void NextRound()

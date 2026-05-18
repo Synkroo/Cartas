@@ -3234,6 +3234,53 @@ Transform:
   - {fileID: 929162960}
   m_Father: {fileID: 1442613434}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &925113801
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 925113802}
+  - component: {fileID: 925113803}
+  m_Layer: 0
+  m_Name: Menus
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &925113802
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925113801}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.36708, y: -1.63615, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &925113803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925113801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b87eac48917b4240a674a90e1c6372bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  victoryPanel: {fileID: 0}
+  defeatPanel: {fileID: 0}
+  pauseTime: 1
 --- !u!1 &928363703
 GameObject:
   m_ObjectHideFlags: 0
@@ -4452,6 +4499,8 @@ MonoBehaviour:
   enemy:
     data: {fileID: 0}
     currentHealth: 0
+    maxHealth: 0
+    damageModifier: 0
   enemyWave:
   - {fileID: 11400000, guid: 888a8cf02d08e3045b3151d883195d56, type: 2}
   - {fileID: 11400000, guid: 1f417bb98cfd0274e9f157f8f240b89a, type: 2}
@@ -4462,6 +4511,7 @@ MonoBehaviour:
   deckViewer: {fileID: 702479333}
   handParent: {fileID: 637238228}
   cardPrefab: {fileID: 6961616625680443258, guid: 31e61bb76f2c7a94397b40a3e7470748, type: 3}
+  endGameMenu: {fileID: 925113803}
 --- !u!4 &1357940023
 Transform:
   m_ObjectHideFlags: 0
@@ -6587,3 +6637,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 116539069}
   - {fileID: 1112128878}
+  - {fileID: 925113802}
