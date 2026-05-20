@@ -24,7 +24,7 @@ namespace JuegoDeCartas.Enemies
             if (battle.enemy == null)
                 return;
 
-            float percent = (float)battle.enemy.currentHealth / battle.enemy.maxHealth;
+            float percent = (float)battle.enemy.stats.health / battle.enemy.stats.maxHealth;
 
             fillImage.fillAmount =
                 Mathf.Lerp(

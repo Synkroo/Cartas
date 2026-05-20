@@ -9,9 +9,13 @@ namespace JuegoDeCartas.UI
         public float falloff = 0.15f;
 
         List<RectTransform> cards = new List<RectTransform>();
+        bool dirty = true;
 
         void LateUpdate()
         {
+            if (!dirty) return;
+            dirty = false;
+
             RebuildList();
 
             int count = cards.Count;
@@ -31,6 +35,11 @@ namespace JuegoDeCartas.UI
 
                 card.anchoredPosition = targetPos;
             }
+        }
+
+        public void MarkDirty()
+        {
+            dirty = true;
         }
 
         void RebuildList()

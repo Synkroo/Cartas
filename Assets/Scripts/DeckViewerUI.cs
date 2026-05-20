@@ -50,12 +50,22 @@ namespace JuegoDeCartas.UI
                 GameObject obj =
                     Instantiate(cardPrefab, contentParent);
 
-                CardView view =
-                    obj.GetComponent<CardView>();
+                CardDisplay display =
+                    obj.GetComponent<CardDisplay>();
 
-                view.Setup(card, battle);
-
-                view.interactable = false;
+                if (display != null)
+                {
+                    display.Setup(card);
+                }
+                else
+                {
+                    CardView view = obj.GetComponent<CardView>();
+                    if (view != null)
+                    {
+                        view.Setup(card, battle);
+                        view.interactable = false;
+                    }
+                }
 
                 CardHover hover =
                     obj.GetComponent<CardHover>();

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using JuegoDeCartas.Managers;
 
-namespace JuegoDeCartas.Cards
+namespace JuegoDeCartas.Effects
 {
     public abstract class CardEffect : ScriptableObject
     {

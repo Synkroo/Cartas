@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using JuegoDeCartas.Cards;
 using JuegoDeCartas.Managers;
 
 namespace JuegoDeCartas.Effects

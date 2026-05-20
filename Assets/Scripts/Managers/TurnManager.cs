@@ -51,11 +51,14 @@ namespace JuegoDeCartas.Managers
             battle.UpdateUI();
         }
 
+        public bool isExecuting;
+
         public void EndPlayerTurn()
         {
-            if (currentTurn != Turn.Player)
+            if (currentTurn != Turn.Player || isExecuting)
                 return;
 
+            isExecuting = true;
             currentTurn = Turn.Enemy;
 
             battle.deckManager.DiscardHand();
@@ -94,6 +97,7 @@ namespace JuegoDeCartas.Managers
 
             NextRound();
 
+            isExecuting = false;
             StartPlayerTurn();
         }
 

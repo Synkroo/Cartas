@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using JuegoDeCartas.Cards;
 using JuegoDeCartas.Managers;
 using JuegoDeCartas.Stats;
 
@@ -81,24 +80,24 @@ namespace JuegoDeCartas.Effects
                     }
                     else
                     {
-                        battle.enemy.currentHealth += mod.amount;
-                        battle.enemy.currentHealth = Mathf.Clamp(
-                            battle.enemy.currentHealth, 0, battle.enemy.maxHealth);
+                        battle.enemy.stats.health += mod.amount;
+                        battle.enemy.stats.health = Mathf.Clamp(
+                            battle.enemy.stats.health, 0, battle.enemy.stats.maxHealth);
                     }
                     break;
 
                 case StatType.MaxHealth:
                     if (mod.operation == StatModifier.Operation.Add)
                     {
-                        battle.enemy.maxHealth += mod.amount;
+                        battle.enemy.stats.maxHealth += mod.amount;
                     }
                     else
                     {
-                        battle.enemy.maxHealth -= mod.amount;
-                        battle.enemy.maxHealth = Mathf.Max(1, battle.enemy.maxHealth);
+                        battle.enemy.stats.maxHealth -= mod.amount;
+                        battle.enemy.stats.maxHealth = Mathf.Max(1, battle.enemy.stats.maxHealth);
                     }
-                    battle.enemy.currentHealth = Mathf.Clamp(
-                        battle.enemy.currentHealth, 0, battle.enemy.maxHealth);
+                    battle.enemy.stats.health = Mathf.Clamp(
+                        battle.enemy.stats.health, 0, battle.enemy.stats.maxHealth);
                     break;
 
                 case StatType.Damage:
@@ -110,6 +109,7 @@ namespace JuegoDeCartas.Effects
                     {
                         battle.enemy.damageModifier -= mod.amount;
                     }
+                    battle.enemy.damageModifier = Mathf.Max(0, battle.enemy.damageModifier);
                     break;
 
                 case StatType.Armor:

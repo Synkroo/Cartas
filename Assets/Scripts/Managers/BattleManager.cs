@@ -65,6 +65,8 @@ namespace JuegoDeCartas.Managers
         public void PlayCard(Card card)
         {
             if (card == null) return;
+            if (turnManager.currentTurn != TurnManager.Turn.Player || turnManager.isExecuting)
+                return;
 
             if (player.stats.mana < card.data.cost)
                 return;
@@ -105,11 +107,11 @@ namespace JuegoDeCartas.Managers
         {
             if (enemy == null) return;
 
-            enemy.currentHealth -= damage;
+            enemy.stats.health -= damage;
 
-            if (enemy.currentHealth <= 0)
+            if (enemy.stats.health <= 0)
             {
-                enemy.currentHealth = 0;
+                enemy.stats.health = 0;
                 EnemyDeath();
             }
 
@@ -168,6 +170,10 @@ namespace JuegoDeCartas.Managers
                 GameObject obj = Instantiate(cardPrefab, handParent);
                 obj.GetComponent<CardView>().Setup(card, this);
             }
+
+            HandLayout layout = handParent.GetComponentInParent<HandLayout>();
+            if (layout != null)
+                layout.MarkDirty();
         }
 
         public void UpdateUI()

@@ -39,8 +39,8 @@ namespace JuegoDeCartas.Managers
             if (battle.enemy != null)
             {
                 enemyHpText.text =
-                    battle.enemy.currentHealth + " / " +
-                    battle.enemy.maxHealth;
+                    battle.enemy.stats.health + " / " +
+                    battle.enemy.stats.maxHealth;
             }
             else
             {

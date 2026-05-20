@@ -1,4 +1,5 @@
 ﻿using System;
+using JuegoDeCartas.Stats;
 
 namespace JuegoDeCartas.Enemies
 {
@@ -6,17 +7,15 @@ namespace JuegoDeCartas.Enemies
     public class Enemy
     {
         public EnemyData data;
-
-        public int currentHealth;
-        public int maxHealth;
+        public Stats.Stats stats = new Stats.Stats();
         public int damageModifier;
 
         public void Initialize(EnemyData enemyData)
         {
             data = enemyData;
 
-            maxHealth = data.maxHealth;
-            currentHealth = maxHealth;
+            stats.maxHealth = data.maxHealth;
+            stats.health = stats.maxHealth;
             damageModifier = 0;
         }
 
