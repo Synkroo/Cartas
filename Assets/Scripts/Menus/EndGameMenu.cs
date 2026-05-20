@@ -78,8 +78,7 @@ namespace JuegoDeCartas.UI
         public void RestartGame()
         {
             HideAll();
-            UnityEngine.SceneManagement.SceneManager.LoadScene(
-                UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
         }
 
         public void QuitGame()
