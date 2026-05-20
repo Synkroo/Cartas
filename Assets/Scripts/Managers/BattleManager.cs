@@ -24,6 +24,9 @@ namespace JuegoDeCartas.Managers
         public DeckViewerUI deckViewer;
         public EndGameMenu endGameMenu;
         public GameManager gameManager;
+        public JuegoDeCartas.Stats.GameStatsTracker statsTracker;
+
+        private int lastCardDamageDealt;
 
         [Header("Hand")]
         public Transform handParent;
@@ -76,11 +79,16 @@ namespace JuegoDeCartas.Managers
             deckManager.hand.Remove(card);
             deckManager.discard.Add(card);
 
+            lastCardDamageDealt = 0;
+
             foreach (var effect in card.data.effects)
             {
                 if (effect != null)
                     effect.Apply(this);
             }
+
+            if (statsTracker != null)
+                statsTracker.RegisterCardPlayed(lastCardDamageDealt);
 
             RenderHand();
             UpdateUI();
@@ -108,6 +116,10 @@ namespace JuegoDeCartas.Managers
             if (enemy == null) return;
 
             enemy.stats.health -= damage;
+            lastCardDamageDealt += damage;
+
+            if (statsTracker != null)
+                statsTracker.RegisterDamageDealt(damage);
 
             if (enemy.stats.health <= 0)
             {
@@ -120,11 +132,18 @@ namespace JuegoDeCartas.Managers
 
         void EnemyDeath()
         {
+            if (statsTracker != null)
+                statsTracker.RegisterEnemyDefeated();
+
             turnManager.NextRound();
             SpawnEnemy();
 
             if (enemy == null && gameManager != null)
+            {
+                if (statsTracker != null)
+                    statsTracker.PopulateStatsText();
                 gameManager.ShowVictory();
+            }
         }
 
         public void DamagePlayer(int damage)
@@ -145,8 +164,15 @@ namespace JuegoDeCartas.Managers
             stats.Clamp();
             UpdateUI();
 
+            if (statsTracker != null)
+                statsTracker.RegisterDamageReceived(remaining);
+
             if (stats.health <= 0 && gameManager != null)
+            {
+                if (statsTracker != null)
+                    statsTracker.PopulateStatsText();
                 gameManager.ShowDefeat();
+            }
         }
 
         void ShuffleEnemyWave()

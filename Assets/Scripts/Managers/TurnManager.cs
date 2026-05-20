@@ -40,9 +40,16 @@ namespace JuegoDeCartas.Managers
 
             turnCount++;
 
+            if (battle.statsTracker != null)
+                battle.statsTracker.RegisterTurnPlayed();
+
             UpdateTurnUI();
 
             var player = battle.player;
+
+            if (battle.statsTracker != null)
+                battle.statsTracker.RegisterMaxArmor(player.stats.armor);
+
             player.stats.mana = player.stats.maxMana;
             player.stats.armor = 0;
 
@@ -86,6 +93,9 @@ namespace JuegoDeCartas.Managers
             );
             pendingEnemyDamage = Mathf.Max(0, pendingEnemyDamage);
 
+            if (battle.statsTracker != null)
+                battle.statsTracker.RegisterMaxEnemyDamage(pendingEnemyDamage);
+
             if (enemyNextAttackText != null)
                 enemyNextAttackText.text = pendingEnemyDamage + " DMG";
 
@@ -111,6 +121,10 @@ namespace JuegoDeCartas.Managers
         {
             roundCount++;
             turnCount = 0;
+
+            if (battle.statsTracker != null)
+                battle.statsTracker.RegisterRoundPlayed();
+
             UpdateRoundUI();
         }
 

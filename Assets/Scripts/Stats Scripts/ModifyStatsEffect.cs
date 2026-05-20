@@ -62,6 +62,10 @@ namespace JuegoDeCartas.Effects
 
                 case StatType.Armor:
                     stats.armor += value;
+                    if (value > 0 && battle.statsTracker != null)
+                        battle.statsTracker.RegisterArmorGained(value);
+                    if (battle.statsTracker != null)
+                        battle.statsTracker.RegisterMaxArmor(stats.armor);
                     break;
             }
         }
