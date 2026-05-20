@@ -26,7 +26,7 @@ namespace JuegoDeCartas.Effects
             if (mod.target == StatModifier.Target.Player ||
                 mod.target == StatModifier.Target.Both)
             {
-                ApplyPlayerStat(battle.player.stats, mod);
+                ApplyPlayerStat(battle, battle.player.stats, mod);
             }
 
             if (mod.target == StatModifier.Target.Enemy ||
@@ -36,7 +36,7 @@ namespace JuegoDeCartas.Effects
             }
         }
 
-        void ApplyPlayerStat(JuegoDeCartas.Stats.Stats stats, StatModifier mod)
+        void ApplyPlayerStat(BattleManager battle, JuegoDeCartas.Stats.Stats stats, StatModifier mod)
         {
             int value = mod.operation == StatModifier.Operation.Add
                 ? mod.amount
