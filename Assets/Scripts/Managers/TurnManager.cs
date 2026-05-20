@@ -105,8 +105,6 @@ namespace JuegoDeCartas.Managers
 
             yield return new WaitForSeconds(0.5f);
 
-            NextRound();
-
             isExecuting = false;
             StartPlayerTurn();
         }
