@@ -21,7 +21,7 @@ namespace JuegoDeCartas.Enemies
 
         void Update()
         {
-            if (battle.enemy == null)
+            if (battle == null || battle.enemy == null)
                 return;
 
             float percent = (float)battle.enemy.stats.health / battle.enemy.stats.maxHealth;
