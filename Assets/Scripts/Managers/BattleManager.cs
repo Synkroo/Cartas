@@ -23,6 +23,7 @@ namespace JuegoDeCartas.Managers
         public UIManager uiManager;
         public DeckViewerUI deckViewer;
         public EndGameMenu endGameMenu;
+        public GameManager gameManager;
 
         [Header("Hand")]
         public Transform handParent;
@@ -120,8 +121,8 @@ namespace JuegoDeCartas.Managers
             turnManager.NextRound();
             SpawnEnemy();
 
-            if (enemy == null && endGameMenu != null)
-                endGameMenu.ShowVictory();
+            if (enemy == null && gameManager != null)
+                gameManager.ShowVictory();
         }
 
         public void DamagePlayer(int damage)
@@ -142,8 +143,8 @@ namespace JuegoDeCartas.Managers
             stats.Clamp();
             UpdateUI();
 
-            if (stats.health <= 0 && endGameMenu != null)
-                endGameMenu.ShowDefeat();
+            if (stats.health <= 0 && gameManager != null)
+                gameManager.ShowDefeat();
         }
 
         void ShuffleEnemyWave()
