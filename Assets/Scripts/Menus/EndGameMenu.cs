@@ -19,7 +19,7 @@ namespace JuegoDeCartas.UI
 
         void Awake()
         {
-            canvas = GetComponent<Canvas>();
+            canvas = GetComponentInParent<Canvas>();
             HideAll();
         }
 
@@ -39,8 +39,8 @@ namespace JuegoDeCartas.UI
                 Time.timeScale = 0f;
 
             // Ensure the Menus Canvas has a raycaster for its buttons
-            if (menusRaycaster == null)
-                menusRaycaster = GetComponent<GraphicRaycaster>() ?? gameObject.AddComponent<GraphicRaycaster>();
+            if (menusRaycaster == null && canvas != null)
+                menusRaycaster = canvas.GetComponent<GraphicRaycaster>() ?? canvas.gameObject.AddComponent<GraphicRaycaster>();
 
             // Disable all other raycaster so game UI is unclickable
             var all = FindObjectsByType<GraphicRaycaster>(FindObjectsSortMode.None);

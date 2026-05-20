@@ -72,7 +72,7 @@ namespace JuegoDeCartas.UI
         }
         public void BackToMenu()
         {
-            Debug.Log("Volver al menu");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
         }
 
         public void QuitGame()
