@@ -1864,6 +1864,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   victoryPanel: {fileID: 940000001}
   defeatPanel: {fileID: 935000001}
+  menusCanvas: {fileID: 331000001}
   pauseTime: 1
 --- !u!1 &374926560
 GameObject:

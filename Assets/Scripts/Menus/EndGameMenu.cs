@@ -10,16 +10,20 @@ namespace JuegoDeCartas.UI
         public GameObject victoryPanel;
         public GameObject defeatPanel;
 
+        [Header("Canvas")]
+        public Canvas menusCanvas;
+
         [Header("Settings")]
         public bool pauseTime = true;
 
-        Canvas canvas;
         GraphicRaycaster menusRaycaster;
         List<GraphicRaycaster> disabledRaycasters = new List<GraphicRaycaster>();
 
         void Awake()
         {
-            canvas = GetComponentInParent<Canvas>();
+            if (menusCanvas != null)
+                menusRaycaster = menusCanvas.GetComponent<GraphicRaycaster>()
+                                 ?? menusCanvas.gameObject.AddComponent<GraphicRaycaster>();
             HideAll();
         }
 
@@ -38,11 +42,7 @@ namespace JuegoDeCartas.UI
             if (pauseTime)
                 Time.timeScale = 0f;
 
-            // Ensure the Menus Canvas has a raycaster for its buttons
-            if (menusRaycaster == null && canvas != null)
-                menusRaycaster = canvas.GetComponent<GraphicRaycaster>() ?? canvas.gameObject.AddComponent<GraphicRaycaster>();
-
-            // Disable all other raycaster so game UI is unclickable
+            // Disable all other raycasters so game UI is unclickable
             var all = FindObjectsByType<GraphicRaycaster>(FindObjectsSortMode.None);
             disabledRaycasters.Clear();
             foreach (var rc in all)
@@ -54,8 +54,8 @@ namespace JuegoDeCartas.UI
                 }
             }
 
-            if (canvas != null)
-                canvas.enabled = true;
+            if (menusCanvas != null)
+                menusCanvas.enabled = true;
 
             panel.SetActive(true);
         }
@@ -69,8 +69,8 @@ namespace JuegoDeCartas.UI
             if (victoryPanel != null) victoryPanel.SetActive(false);
             if (defeatPanel != null) defeatPanel.SetActive(false);
 
-            if (canvas != null)
-                canvas.enabled = false;
+            if (menusCanvas != null)
+                menusCanvas.enabled = false;
 
             Time.timeScale = 1f;
         }
