@@ -136,14 +136,22 @@ namespace JuegoDeCartas.Managers
                 statsTracker.RegisterEnemyDefeated();
 
             turnManager.NextRound();
-            SpawnEnemy();
 
             if (enemy == null && gameManager != null)
             {
                 if (statsTracker != null)
                     statsTracker.PopulateStatsText();
                 gameManager.ShowVictory();
+                return;
             }
+
+            if (gameManager != null)
+                gameManager.OpenShop();
+        }
+
+        public void ContinueAfterShop()
+        {
+            SpawnEnemy();
         }
 
         public void DamagePlayer(int damage)

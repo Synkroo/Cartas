@@ -2089,6 +2089,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endGameMenu: {fileID: 332000004}
+  shopManager: {fileID: 1060456276}
+  dinero: 1000
 --- !u!114 &332000004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6193,6 +6195,7 @@ GameObject:
   - component: {fileID: 1060456273}
   - component: {fileID: 1060456275}
   - component: {fileID: 1060456274}
+  - component: {fileID: 1060456276}
   m_Layer: 5
   m_Name: MenuTienda
   m_TagString: Untagged
@@ -6261,6 +6264,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1060456272}
   m_CullTransparentMesh: 1
+--- !u!114 &1060456276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060456272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f24293230617e6b4e86ee1a4aab540aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.UI.ShopManager
+  shopPanel: {fileID: 1060456272}
+  dineroText: {fileID: 1308803593}
+  menusCanvas: {fileID: 331000001}
+  pauseTime: 1
+  deckViewer: {fileID: 702479333}
+  battle: {fileID: 1357940022}
+  gameManager: {fileID: 0}
 --- !u!1 &1079733725
 GameObject:
   m_ObjectHideFlags: 0
@@ -7267,7 +7289,7 @@ GameObject:
   - component: {fileID: 1308803594}
   - component: {fileID: 1308803593}
   m_Layer: 5
-  m_Name: Precio1000
+  m_Name: DineroText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

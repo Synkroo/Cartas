@@ -7,6 +7,17 @@ namespace JuegoDeCartas.Managers
     {
         [SerializeField] private EndGameMenu endGameMenu;
 
+        [Header("Shop")]
+        public ShopManager shopManager;
+
+        public int dinero = 1000;
+
+        void Awake()
+        {
+            if (shopManager != null)
+                shopManager.gameManager = this;
+        }
+
         public void ShowVictory()
         {
             if (endGameMenu != null)
@@ -17,6 +28,12 @@ namespace JuegoDeCartas.Managers
         {
             if (endGameMenu != null)
                 endGameMenu.ShowDefeat();
+        }
+
+        public void OpenShop()
+        {
+            if (shopManager != null)
+                shopManager.Open();
         }
     }
 }
