@@ -37,6 +37,23 @@ namespace JuegoDeCartas.UI
                                  ?? menusCanvas.gameObject.AddComponent<GraphicRaycaster>();
         }
 
+        void OnEnable()
+        {
+            var salirBtn = transform.Find("BotonSalir")?.GetComponent<Button>();
+            if (salirBtn != null)
+            {
+                salirBtn.onClick.RemoveAllListeners();
+                salirBtn.onClick.AddListener(OnSalir);
+            }
+
+            var verMazoBtn = transform.Find("BotonVerMazo")?.GetComponent<Button>();
+            if (verMazoBtn != null)
+            {
+                verMazoBtn.onClick.RemoveAllListeners();
+                verMazoBtn.onClick.AddListener(OnVerMazo);
+            }
+        }
+
         public void Open()
         {
             if (pauseTime)

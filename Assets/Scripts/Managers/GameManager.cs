@@ -12,12 +12,6 @@ namespace JuegoDeCartas.Managers
 
         public int dinero = 1000;
 
-        void Awake()
-        {
-            if (shopManager != null)
-                shopManager.gameManager = this;
-        }
-
         public void ShowVictory()
         {
             if (endGameMenu != null)
