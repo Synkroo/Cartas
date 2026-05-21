@@ -16,6 +16,8 @@ namespace JuegoDeCartas.UI
 
         public GameObject cardPrefab;
 
+        public System.Action onClose;
+
         public void Open()
         {
             panel.SetActive(true);
@@ -26,6 +28,7 @@ namespace JuegoDeCartas.UI
         public void Close()
         {
             panel.SetActive(false);
+            onClose?.Invoke();
         }
 
         public void ShowRemaining()

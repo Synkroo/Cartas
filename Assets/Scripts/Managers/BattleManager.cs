@@ -137,7 +137,9 @@ namespace JuegoDeCartas.Managers
 
             turnManager.NextRound();
 
-            if (enemy == null && gameManager != null)
+            bool noMoreEnemies = currentEnemyIndex >= enemyWave.Count;
+
+            if (noMoreEnemies && gameManager != null)
             {
                 if (statsTracker != null)
                     statsTracker.PopulateStatsText();
@@ -152,6 +154,8 @@ namespace JuegoDeCartas.Managers
         public void ContinueAfterShop()
         {
             SpawnEnemy();
+            turnManager.DiscardHand();
+            turnManager.StartPlayerTurn();
         }
 
         public void DamagePlayer(int damage)

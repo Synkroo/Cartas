@@ -59,6 +59,21 @@ namespace JuegoDeCartas.UI
             if (pauseTime)
                 Time.timeScale = 0f;
 
+            shopPanel.SetActive(true);
+
+            SetActiveAndBlockOthers();
+
+            if (menusCanvas != null)
+                menusCanvas.enabled = true;
+
+            if (menusRaycaster != null)
+                menusRaycaster.enabled = true;
+
+            UpdateDineroUI();
+        }
+
+        void SetActiveAndBlockOthers()
+        {
             var all = FindObjectsByType<GraphicRaycaster>(FindObjectsSortMode.None);
             disabledRaycasters.Clear();
             foreach (var rc in all)
@@ -69,12 +84,6 @@ namespace JuegoDeCartas.UI
                     disabledRaycasters.Add(rc);
                 }
             }
-
-            if (menusCanvas != null)
-                menusCanvas.enabled = true;
-
-            UpdateDineroUI();
-            shopPanel.SetActive(true);
         }
 
         public void Close()
@@ -107,8 +116,19 @@ namespace JuegoDeCartas.UI
 
         public void OnVerMazo()
         {
-            if (deckViewer != null)
-                deckViewer.Open();
+            if (deckViewer == null) return;
+
+            shopPanel.SetActive(false);
+
+            deckViewer.onClose -= OnDeckViewerClosed;
+            deckViewer.onClose += OnDeckViewerClosed;
+            deckViewer.Open();
+        }
+
+        void OnDeckViewerClosed()
+        {
+            deckViewer.onClose -= OnDeckViewerClosed;
+            shopPanel.SetActive(true);
         }
     }
 }
