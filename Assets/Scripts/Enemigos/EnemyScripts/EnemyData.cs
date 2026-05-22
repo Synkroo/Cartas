@@ -14,6 +14,9 @@ namespace JuegoDeCartas.Enemies
         public int minDamage = 5;
         public int maxDamage = 10;
 
+        [Header("Boss")]
+        public bool isBoss;
+
         [Header("Visual")]
         public Sprite sprite;
     }

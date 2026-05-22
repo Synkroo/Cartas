@@ -11,14 +11,26 @@ namespace JuegoDeCartas.Articulos
         public Sprite imagen;
         [TextArea] public string descripcion;
         [TextArea] public string efecto;
+        public TipoEfectoArticulo tipoEfecto;
+        public int cantidad;
     }
 
     public enum Rareza
     {
         Comun,
-        PocoComun,
         Raro,
-        Epico,
-        Legendario
+        Epico
+    }
+
+    public enum TipoEfectoArticulo
+    {
+        CurarVida,
+        DarArmadura,
+        AumentarRobo,
+        AumentarVidaMax,
+        AumentarManaMax,
+        AumentarMano,
+        ArmaduraPorTurno,
+        RegeneracionVida
     }
 }

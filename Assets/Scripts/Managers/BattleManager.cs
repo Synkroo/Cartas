@@ -28,6 +28,9 @@ namespace JuegoDeCartas.Managers
 
         private int lastCardDamageDealt;
 
+        [HideInInspector] public int armorPerTurn;
+        [HideInInspector] public int regenPerRound;
+
         [Header("Hand")]
         public Transform handParent;
         public GameObject cardPrefab;
@@ -134,6 +137,9 @@ namespace JuegoDeCartas.Managers
         {
             if (statsTracker != null)
                 statsTracker.RegisterEnemyDefeated();
+
+            if (enemy != null && enemy.data != null && gameManager != null)
+                gameManager.dinero += enemy.data.isBoss ? 500 : 200;
 
             turnManager.NextRound();
 

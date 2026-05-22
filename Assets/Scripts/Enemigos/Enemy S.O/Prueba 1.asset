@@ -16,4 +16,5 @@ MonoBehaviour:
   maxHealth: 2000
   minDamage: 5
   maxDamage: 10
+  isBoss: 0
   sprite: {fileID: 4631623571575152567, guid: 2ebdcc366015439458c86c9e2bbc82d1, type: 3}

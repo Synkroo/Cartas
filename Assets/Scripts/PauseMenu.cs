@@ -8,6 +8,9 @@ namespace JuegoDeCartas.UI
         [Header("Menu")]
         public GameObject optionsMenu;
 
+        [Header("Key")]
+        public KeyCode toggleKey = KeyCode.Escape;
+
         [Header("Animation")]
         public RectTransform menuTransform;
 
@@ -23,6 +26,17 @@ namespace JuegoDeCartas.UI
             menuTransform.localScale = closedScale;
 
             optionsMenu.SetActive(false);
+        }
+
+        void Update()
+        {
+            if (Input.GetKeyDown(toggleKey))
+            {
+                if (optionsMenu.activeSelf)
+                    ResumeGame();
+                else
+                    OpenMenu();
+            }
         }
 
         public void OpenMenu()

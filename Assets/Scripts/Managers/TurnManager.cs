@@ -53,6 +53,9 @@ namespace JuegoDeCartas.Managers
             player.stats.mana = player.stats.maxMana;
             player.stats.armor = 0;
 
+            if (battle.armorPerTurn > 0)
+                player.stats.armor += battle.armorPerTurn;
+
             battle.deckManager.DrawStartingHand();
             battle.RenderHand();
             battle.UpdateUI();
@@ -122,6 +125,13 @@ namespace JuegoDeCartas.Managers
 
             if (battle.statsTracker != null)
                 battle.statsTracker.RegisterRoundPlayed();
+
+            if (battle.regenPerRound > 0)
+            {
+                battle.player.stats.health =
+                    Mathf.Min(battle.player.stats.health + battle.regenPerRound, battle.player.stats.maxHealth);
+                battle.UpdateUI();
+            }
 
             UpdateRoundUI();
         }

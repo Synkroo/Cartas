@@ -15,6 +15,8 @@ MonoBehaviour:
   nombre: Pocion de Vida
   precio: 200
   rareza: 0
-  imagen: {fileID: 0}
+  imagen: {fileID: 1464903543452561498, guid: d364c65181512c4469d532055f2260b2, type: 3}
   descripcion: Una pocion que restaura vida.
   efecto: Cura 10 puntos de vida.
+  tipoEfecto: 0
+  cantidad: 10

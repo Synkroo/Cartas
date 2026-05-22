@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Articulos.ArticuloData
   nombre: Escudo Reforzado
   precio: 500
-  rareza: 2
-  imagen: {fileID: 0}
+  rareza: 1
+  imagen: {fileID: 1464903543452561498, guid: d364c65181512c4469d532055f2260b2, type: 3}
   descripcion: Un escudo resistente que absorbe golpes.
   efecto: Obtienes 5 de armadura.
+  tipoEfecto: 1
+  cantidad: 5

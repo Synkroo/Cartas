@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 273ec2d1544d2a3418a576ab0bdfda26, type: 3}
-  m_Name: RoboExtra
+  m_Name: MejorarCarta
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Articulos.ArticuloData
-  nombre: Robo Extra
-  precio: 1000
-  rareza: 2
-  imagen: {fileID: 1464903543452561498, guid: d364c65181512c4469d532055f2260b2, type: 3}
-  descripcion: Entrenamiento avanzado para robar mas cartas.
-  efecto: Robas 2 cartas extra al inicio de tu turno.
-  tipoEfecto: 2
-  cantidad: 1
+  nombre: Mejorar la carta
+  precio: 0
+  rareza: 0
+  imagen: {fileID: 0}
+  descripcion: Mejora una carta de tu mazo.
+  efecto: ""
+  tipoEfecto: 0
+  cantidad: 0
