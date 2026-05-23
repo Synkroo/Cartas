@@ -73,7 +73,8 @@ namespace JuegoDeCartas.Managers
             for (int i = 0; i < list.Count; i++)
             {
                 Card temp = list[i];
-                int randomIndex = UnityEngine.Random.Range(i, list.Count); list[i] = list[randomIndex];
+                int randomIndex = UnityEngine.Random.Range(i, list.Count);
+                list[i] = list[randomIndex];
                 list[randomIndex] = temp;
             }
         }

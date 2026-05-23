@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273ec2d1544d2a3418a576ab0bdfda26, type: 3}
   m_Name: EscudoReforzado
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Articulos.ArticuloData
-  nombre: Escudo Reforzado
+  nombre: Escudo de Acero
   precio: 500
   rareza: 1
   imagen: {fileID: 1464903543452561498, guid: d364c65181512c4469d532055f2260b2, type: 3}
   descripcion: Un escudo resistente que absorbe golpes.
-  efecto: Obtienes 5 de armadura.
   tipoEfecto: 1
   cantidad: 5

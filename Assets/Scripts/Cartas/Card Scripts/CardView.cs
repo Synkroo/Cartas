@@ -32,8 +32,8 @@ namespace JuegoDeCartas.Cards
             card = newCard;
             battleManager = manager;
 
-            nameText.text = card.data.cardName;
-            costText.text = card.data.cost.ToString();
+            if (nameText != null) nameText.text = card.data.cardName;
+            if (costText != null) costText.text = card.data.cost.ToString();
         }
 
         public void OnClick()

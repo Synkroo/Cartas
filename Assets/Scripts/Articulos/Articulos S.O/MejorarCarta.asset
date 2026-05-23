@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273ec2d1544d2a3418a576ab0bdfda26, type: 3}
   m_Name: MejorarCarta
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Articulos.ArticuloData
-  nombre: Mejorar la carta
+  nombre: Yunque Encantado
   precio: 0
   rareza: 0
   imagen: {fileID: 0}
   descripcion: Mejora una carta de tu mazo.
-  efecto: ""
-  tipoEfecto: 0
-  cantidad: 0
+  tipoEfecto: 10
+  cantidad: 1

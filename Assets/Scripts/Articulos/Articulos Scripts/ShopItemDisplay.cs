@@ -1,17 +1,21 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using JuegoDeCartas.Managers;
 using JuegoDeCartas.Articulos;
+using JuegoDeCartas.Cards;
 
 namespace JuegoDeCartas.UI
 {
-    public class ShopItemDisplay : MonoBehaviour
+    public class ShopItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         ArticuloData item;
         ShopManager shopManager;
         BattleManager battle;
         Button button;
+        bool isHovering;
+        Vector3 originalScale;
 
         static readonly Color colorComun = new Color(0f, 0.5f, 1f);
         static readonly Color colorRaro = new Color(0f, 0.7f, 0f);
@@ -25,6 +29,7 @@ namespace JuegoDeCartas.UI
             button = GetComponent<Button>();
             if (button != null)
                 button.onClick.AddListener(OnBuy);
+            originalScale = transform.localScale;
         }
 
         public void Setup(ArticuloData newItem, ShopManager manager, BattleManager battleManager)
@@ -38,6 +43,7 @@ namespace JuegoDeCartas.UI
             var rarezaText = transform.Find("Rareza/Text (TMP)")?.GetComponent<TextMeshProUGUI>();
             var imagen = transform.Find("Imagen/Marco/Fondo/Sprite")?.GetComponent<Image>();
             var fondo = transform.Find("Panel")?.GetComponent<Image>();
+            var descripcionText = transform.Find("Descripcion/Text (TMP)")?.GetComponent<TextMeshProUGUI>();
 
             if (nombreText != null && item != null)
                 nombreText.text = item.nombre;
@@ -57,8 +63,32 @@ namespace JuegoDeCartas.UI
             if (fondo != null && item != null)
                 fondo.color = GetFondoColor(item.rareza);
 
+            if (descripcionText != null && item != null)
+                descripcionText.text = item.descripcion;
+
             if (button != null)
                 button.interactable = true;
+        }
+
+        void Update()
+        {
+            Vector3 target = originalScale * (isHovering ? 1.06f : 1f);
+            if (Vector3.Distance(transform.localScale, target) > 0.001f)
+                transform.localScale = Vector3.Lerp(
+                    transform.localScale,
+                    target,
+                    Time.unscaledDeltaTime * 12f
+                );
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            isHovering = true;
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            isHovering = false;
         }
 
         int GetRarezaCost(Rareza r)
@@ -164,6 +194,67 @@ namespace JuegoDeCartas.UI
                 case TipoEfectoArticulo.RegeneracionVida:
                     battle.regenPerRound += item.cantidad;
                     break;
+
+                case TipoEfectoArticulo.AgregarCartaAleatoria:
+                {
+                    var pool = battle.deckManager.startingDeck;
+                    for (int i = 0; i < item.cantidad; i++)
+                    {
+                        var rand = pool[Random.Range(0, pool.Count)];
+                        battle.deckManager.hand.Add(new Card(rand));
+                    }
+                    battle.RenderHand();
+                    break;
+                }
+
+                case TipoEfectoArticulo.AgregarCartaEleccion:
+                {
+                    var pool = battle.deckManager.startingDeck;
+                    for (int i = 0; i < item.cantidad; i++)
+                    {
+                        var rand = pool[Random.Range(0, pool.Count)];
+                        battle.deckManager.hand.Add(new Card(rand));
+                    }
+                    battle.RenderHand();
+                    break;
+                }
+
+                case TipoEfectoArticulo.MejorarCarta:
+                {
+                    var hand = battle.deckManager.hand;
+                    int count = Mathf.Min(item.cantidad, hand.Count);
+                    for (int i = 0; i < count; i++)
+                    {
+                        var card = hand[Random.Range(0, hand.Count)];
+                        card.data.cost = Mathf.Max(0, card.data.cost - 1);
+                    }
+                    battle.RenderHand();
+                    break;
+                }
+
+                case TipoEfectoArticulo.DuplicarCarta:
+                case TipoEfectoArticulo.DuplicarCartaMejoras:
+                {
+                    var hand = battle.deckManager.hand;
+                    int count = Mathf.Min(item.cantidad, hand.Count);
+                    for (int i = 0; i < count; i++)
+                    {
+                        var source = hand[Random.Range(0, hand.Count)];
+                        battle.deckManager.hand.Add(new Card(source.data));
+                    }
+                    battle.RenderHand();
+                    break;
+                }
+
+                case TipoEfectoArticulo.ReducirCoste:
+                {
+                    var hand = battle.deckManager.hand;
+                    if (hand.Count == 0) break;
+                    var card = hand[Random.Range(0, hand.Count)];
+                    card.data.cost = Mathf.Max(0, card.data.cost - item.cantidad);
+                    battle.RenderHand();
+                    break;
+                }
             }
 
             battle.UpdateUI();

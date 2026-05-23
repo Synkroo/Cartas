@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273ec2d1544d2a3418a576ab0bdfda26, type: 3}
   m_Name: RegeneracionVida
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Articulos.ArticuloData
-  nombre: Regeneracion de vida por ronda
+  nombre: Corazon de Fenix
   precio: 0
   rareza: 2
   imagen: {fileID: 0}
   descripcion: Recupera 10 de vida al inicio de cada ronda.
-  efecto: ""
   tipoEfecto: 7
   cantidad: 10

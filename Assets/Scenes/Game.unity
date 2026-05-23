@@ -4395,6 +4395,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenu
   optionsMenu: {fileID: 1079733725}
+  toggleKey: 27
   menuTransform: {fileID: 1079733726}
   animationDuration: 0.1
 --- !u!114 &929162964
@@ -6106,7 +6107,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e48604da6a1a1a84a9d44738b582acf7, type: 2}
   - {fileID: 11400000, guid: 6ccdf836c613a844997bbdabbd53df85, type: 2}
   - {fileID: 11400000, guid: 9445473f6e1c51143a797c392adb9d96, type: 2}
-  - {fileID: 11400000, guid: b90ad6452434d304ca9b8368bf573908, type: 2}
   - {fileID: 11400000, guid: 9c7e61d5881d6c34eb8be308a013bf6c, type: 2}
   - {fileID: 11400000, guid: 4c989de1147ee5445ad40a77e58f3b3e, type: 2}
   - {fileID: 11400000, guid: ec7b084aeff1862449f2ebf6f66974ff, type: 2}
@@ -6563,7 +6563,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5, y: -1}
+  m_AnchoredPosition: {x: -5, y: -0.5}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1141461237
@@ -7483,6 +7483,8 @@ MonoBehaviour:
   endGameMenu: {fileID: 332000004}
   gameManager: {fileID: 332000003}
   statsTracker: {fileID: 925113803}
+  armorPerTurn: 0
+  regenPerRound: 0
   handParent: {fileID: 637238228}
   cardPrefab: {fileID: 6961616625680443258, guid: 31e61bb76f2c7a94397b40a3e7470748, type: 3}
 --- !u!4 &1357940023
@@ -7706,7 +7708,7 @@ MonoBehaviour:
   enemyNextAttackText: {fileID: 966023763}
   currentTurn: 0
   turnCount: 0
-  roundCount: 0
+  roundCount: 1
   isExecuting: 0
 --- !u!1 &1442613433
 GameObject:
@@ -7847,7 +7849,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 5, y: -1}
+  m_AnchoredPosition: {x: 5, y: -0.5}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1447514947
@@ -9022,7 +9024,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -1}
+  m_AnchoredPosition: {x: 0, y: -0.5}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1786291740

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -30,6 +31,9 @@ namespace JuegoDeCartas.UI
 
         [Header("Item Pool")]
         public List<ArticuloData> itemPool = new List<ArticuloData>();
+
+        [Header("Restock")]
+        public int restockCost = 200;
 
         [Header("Slots")]
         public Transform[] slotContainers = new Transform[3];
@@ -91,6 +95,10 @@ namespace JuegoDeCartas.UI
                 menusRaycaster.enabled = true;
 
             UpdateDineroUI();
+
+            var restockPrecioText = transform.Find("Cabecero/PanelRestock/Precio200")?.GetComponent<TextMeshProUGUI>();
+            if (restockPrecioText != null)
+                restockPrecioText.text = restockCost + "€";
         }
 
         void ClearSlots()
@@ -109,10 +117,10 @@ namespace JuegoDeCartas.UI
                 if (slotContainers[i] == null) continue;
 
                 ArticuloData selected = RollItem();
+                if (selected == null) continue;
 
                 GameObject itemGO = Instantiate(itemCardPrefab, slotContainers[i]);
                 itemGO.transform.localPosition = Vector3.zero;
-                itemGO.transform.localScale = Vector3.one;
 
                 var display = itemGO.GetComponent<ShopItemDisplay>();
                 if (display != null)
@@ -190,10 +198,35 @@ namespace JuegoDeCartas.UI
                 battle.ContinueAfterShop();
         }
 
+        int lastDinero = -1;
+
         public void UpdateDineroUI()
         {
             if (dineroText != null && gameManager != null)
+            {
                 dineroText.text = gameManager.dinero.ToString() + "€";
+                if (gameManager.dinero != lastDinero)
+                {
+                    lastDinero = gameManager.dinero;
+                    StopCoroutine(PulseGold());
+                    StartCoroutine(PulseGold());
+                }
+            }
+        }
+
+        IEnumerator PulseGold()
+        {
+            float dur = 0.3f;
+            float t = 0;
+            while (t < dur)
+            {
+                float p = t / dur;
+                float s = 1f + Mathf.Sin(p * Mathf.PI) * 0.15f;
+                dineroText.transform.localScale = Vector3.one * s;
+                t += Time.unscaledDeltaTime;
+                yield return null;
+            }
+            dineroText.transform.localScale = Vector3.one;
         }
 
         public void OnSalir()
@@ -220,15 +253,10 @@ namespace JuegoDeCartas.UI
 
         public void OnRestock()
         {
-            var precioText = transform.Find("Cabecero/PanelRestock/Precio200")?.GetComponent<TextMeshProUGUI>();
-            if (precioText == null || gameManager == null) return;
+            if (gameManager == null) return;
+            if (gameManager.dinero < restockCost) return;
 
-            string numeric = System.Text.RegularExpressions.Regex.Replace(precioText.text, @"[^\d]", "");
-            if (!int.TryParse(numeric, out int cost)) return;
-
-            if (gameManager.dinero < cost) return;
-
-            gameManager.dinero -= cost;
+            gameManager.dinero -= restockCost;
             UpdateDineroUI();
 
             ClearSlots();

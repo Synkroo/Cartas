@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273ec2d1544d2a3418a576ab0bdfda26, type: 3}
   m_Name: ReducirCoste
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Articulos.ArticuloData
-  nombre: Reducir coste de una carta
+  nombre: Moneda del Trueque
   precio: 0
   rareza: 2
   imagen: {fileID: 0}
   descripcion: Reduce el coste de una carta de tu mazo.
-  efecto: ""
-  tipoEfecto: 0
-  cantidad: 0
+  tipoEfecto: 13
+  cantidad: 2

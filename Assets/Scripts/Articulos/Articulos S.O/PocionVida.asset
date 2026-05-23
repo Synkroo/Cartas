@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273ec2d1544d2a3418a576ab0bdfda26, type: 3}
   m_Name: PocionVida
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Articulos.ArticuloData
-  nombre: Pocion de Vida
+  nombre: Vial de Sangre
   precio: 200
   rareza: 0
   imagen: {fileID: 1464903543452561498, guid: d364c65181512c4469d532055f2260b2, type: 3}
   descripcion: Una pocion que restaura vida.
-  efecto: Cura 10 puntos de vida.
   tipoEfecto: 0
   cantidad: 10

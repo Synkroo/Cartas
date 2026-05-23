@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273ec2d1544d2a3418a576ab0bdfda26, type: 3}
   m_Name: AgregarCartaAleatoria
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Articulos.ArticuloData
-  nombre: Agregar una carta aleatoria
+  nombre: Orbe del Caos
   precio: 0
   rareza: 0
   imagen: {fileID: 0}
-  descripcion: Anyade una carta aleatoria a tu mazo.
-  efecto: ""
-  tipoEfecto: 0
-  cantidad: 0
+  descripcion: "A\xF1ade una carta aleatoria a tu mazo."
+  tipoEfecto: 8
+  cantidad: 1

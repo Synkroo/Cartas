@@ -6,11 +6,9 @@ namespace JuegoDeCartas.Articulos
     public class ArticuloData : ScriptableObject
     {
         public string nombre;
-        public int precio;
         public Rareza rareza;
         public Sprite imagen;
         [TextArea] public string descripcion;
-        [TextArea] public string efecto;
         public TipoEfectoArticulo tipoEfecto;
         public int cantidad;
     }
@@ -31,6 +29,12 @@ namespace JuegoDeCartas.Articulos
         AumentarManaMax,
         AumentarMano,
         ArmaduraPorTurno,
-        RegeneracionVida
+        RegeneracionVida,
+        AgregarCartaAleatoria,
+        AgregarCartaEleccion,
+        MejorarCarta,
+        DuplicarCarta,
+        DuplicarCartaMejoras,
+        ReducirCoste
     }
 }

@@ -22,7 +22,6 @@ namespace JuegoDeCartas.Managers
         public TurnManager turnManager;
         public UIManager uiManager;
         public DeckViewerUI deckViewer;
-        public EndGameMenu endGameMenu;
         public GameManager gameManager;
         public JuegoDeCartas.Stats.GameStatsTracker statsTracker;
 
@@ -95,7 +94,7 @@ namespace JuegoDeCartas.Managers
 
             RenderHand();
             UpdateUI();
-            deckViewer.ShowDiscard();
+            if (deckViewer != null) deckViewer.ShowDiscard();
         }
 
         void SpawnEnemy()
@@ -141,8 +140,6 @@ namespace JuegoDeCartas.Managers
             if (enemy != null && enemy.data != null && gameManager != null)
                 gameManager.dinero += enemy.data.isBoss ? 500 : 200;
 
-            turnManager.NextRound();
-
             bool noMoreEnemies = currentEnemyIndex >= enemyWave.Count;
 
             if (noMoreEnemies && gameManager != null)
@@ -160,7 +157,10 @@ namespace JuegoDeCartas.Managers
         public void ContinueAfterShop()
         {
             SpawnEnemy();
-            turnManager.DiscardHand();
+            deckManager.deck.AddRange(deckManager.hand);
+            deckManager.hand.Clear();
+            deckManager.Shuffle(deckManager.deck);
+            turnManager.NextRound();
             turnManager.StartPlayerTurn();
         }
 
@@ -180,6 +180,7 @@ namespace JuegoDeCartas.Managers
 
             stats.health -= remaining;
             stats.Clamp();
+
             UpdateUI();
 
             if (statsTracker != null)

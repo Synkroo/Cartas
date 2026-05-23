@@ -136,22 +136,39 @@ namespace JuegoDeCartas.Managers
             UpdateRoundUI();
         }
 
-        public void DiscardHand()
-        {
-            battle.deckManager.DiscardHand();
-            battle.RenderHand();
-        }
-
         void UpdateTurnUI()
         {
             if (turnText != null)
+            {
                 turnText.text = "Turno " + turnCount;
+                turnText.transform.localScale = Vector3.zero;
+                StartCoroutine(PopIn(turnText.transform));
+            }
         }
 
         void UpdateRoundUI()
         {
             if (roundText != null)
+            {
                 roundText.text = "Ronda " + roundCount;
+                roundText.transform.localScale = Vector3.zero;
+                StartCoroutine(PopIn(roundText.transform));
+            }
+        }
+
+        IEnumerator PopIn(Transform t)
+        {
+            float dur = 0.25f;
+            float elapsed = 0;
+            while (elapsed < dur)
+            {
+                float p = elapsed / dur;
+                float s = Mathf.Sin(p * Mathf.PI * 0.5f);
+                t.localScale = Vector3.one * s;
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+            t.localScale = Vector3.one;
         }
     }
 }
