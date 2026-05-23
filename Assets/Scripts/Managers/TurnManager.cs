@@ -26,6 +26,9 @@ namespace JuegoDeCartas.Managers
         public int turnCount = 0;
         public int roundCount = 1;
 
+        [Header("Animation")]
+        public AnimationCurve popInCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+
         private int pendingEnemyDamage;
 
         public void StartGame()
@@ -54,7 +57,11 @@ namespace JuegoDeCartas.Managers
             player.stats.armor = 0;
 
             if (battle.armorPerTurn > 0)
+            {
                 player.stats.armor += battle.armorPerTurn;
+                if (battle.statsTracker != null)
+                    battle.statsTracker.RegisterArmorGained(battle.armorPerTurn);
+            }
 
             battle.deckManager.DrawStartingHand();
             battle.RenderHand();
@@ -163,7 +170,7 @@ namespace JuegoDeCartas.Managers
             while (elapsed < dur)
             {
                 float p = elapsed / dur;
-                float s = Mathf.Sin(p * Mathf.PI * 0.5f);
+                float s = popInCurve.Evaluate(p);
                 t.localScale = Vector3.one * s;
                 elapsed += Time.deltaTime;
                 yield return null;

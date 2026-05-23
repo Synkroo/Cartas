@@ -18,6 +18,8 @@ namespace JuegoDeCartas.UI
 
         GraphicRaycaster menusRaycaster;
         List<GraphicRaycaster> disabledRaycasters = new List<GraphicRaycaster>();
+        List<GraphicRaycaster> allRaycasters = new List<GraphicRaycaster>();
+        bool raycastersCached;
 
         void Awake()
         {
@@ -25,6 +27,14 @@ namespace JuegoDeCartas.UI
                 menusRaycaster = menusCanvas.GetComponent<GraphicRaycaster>()
                                  ?? menusCanvas.gameObject.AddComponent<GraphicRaycaster>();
             HideAll();
+        }
+
+        void CacheRaycasters()
+        {
+            if (raycastersCached) return;
+            allRaycasters.Clear();
+            allRaycasters.AddRange(FindObjectsByType<GraphicRaycaster>(FindObjectsSortMode.None));
+            raycastersCached = true;
         }
 
         public void ShowVictory()
@@ -42,10 +52,9 @@ namespace JuegoDeCartas.UI
             if (pauseTime)
                 Time.timeScale = 0f;
 
-            // Disable all other raycasters so game UI is unclickable
-            var all = FindObjectsByType<GraphicRaycaster>(FindObjectsSortMode.None);
+            CacheRaycasters();
             disabledRaycasters.Clear();
-            foreach (var rc in all)
+            foreach (var rc in allRaycasters)
             {
                 if (rc != menusRaycaster && rc.enabled)
                 {

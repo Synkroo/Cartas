@@ -612,22 +612,10 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 661488672a178784eab1709fc3dc6e33, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardHover
+  m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Cards.CardHover
   isHovering: 0
-  hoverHeight: 40
-  hoverSpeed: 10
---- !u!114 &9080429721754644958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6961616625680443258}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce8399decf39b8c4ca1b7ffcbf666a62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardHoverDetector
+  hoverScale: 1.1
+  lerpSpeed: 10
 --- !u!114 &4376363975156439854
 MonoBehaviour:
   m_ObjectHideFlags: 0

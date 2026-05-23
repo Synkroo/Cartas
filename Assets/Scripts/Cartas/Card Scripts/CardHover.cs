@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace JuegoDeCartas.Cards
 {
-    public class CardHover : MonoBehaviour
+    public class CardHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         public bool isHovering;
 
@@ -34,6 +35,16 @@ namespace JuegoDeCartas.Cards
         public void SetHover(bool value)
         {
             isHovering = value;
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            isHovering = true;
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            isHovering = false;
         }
     }
 }

@@ -20,6 +20,7 @@ namespace JuegoDeCartas.UI
         private Vector3 openedScale = Vector3.one;
 
         private Coroutine currentRoutine;
+        private float previousTimeScale = 1f;
 
         void Start()
         {
@@ -41,6 +42,9 @@ namespace JuegoDeCartas.UI
 
         public void OpenMenu()
         {
+            previousTimeScale = Time.timeScale;
+            Time.timeScale = 0f;
+
             optionsMenu.SetActive(true);
 
             if (currentRoutine != null)
@@ -62,6 +66,8 @@ namespace JuegoDeCartas.UI
             yield return StartCoroutine(ScaleMenu(closedScale));
 
             optionsMenu.SetActive(false);
+
+            Time.timeScale = previousTimeScale;
         }
 
         IEnumerator ScaleMenu(Vector3 targetScale)

@@ -14,14 +14,17 @@ namespace JuegoDeCartas.Enemies
 
         void Start()
         {
-            fillImage.type = Image.Type.Filled;
-            fillImage.fillMethod = Image.FillMethod.Horizontal;
-            fillImage.fillOrigin = (int)Image.OriginHorizontal.Left;
+            if (fillImage != null)
+            {
+                fillImage.type = Image.Type.Filled;
+                fillImage.fillMethod = Image.FillMethod.Horizontal;
+                fillImage.fillOrigin = (int)Image.OriginHorizontal.Left;
+            }
         }
 
         void Update()
         {
-            if (battle == null || battle.enemy == null)
+            if (battle?.enemy == null)
                 return;
 
             float percent = (float)battle.enemy.stats.health / battle.enemy.stats.maxHealth;

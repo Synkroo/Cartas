@@ -44,12 +44,22 @@ namespace JuegoDeCartas.UI
         List<GameObject> spawnedItems = new List<GameObject>();
         GraphicRaycaster menusRaycaster;
         List<GraphicRaycaster> disabledRaycasters = new List<GraphicRaycaster>();
+        List<GraphicRaycaster> allRaycasters = new List<GraphicRaycaster>();
+        bool raycastersCached;
 
         void Awake()
         {
             if (menusCanvas != null)
                 menusRaycaster = menusCanvas.GetComponent<GraphicRaycaster>()
                                  ?? menusCanvas.gameObject.AddComponent<GraphicRaycaster>();
+        }
+
+        void CacheRaycasters()
+        {
+            if (raycastersCached) return;
+            allRaycasters.Clear();
+            allRaycasters.AddRange(FindObjectsByType<GraphicRaycaster>(FindObjectsSortMode.None));
+            raycastersCached = true;
         }
 
         void OnEnable()
@@ -169,9 +179,9 @@ namespace JuegoDeCartas.UI
 
         void SetActiveAndBlockOthers()
         {
-            var all = FindObjectsByType<GraphicRaycaster>(FindObjectsSortMode.None);
+            CacheRaycasters();
             disabledRaycasters.Clear();
-            foreach (var rc in all)
+            foreach (var rc in allRaycasters)
             {
                 if (rc != menusRaycaster && rc.enabled)
                 {

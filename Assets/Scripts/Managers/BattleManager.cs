@@ -24,6 +24,7 @@ namespace JuegoDeCartas.Managers
         public DeckViewerUI deckViewer;
         public GameManager gameManager;
         public JuegoDeCartas.Stats.GameStatsTracker statsTracker;
+        public EnemyHealthBar enemyHealthBar;
 
         private int lastCardDamageDealt;
 
@@ -51,7 +52,6 @@ namespace JuegoDeCartas.Managers
 
             deckManager.InitializeDeck();
 
-            turnManager.battle = this;
             turnManager.StartGame();
         }
 
@@ -64,7 +64,6 @@ namespace JuegoDeCartas.Managers
         public void DrawCards(int amount)
         {
             deckManager.DrawCards(amount);
-            UpdateUI();
         }
 
         public void PlayCard(Card card)
@@ -102,6 +101,8 @@ namespace JuegoDeCartas.Managers
             if (currentEnemyIndex >= enemyWave.Count)
             {
                 enemy = null;
+                if (enemyHealthBar != null)
+                    enemyHealthBar.enabled = false;
                 return;
             }
 
@@ -110,7 +111,9 @@ namespace JuegoDeCartas.Managers
             currentEnemyIndex++;
 
             uiManager.SetEnemySprite(enemy.data.sprite);
-            UpdateUI();
+
+            if (enemyHealthBar != null)
+                enemyHealthBar.enabled = true;
         }
 
         public void DamageEnemy(int damage)
@@ -142,11 +145,15 @@ namespace JuegoDeCartas.Managers
 
             bool noMoreEnemies = currentEnemyIndex >= enemyWave.Count;
 
-            if (noMoreEnemies && gameManager != null)
+            if (noMoreEnemies)
             {
+                if (enemyHealthBar != null)
+                    enemyHealthBar.enabled = false;
+
                 if (statsTracker != null)
                     statsTracker.PopulateStatsText();
-                gameManager.ShowVictory();
+                if (gameManager != null)
+                    gameManager.ShowVictory();
                 return;
             }
 

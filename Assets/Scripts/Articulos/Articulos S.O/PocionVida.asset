@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: PocionVida
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Articulos.ArticuloData
   nombre: Vial de Sangre
-  precio: 200
   rareza: 0
   imagen: {fileID: 1464903543452561498, guid: d364c65181512c4469d532055f2260b2, type: 3}
-  descripcion: Una pocion que restaura vida.
+  descripcion: Una pocion que restaura 10 de vida.
   tipoEfecto: 0
   cantidad: 10

@@ -6017,7 +6017,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1060456273
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6034,6 +6034,7 @@ RectTransform:
   - {fileID: 814971874}
   - {fileID: 1784110935}
   - {fileID: 987814293}
+  - {fileID: 1614384069}
   m_Father: {fileID: 925113802}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -6100,8 +6101,6 @@ MonoBehaviour:
   gameManager: {fileID: 332000003}
   itemPool:
   - {fileID: 11400000, guid: 0b8db2497afc7e543826b810c6e9ad10, type: 2}
-  - {fileID: 11400000, guid: 1aaa2bd2d863633409343a9e96ba039b, type: 2}
-  - {fileID: 11400000, guid: dfe1638b0b696e14da21c5e1bbc43084, type: 2}
   - {fileID: 11400000, guid: dd85ff0e391d04840a43f5e7bf312049, type: 2}
   - {fileID: 11400000, guid: 947d65315858a15449e109d9b54e7f26, type: 2}
   - {fileID: 11400000, guid: e48604da6a1a1a84a9d44738b582acf7, type: 2}
@@ -6112,6 +6111,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ec7b084aeff1862449f2ebf6f66974ff, type: 2}
   - {fileID: 11400000, guid: 8020ffa1d4fd3a44faf28b323f13b8e0, type: 2}
   - {fileID: 11400000, guid: 3f8a221904e0850489846cc970655e43, type: 2}
+  restockCost: 200
   slotContainers:
   - {fileID: 1141461236}
   - {fileID: 1786291739}
@@ -6578,6 +6578,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faa4f45c5f2805c4bb645daecdb9e4ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.UI.ShopItemDisplay
+  nombreText: {fileID: 0}
+  precioText: {fileID: 0}
+  rarezaText: {fileID: 0}
+  descripcionText: {fileID: 0}
+  imagenSprite: {fileID: 0}
+  fondoPanel: {fileID: 0}
 --- !u!114 &1141461238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7480,9 +7486,9 @@ MonoBehaviour:
   turnManager: {fileID: 1423691076}
   uiManager: {fileID: 1959747934}
   deckViewer: {fileID: 702479333}
-  endGameMenu: {fileID: 332000004}
   gameManager: {fileID: 332000003}
   statsTracker: {fileID: 925113803}
+  enemyHealthBar: {fileID: 0}
   armorPerTurn: 0
   regenPerRound: 0
   handParent: {fileID: 637238228}
@@ -7709,6 +7715,30 @@ MonoBehaviour:
   currentTurn: 0
   turnCount: 0
   roundCount: 1
+  popInCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   isExecuting: 0
 --- !u!1 &1442613433
 GameObject:
@@ -7864,6 +7894,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faa4f45c5f2805c4bb645daecdb9e4ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.UI.ShopItemDisplay
+  nombreText: {fileID: 0}
+  precioText: {fileID: 0}
+  rarezaText: {fileID: 0}
+  descripcionText: {fileID: 0}
+  imagenSprite: {fileID: 0}
+  fondoPanel: {fileID: 0}
 --- !u!114 &1447514948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8381,6 +8417,81 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1602309292}
+  m_CullTransparentMesh: 1
+--- !u!1 &1614384068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1614384069}
+  - component: {fileID: 1614384071}
+  - component: {fileID: 1614384070}
+  m_Layer: 5
+  m_Name: Eleccion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1614384069
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614384068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1060456273}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -1.6056}
+  m_SizeDelta: {x: -1, y: -4.0006}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1614384070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614384068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1614384071
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614384068}
   m_CullTransparentMesh: 1
 --- !u!1 &1632161932
 GameObject:
@@ -9039,6 +9150,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faa4f45c5f2805c4bb645daecdb9e4ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.UI.ShopItemDisplay
+  nombreText: {fileID: 0}
+  precioText: {fileID: 0}
+  rarezaText: {fileID: 0}
+  descripcionText: {fileID: 0}
+  imagenSprite: {fileID: 0}
+  fondoPanel: {fileID: 0}
 --- !u!114 &1786291741
 MonoBehaviour:
   m_ObjectHideFlags: 0
