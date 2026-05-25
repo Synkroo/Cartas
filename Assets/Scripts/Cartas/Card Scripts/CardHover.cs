@@ -11,7 +11,7 @@ namespace JuegoDeCartas.Cards
         public float hoverScale = 1.1f;
         public float lerpSpeed = 10f;
 
-        private Vector3 originalScale;
+        public Vector3 originalScale;
         private Vector3 targetScale;
         private RectTransform rectTransform;
 
@@ -28,8 +28,14 @@ namespace JuegoDeCartas.Cards
             rectTransform.localScale = Vector3.Lerp(
                 rectTransform.localScale,
                 targetScale,
-                Time.deltaTime * lerpSpeed
+                Time.unscaledDeltaTime * lerpSpeed
             );
+        }
+
+        public void RefreshState()
+        {
+            targetScale = isHovering ? originalScale * hoverScale : originalScale;
+            rectTransform.localScale = targetScale;
         }
 
         public void SetHover(bool value)

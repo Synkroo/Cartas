@@ -1,9 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using JuegoDeCartas.Managers;
+using JuegoDeCartas.Cards;
 using JuegoDeCartas.Articulos;
 
 namespace JuegoDeCartas.UI
@@ -15,6 +17,9 @@ namespace JuegoDeCartas.UI
         BattleManager battle;
         Button button;
         Vector3 originalScale;
+
+        [Header("Selection")]
+        public CardSelectionUI selectionUI;
 
         [Header("UI References")]
         public TextMeshProUGUI nombreText;
@@ -41,11 +46,12 @@ namespace JuegoDeCartas.UI
             originalScale = transform.localScale;
         }
 
-        public void Setup(ArticuloData newItem, ShopManager manager, BattleManager battleManager)
+        public void Setup(ArticuloData newItem, ShopManager manager, BattleManager battleManager, CardSelectionUI cardSelUI = null)
         {
             item = newItem;
             shopManager = manager;
             battle = battleManager;
+            if (cardSelUI != null) selectionUI = cardSelUI;
 
             if (item == null) return;
 
@@ -182,18 +188,57 @@ namespace JuegoDeCartas.UI
         {
             if (item == null || shopManager == null || battle == null) return;
 
-            int cost = GetRarezaCost(item.rareza);
-            if (battle.gameManager.dinero < cost) return;
+            if (ItemEffectApplier.NeedsSelection(item.tipoEfecto))
+            {
+                if (selectionUI == null) return;
 
-            battle.gameManager.dinero -= cost;
-            shopManager.UpdateDineroUI();
+                List<Card> source = ItemEffectApplier.GetSelectionSource(item, battle);
+                if (source == null || source.Count == 0) return;
 
-            ItemEffectApplier.Apply(item, battle);
+                int cost = GetRarezaCost(item.rareza);
+                if (battle.gameManager.dinero < cost) return;
 
-            if (button != null)
-                button.interactable = false;
+                battle.gameManager.dinero -= cost;
+                shopManager.UpdateDineroUI();
 
-            gameObject.SetActive(false);
+                int spent = cost;
+                var capturedItem = item;
+                var capturedBattle = battle;
+                var capturedButton = button;
+                var capturedGO = gameObject;
+                selectionUI.OpenForSelection(source, item.descripcion,
+                    (selected) =>
+                    {
+                        ItemEffectApplier.ApplyToSelected(capturedItem, capturedBattle, selected);
+                        if (capturedButton != null)
+                            capturedButton.interactable = false;
+                        capturedGO.SetActive(false);
+                    },
+                    () =>
+                    {
+                        capturedBattle.gameManager.dinero += spent;
+                        if (shopManager != null)
+                            shopManager.UpdateDineroUI();
+                        if (capturedButton != null)
+                            capturedButton.interactable = true;
+                    }
+                );
+            }
+            else
+            {
+                int cost = GetRarezaCost(item.rareza);
+                if (battle.gameManager.dinero < cost) return;
+
+                battle.gameManager.dinero -= cost;
+                shopManager.UpdateDineroUI();
+
+                ItemEffectApplier.Apply(item, battle);
+
+                if (button != null)
+                    button.interactable = false;
+
+                gameObject.SetActive(false);
+            }
         }
     }
 }

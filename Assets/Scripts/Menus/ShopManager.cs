@@ -10,24 +10,22 @@ namespace JuegoDeCartas.UI
 {
     public class ShopManager : MonoBehaviour
     {
-        [Header("Shop Panel")]
-        public GameObject shopPanel;
-
-        [Header("UI References")]
-        public TextMeshProUGUI dineroText;
-
-        [Header("Canvas")]
-        public Canvas menusCanvas;
-
-        [Header("Settings")]
-        public bool pauseTime = true;
-
         [Header("External References")]
         public DeckViewerUI deckViewer;
 
         public BattleManager battle;
 
         public GameManager gameManager;
+
+        public CardSelectionUI cardSelectionUI;
+
+        public GameObject shopPanel;
+
+        public TextMeshProUGUI dineroText;
+
+        public Canvas menusCanvas;
+
+        public bool pauseTime = true;
 
         [Header("Item Pool")]
         public List<ArticuloData> itemPool = new List<ArticuloData>();
@@ -122,6 +120,9 @@ namespace JuegoDeCartas.UI
         {
             if (itemCardPrefab == null) return;
 
+            if (cardSelectionUI == null)
+                cardSelectionUI = GetComponentInChildren<CardSelectionUI>(true);
+
             for (int i = 0; i < slotContainers.Length; i++)
             {
                 if (slotContainers[i] == null) continue;
@@ -134,7 +135,7 @@ namespace JuegoDeCartas.UI
 
                 var display = itemGO.GetComponent<ShopItemDisplay>();
                 if (display != null)
-                    display.Setup(selected, this, battle);
+                    display.Setup(selected, this, battle, cardSelectionUI);
 
                 spawnedItems.Add(itemGO);
             }

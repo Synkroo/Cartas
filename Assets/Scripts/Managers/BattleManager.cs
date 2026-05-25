@@ -220,7 +220,14 @@ namespace JuegoDeCartas.Managers
             foreach (var card in deckManager.hand)
             {
                 GameObject obj = Instantiate(cardPrefab, handParent);
+                obj.transform.localScale = new Vector3(0.8f, obj.transform.localScale.y, obj.transform.localScale.z);
                 obj.GetComponent<CardView>().Setup(card, this);
+                var hover = obj.GetComponent<CardHover>();
+                if (hover != null)
+                {
+                    hover.originalScale = obj.transform.localScale;
+                    hover.RefreshState();
+                }
             }
 
             HandLayout layout = handParent.GetComponentInParent<HandLayout>();
