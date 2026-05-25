@@ -122,8 +122,26 @@ namespace JuegoDeCartas.Articulos
             all.AddRange(dm.hand);
             all.AddRange(dm.discard);
 
-            if (item.tipoEfecto == TipoEfectoArticulo.MejorarCarta)
+            var tipo = item.tipoEfecto;
+
+            if (tipo == TipoEfectoArticulo.MejorarCarta
+                || tipo == TipoEfectoArticulo.AgregarCartaEleccion
+                || tipo == TipoEfectoArticulo.DuplicarCarta
+                || tipo == TipoEfectoArticulo.DuplicarCartaMejoras)
                 all.RemoveAll(c => c.upgraded);
+
+            if (tipo == TipoEfectoArticulo.DuplicarCarta
+                || tipo == TipoEfectoArticulo.DuplicarCartaMejoras)
+            {
+                var unique = new List<Card>();
+                var seen = new HashSet<CardData>();
+                foreach (var c in all)
+                {
+                    if (seen.Add(c.data))
+                        unique.Add(c);
+                }
+                all = unique;
+            }
 
             return all;
         }
