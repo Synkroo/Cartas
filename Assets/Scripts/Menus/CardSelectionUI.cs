@@ -62,6 +62,9 @@ namespace JuegoDeCartas.UI
             onCardSelected = onSelect;
             onCancel = onCancelAction;
 
+            for (int i = contentParent.childCount - 1; i >= 0; i--)
+                Destroy(contentParent.GetChild(i).gameObject);
+
             panel.SetActive(true);
 
             if (tituloText == null)
