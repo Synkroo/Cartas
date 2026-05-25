@@ -16,22 +16,37 @@ namespace JuegoDeCartas.UI
 
         private Card currentCard;
         private Action onComplete;
+        private GameObject overlay;
 
         void Awake()
         {
             if (panel != null)
                 panel.SetActive(false);
 
-            CreatePanelIfNeeded();
+            CreateUI();
         }
 
-        void CreatePanelIfNeeded()
+        void CreateUI()
         {
             if (panel != null) return;
 
             var parent = transform.parent ?? transform;
+
+            overlay = new GameObject("UpgradeOverlay", typeof(RectTransform), typeof(Image));
+            overlay.transform.SetParent(parent, false);
+            var olRT = overlay.GetComponent<RectTransform>();
+            olRT.anchorMin = Vector2.zero;
+            olRT.anchorMax = Vector2.one;
+            olRT.sizeDelta = Vector2.zero;
+            olRT.localScale = Vector3.one;
+            var olImg = overlay.GetComponent<Image>();
+            olImg.color = new Color(0, 0, 0, 0.6f);
+            olImg.raycastTarget = true;
+            overlay.SetActive(false);
+
             panel = new GameObject("UpgradePanel", typeof(RectTransform), typeof(Image), typeof(CanvasGroup));
             panel.transform.SetParent(parent, false);
+            panel.transform.SetAsLastSibling();
 
             var rt = panel.GetComponent<RectTransform>();
             rt.sizeDelta = new Vector2(4, 3);
@@ -41,7 +56,7 @@ namespace JuegoDeCartas.UI
             rt.localScale = Vector3.one;
 
             var img = panel.GetComponent<Image>();
-            img.color = new Color(0.15f, 0.15f, 0.15f, 0.95f);
+            img.color = new Color(0.15f, 0.15f, 0.15f, 1f);
 
             var cg = panel.GetComponent<CanvasGroup>();
             cg.blocksRaycasts = true;
@@ -67,7 +82,7 @@ namespace JuegoDeCartas.UI
             costBtnRT.sizeDelta = new Vector2(2.5f, 0.6f);
             costBtnRT.anchoredPosition = new Vector2(0, 0.5f);
             var costBtnImg = costBtn.GetComponent<Image>();
-            costBtnImg.color = new Color(0.2f, 0.4f, 0.8f, 1);
+            costBtnImg.color = new Color(0.2f, 0.4f, 0.8f, 1f);
             costUpgradeButton = costBtn.GetComponent<Button>();
 
             var costBtnText = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
@@ -89,7 +104,7 @@ namespace JuegoDeCartas.UI
             reactBtnRT.sizeDelta = new Vector2(2.5f, 0.6f);
             reactBtnRT.anchoredPosition = new Vector2(0, -0.5f);
             var reactBtnImg = reactBtn.GetComponent<Image>();
-            reactBtnImg.color = new Color(0.8f, 0.4f, 0.2f, 1);
+            reactBtnImg.color = new Color(0.8f, 0.4f, 0.2f, 1f);
             reactivationUpgradeButton = reactBtn.GetComponent<Button>();
 
             var reactBtnText = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
@@ -111,7 +126,10 @@ namespace JuegoDeCartas.UI
             currentCard = card;
             onComplete = onUpgradeComplete;
 
-            CreatePanelIfNeeded();
+            CreateUI();
+
+            if (overlay != null)
+                overlay.SetActive(true);
 
             if (titleText != null)
                 titleText.text = "Mejorar: " + card.data.cardName;
@@ -135,16 +153,16 @@ namespace JuegoDeCartas.UI
         void ApplyCostUpgrade()
         {
             if (currentCard == null) return;
-            currentCard.data.cost = Mathf.Max(0, currentCard.data.cost - 1);
-            currentCard.data.upgraded = true;
+            currentCard.costReduction++;
+            currentCard.upgraded = true;
             Close();
         }
 
         void ApplyReactivationUpgrade()
         {
             if (currentCard == null) return;
-            currentCard.data.reactivationCount++;
-            currentCard.data.upgraded = true;
+            currentCard.reactivationCount++;
+            currentCard.upgraded = true;
             Close();
         }
 
@@ -152,6 +170,8 @@ namespace JuegoDeCartas.UI
         {
             if (panel != null)
                 panel.SetActive(false);
+            if (overlay != null)
+                overlay.SetActive(false);
             onComplete?.Invoke();
         }
     }

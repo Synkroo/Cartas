@@ -69,7 +69,8 @@ namespace JuegoDeCartas.Articulos
                     for (int i = 0; i < count; i++)
                     {
                         var card = hand[Random.Range(0, hand.Count)];
-                        card.data.cost = Mathf.Max(0, card.data.cost - 1);
+                        card.costReduction++;
+                        card.upgraded = true;
                     }
                     battle.RenderHand();
                     break;
@@ -122,7 +123,7 @@ namespace JuegoDeCartas.Articulos
             all.AddRange(dm.discard);
 
             if (item.tipoEfecto == TipoEfectoArticulo.MejorarCarta)
-                all.RemoveAll(c => c.data.upgraded);
+                all.RemoveAll(c => c.upgraded);
 
             return all;
         }
@@ -138,8 +139,8 @@ namespace JuegoDeCartas.Articulos
 
                 case TipoEfectoArticulo.MejorarCarta:
                 {
-                    int count = item.cantidad;
-                    selected.data.cost = Mathf.Max(0, selected.data.cost - count);
+                    selected.costReduction += item.cantidad;
+                    selected.upgraded = true;
                     battle.RenderHand();
                     break;
                 }

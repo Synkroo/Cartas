@@ -6149,6 +6149,7 @@ GameObject:
   - component: {fileID: 1060456275}
   - component: {fileID: 1060456274}
   - component: {fileID: 1060456276}
+  - component: {fileID: 1060456277}
   m_Layer: 5
   m_Name: MenuTienda
   m_TagString: Untagged
@@ -6234,6 +6235,7 @@ MonoBehaviour:
   battle: {fileID: 1357940022}
   gameManager: {fileID: 332000003}
   cardSelectionUI: {fileID: 1433429534}
+  upgradeSelectionUI: {fileID: 1060456277}
   shopPanel: {fileID: 1060456272}
   dineroText: {fileID: 1308803593}
   menusCanvas: {fileID: 331000001}
@@ -6256,6 +6258,22 @@ MonoBehaviour:
   - {fileID: 1786291739}
   - {fileID: 1447514946}
   itemCardPrefab: {fileID: 9097388090399889320, guid: da728a383c7e1744488c3d52aab39f44, type: 3}
+--- !u!114 &1060456277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060456272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93c9b12d05fe81a408b4cde511950748, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.UI.UpgradeSelectionUI
+  panel: {fileID: 0}
+  titleText: {fileID: 0}
+  costUpgradeButton: {fileID: 0}
+  reactivationUpgradeButton: {fileID: 0}
 --- !u!1 &1079733725
 GameObject:
   m_ObjectHideFlags: 0
