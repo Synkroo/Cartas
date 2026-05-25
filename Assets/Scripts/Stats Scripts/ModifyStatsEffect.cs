@@ -45,7 +45,12 @@ namespace JuegoDeCartas.Effects
             switch (mod.stat)
             {
                 case StatType.Health:
-                    stats.health += value;
+                    if (mod.operation == StatModifier.Operation.Remove)
+                    {
+                        battle.DamagePlayer(mod.amount);
+                        return;
+                    }
+                    stats.health += mod.amount;
                     break;
 
                 case StatType.MaxHealth:

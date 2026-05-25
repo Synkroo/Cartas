@@ -11,12 +11,6 @@ namespace JuegoDeCartas.Managers
         [Header("Player")]
         public Entity player;
 
-        [Header("Enemy")]
-        public Enemy enemy;
-
-        public List<EnemyData> enemyWave = new List<EnemyData>();
-        private int currentEnemyIndex = 0;
-
         [Header("Systems")]
         public DeckManager deckManager;
         public TurnManager turnManager;
@@ -24,21 +18,27 @@ namespace JuegoDeCartas.Managers
         public DeckViewerUI deckViewer;
         public GameManager gameManager;
         public JuegoDeCartas.Stats.GameStatsTracker statsTracker;
-        public EnemyHealthBar enemyHealthBar;
+
+        [Header("Wave")]
+        public WaveManager waveManager = new WaveManager();
+
+        [Header("Hand")]
+        public HandRenderer handRenderer = new HandRenderer();
 
         private int lastCardDamageDealt;
 
         [HideInInspector] public int armorPerTurn;
         [HideInInspector] public int regenPerRound;
 
-        [Header("Hand")]
-        public Transform handParent;
-        public GameObject cardPrefab;
+        public Enemy enemy => waveManager.enemy;
 
         void OnDestroy()
         {
             if (deckManager != null)
                 deckManager.OnDeckChanged -= RefreshDeckUI;
+
+            waveManager.OnWaveCleared -= OnWaveCleared;
+            waveManager.OnEnemyDefeated -= OnEnemyDefeated;
         }
 
         void Start()
@@ -47,18 +47,49 @@ namespace JuegoDeCartas.Managers
 
             deckManager.OnDeckChanged += RefreshDeckUI;
 
-            ShuffleEnemyWave();
-            SpawnEnemy();
+            waveManager.uiManager = uiManager;
+            waveManager.gameManager = gameManager;
+            waveManager.statsTracker = statsTracker;
+            waveManager.enemyHealthBar = GetEnemyHealthBar();
+
+            waveManager.OnWaveCleared += OnWaveCleared;
+            waveManager.OnEnemyDefeated += OnEnemyDefeated;
+
+            waveManager.Initialize();
 
             deckManager.InitializeDeck();
 
             turnManager.StartGame();
         }
 
+        EnemyHealthBar GetEnemyHealthBar()
+        {
+            if (waveManager.enemyHealthBar != null)
+                return waveManager.enemyHealthBar;
+
+            var bar = GetComponentInChildren<EnemyHealthBar>();
+            if (bar != null)
+                return bar;
+
+            return FindAnyObjectByType<EnemyHealthBar>();
+        }
+
         void RefreshDeckUI()
         {
             if (deckViewer != null && deckViewer.panel.activeSelf)
                 deckViewer.ShowRemaining();
+        }
+
+        void OnWaveCleared()
+        {
+            if (statsTracker != null)
+                statsTracker.PopulateStatsText();
+            if (gameManager != null)
+                gameManager.ShowVictory();
+        }
+
+        void OnEnemyDefeated()
+        {
         }
 
         public void DrawCards(int amount)
@@ -96,104 +127,32 @@ namespace JuegoDeCartas.Managers
             if (deckViewer != null) deckViewer.ShowDiscard();
         }
 
-        void SpawnEnemy()
-        {
-            if (currentEnemyIndex >= enemyWave.Count)
-            {
-                enemy = null;
-                if (enemyHealthBar != null)
-                    enemyHealthBar.enabled = false;
-                return;
-            }
-
-            enemy = new Enemy();
-            enemy.Initialize(enemyWave[currentEnemyIndex]);
-            currentEnemyIndex++;
-
-            uiManager.SetEnemySprite(enemy.data.sprite);
-
-            if (enemyHealthBar != null)
-                enemyHealthBar.enabled = true;
-        }
-
         public void DamageEnemy(int damage)
         {
             if (enemy == null) return;
 
-            enemy.stats.health -= damage;
             lastCardDamageDealt += damage;
 
             if (statsTracker != null)
                 statsTracker.RegisterDamageDealt(damage);
 
-            if (enemy.stats.health <= 0)
-            {
-                enemy.stats.health = 0;
-                EnemyDeath();
-            }
+            waveManager.DamageEnemy(damage, out bool died);
 
             UpdateUI();
-        }
-
-        void EnemyDeath()
-        {
-            if (statsTracker != null)
-                statsTracker.RegisterEnemyDefeated();
-
-            if (enemy != null && enemy.data != null && gameManager != null)
-                gameManager.dinero += enemy.data.isBoss ? 500 : 200;
-
-            bool noMoreEnemies = currentEnemyIndex >= enemyWave.Count;
-
-            if (noMoreEnemies)
-            {
-                if (enemyHealthBar != null)
-                    enemyHealthBar.enabled = false;
-
-                if (statsTracker != null)
-                    statsTracker.PopulateStatsText();
-                if (gameManager != null)
-                    gameManager.ShowVictory();
-                return;
-            }
-
-            if (gameManager != null)
-                gameManager.OpenShop();
-        }
-
-        public void ContinueAfterShop()
-        {
-            SpawnEnemy();
-            deckManager.deck.AddRange(deckManager.hand);
-            deckManager.hand.Clear();
-            deckManager.Shuffle(deckManager.deck);
-            turnManager.NextRound();
-            turnManager.StartPlayerTurn();
         }
 
         public void DamagePlayer(int damage)
         {
             if (player == null) return;
 
-            var stats = player.stats;
-            int remaining = damage;
-
-            if (stats.armor > 0)
-            {
-                int absorbed = Mathf.Min(stats.armor, remaining);
-                stats.armor -= absorbed;
-                remaining -= absorbed;
-            }
-
-            stats.health -= remaining;
-            stats.Clamp();
+            int dealt = player.TakeDamage(damage);
 
             UpdateUI();
 
             if (statsTracker != null)
-                statsTracker.RegisterDamageReceived(remaining);
+                statsTracker.RegisterDamageReceived(dealt);
 
-            if (stats.health <= 0 && gameManager != null)
+            if (player.stats.health <= 0 && gameManager != null)
             {
                 if (statsTracker != null)
                     statsTracker.PopulateStatsText();
@@ -201,38 +160,22 @@ namespace JuegoDeCartas.Managers
             }
         }
 
-        void ShuffleEnemyWave()
+        public void ContinueAfterShop()
         {
-            for (int i = 0; i < enemyWave.Count; i++)
-            {
-                EnemyData temp = enemyWave[i];
-                int randomIndex = Random.Range(i, enemyWave.Count);
-                enemyWave[i] = enemyWave[randomIndex];
-                enemyWave[randomIndex] = temp;
-            }
+            waveManager.SpawnNext();
+
+            deckManager.deck.AddRange(deckManager.hand);
+            deckManager.hand.Clear();
+            deckManager.Shuffle(deckManager.deck);
+
+            turnManager.NextRound();
+            turnManager.StartPlayerTurn();
         }
 
         public void RenderHand()
         {
-            foreach (Transform child in handParent)
-                Destroy(child.gameObject);
-
-            foreach (var card in deckManager.hand)
-            {
-                GameObject obj = Instantiate(cardPrefab, handParent);
-                obj.transform.localScale = new Vector3(0.8f, obj.transform.localScale.y, obj.transform.localScale.z);
-                obj.GetComponent<CardView>().Setup(card, this);
-                var hover = obj.GetComponent<CardHover>();
-                if (hover != null)
-                {
-                    hover.originalScale = obj.transform.localScale;
-                    hover.RefreshState();
-                }
-            }
-
-            HandLayout layout = handParent.GetComponentInParent<HandLayout>();
-            if (layout != null)
-                layout.MarkDirty();
+            if (handRenderer != null)
+                handRenderer.Render(deckManager.hand, this);
         }
 
         public void UpdateUI()

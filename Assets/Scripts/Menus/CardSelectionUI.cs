@@ -53,19 +53,26 @@ namespace JuegoDeCartas.UI
 
         public void OpenForSelection(List<Card> cards, string title, Action<Card> onSelect, Action onCancelAction)
         {
+            if (cardPrefab == null)
+            {
+                Debug.LogError("[CardSelectionUI] cardPrefab is not assigned. Cannot open selection.");
+                return;
+            }
+
             onCardSelected = onSelect;
             onCancel = onCancelAction;
 
+            panel.SetActive(true);
+
+            if (tituloText == null)
+                tituloText = transform.Find("Cabecero/Titulo")?.GetComponent<TextMeshProUGUI>();
             if (tituloText != null)
-            tituloText.text = title;
-            onCardSelected = onSelect;
-            onCancel = onCancelAction;
+                tituloText.text = title;
 
             int totalCards = cards.Count;
             int columns = 5;
             int rows = Mathf.CeilToInt((float)totalCards / columns);
 
-            panel.SetActive(true);
             Canvas.ForceUpdateCanvases();
 
             if (grid != null)

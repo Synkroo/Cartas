@@ -50,17 +50,6 @@ namespace JuegoDeCartas.Articulos
                     break;
 
                 case TipoEfectoArticulo.AgregarCartaAleatoria:
-                {
-                    var pool = battle.deckManager.startingDeck;
-                    for (int i = 0; i < item.cantidad; i++)
-                    {
-                        var rand = pool[Random.Range(0, pool.Count)];
-                        battle.deckManager.hand.Add(new Card(rand));
-                    }
-                    battle.RenderHand();
-                    break;
-                }
-
                 case TipoEfectoArticulo.AgregarCartaEleccion:
                 {
                     var pool = battle.deckManager.startingDeck;
@@ -91,9 +80,10 @@ namespace JuegoDeCartas.Articulos
                 {
                     var hand = battle.deckManager.hand;
                     int count = Mathf.Min(item.cantidad, hand.Count);
+                    int originalHandCount = hand.Count;
                     for (int i = 0; i < count; i++)
                     {
-                        var source = hand[Random.Range(0, hand.Count)];
+                        var source = hand[Random.Range(0, originalHandCount)];
                         battle.deckManager.hand.Add(new Card(source.data));
                     }
                     battle.RenderHand();
