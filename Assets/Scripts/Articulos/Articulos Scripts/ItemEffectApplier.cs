@@ -134,10 +134,10 @@ namespace JuegoDeCartas.Articulos
                 || tipo == TipoEfectoArticulo.DuplicarCartaMejoras)
             {
                 var unique = new List<Card>();
-                var seen = new HashSet<CardData>();
+                var seen = new HashSet<string>();
                 foreach (var c in all)
                 {
-                    if (seen.Add(c.data))
+                    if (seen.Add(c.data.cardName))
                         unique.Add(c);
                 }
                 all = unique;
