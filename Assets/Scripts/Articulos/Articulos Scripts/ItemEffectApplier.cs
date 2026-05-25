@@ -120,6 +120,10 @@ namespace JuegoDeCartas.Articulos
             all.AddRange(dm.deck);
             all.AddRange(dm.hand);
             all.AddRange(dm.discard);
+
+            if (item.tipoEfecto == TipoEfectoArticulo.MejorarCarta)
+                all.RemoveAll(c => c.data.upgraded);
+
             return all;
         }
 

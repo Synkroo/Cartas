@@ -206,23 +206,55 @@ namespace JuegoDeCartas.UI
                 var capturedBattle = battle;
                 var capturedButton = button;
                 var capturedGO = gameObject;
-                selectionUI.OpenForSelection(source, item.descripcion,
-                    (selected) =>
-                    {
-                        ItemEffectApplier.ApplyToSelected(capturedItem, capturedBattle, selected);
-                        if (capturedButton != null)
-                            capturedButton.interactable = false;
-                        capturedGO.SetActive(false);
-                    },
-                    () =>
-                    {
-                        capturedBattle.gameManager.dinero += spent;
-                        if (shopManager != null)
-                            shopManager.UpdateDineroUI();
-                        if (capturedButton != null)
-                            capturedButton.interactable = true;
-                    }
-                );
+
+                if (item.tipoEfecto == TipoEfectoArticulo.MejorarCarta)
+                {
+                    selectionUI.OpenForSelection(source, item.descripcion,
+                        (selected) =>
+                        {
+                            var upgradeUI = shopManager.upgradeSelectionUI;
+                            if (upgradeUI != null)
+                            {
+                                upgradeUI.Show(selected, () =>
+                                {
+                                    if (capturedButton != null)
+                                        capturedButton.interactable = false;
+                                    capturedGO.SetActive(false);
+                                    if (battle != null)
+                                        battle.RenderHand();
+                                });
+                            }
+                        },
+                        () =>
+                        {
+                            capturedBattle.gameManager.dinero += spent;
+                            if (shopManager != null)
+                                shopManager.UpdateDineroUI();
+                            if (capturedButton != null)
+                                capturedButton.interactable = true;
+                        }
+                    );
+                }
+                else
+                {
+                    selectionUI.OpenForSelection(source, item.descripcion,
+                        (selected) =>
+                        {
+                            ItemEffectApplier.ApplyToSelected(capturedItem, capturedBattle, selected);
+                            if (capturedButton != null)
+                                capturedButton.interactable = false;
+                            capturedGO.SetActive(false);
+                        },
+                        () =>
+                        {
+                            capturedBattle.gameManager.dinero += spent;
+                            if (shopManager != null)
+                                shopManager.UpdateDineroUI();
+                            if (capturedButton != null)
+                                capturedButton.interactable = true;
+                        }
+                    );
+                }
             }
             else
             {

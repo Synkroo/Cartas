@@ -26,6 +26,7 @@ namespace JuegoDeCartas.Managers
         public HandRenderer handRenderer = new HandRenderer();
 
         private int lastCardDamageDealt;
+        private readonly HashSet<CardData> reactivatedThisTurn = new HashSet<CardData>();
 
         [HideInInspector] public int armorPerTurn;
         [HideInInspector] public int regenPerRound;
@@ -109,7 +110,16 @@ namespace JuegoDeCartas.Managers
             player.stats.mana -= card.data.cost;
 
             deckManager.hand.Remove(card);
-            deckManager.discard.Add(card);
+
+            if (card.data.reactivationCount > 0 && !reactivatedThisTurn.Contains(card.data))
+            {
+                reactivatedThisTurn.Add(card.data);
+                deckManager.hand.Add(card);
+            }
+            else
+            {
+                deckManager.discard.Add(card);
+            }
 
             lastCardDamageDealt = 0;
 
@@ -170,6 +180,11 @@ namespace JuegoDeCartas.Managers
 
             turnManager.NextRound();
             turnManager.StartPlayerTurn();
+        }
+
+        public void ClearReactivatedCards()
+        {
+            reactivatedThisTurn.Clear();
         }
 
         public void RenderHand()

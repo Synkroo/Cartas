@@ -513,7 +513,6 @@ GameObject:
   - component: {fileID: 4390230866058145992}
   - component: {fileID: -5910228406674185337}
   - component: {fileID: 931934757744940538}
-  - component: {fileID: 9080429721754644958}
   - component: {fileID: 4376363975156439854}
   m_Layer: 0
   m_Name: CardPrefab
@@ -616,6 +615,7 @@ MonoBehaviour:
   isHovering: 0
   hoverScale: 1.1
   lerpSpeed: 10
+  originalScale: {x: 0, y: 0, z: 0}
 --- !u!114 &4376363975156439854
 MonoBehaviour:
   m_ObjectHideFlags: 0

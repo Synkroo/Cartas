@@ -10,5 +10,7 @@ namespace JuegoDeCartas.Cards
         public string cardName;
         public int cost;
         public List<CardEffect> effects = new List<CardEffect>();
+        public bool upgraded;
+        public int reactivationCount;
     }
 }

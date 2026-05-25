@@ -19,6 +19,8 @@ namespace JuegoDeCartas.UI
 
         public CardSelectionUI cardSelectionUI;
 
+        public UpgradeSelectionUI upgradeSelectionUI;
+
         public GameObject shopPanel;
 
         public TextMeshProUGUI dineroText;
