@@ -41,9 +41,6 @@ namespace JuegoDeCartas.Managers
         {
             currentTurn = Turn.Player;
 
-            if (battle != null)
-                battle.ClearReactivatedCards();
-
             turnCount++;
 
             if (battle.statsTracker != null)
