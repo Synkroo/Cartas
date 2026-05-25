@@ -90,16 +90,6 @@ namespace JuegoDeCartas.Articulos
                     battle.RenderHand();
                     break;
                 }
-
-                case TipoEfectoArticulo.ReducirCoste:
-                {
-                    var hand = battle.deckManager.hand;
-                    if (hand.Count == 0) break;
-                    var card = hand[Random.Range(0, hand.Count)];
-                    card.data.cost = Mathf.Max(0, card.data.cost - item.cantidad);
-                    battle.RenderHand();
-                    break;
-                }
             }
 
             battle.UpdateUI();
@@ -110,8 +100,7 @@ namespace JuegoDeCartas.Articulos
             return tipo == TipoEfectoArticulo.AgregarCartaEleccion
                 || tipo == TipoEfectoArticulo.MejorarCarta
                 || tipo == TipoEfectoArticulo.DuplicarCarta
-                || tipo == TipoEfectoArticulo.DuplicarCartaMejoras
-                || tipo == TipoEfectoArticulo.ReducirCoste;
+                || tipo == TipoEfectoArticulo.DuplicarCartaMejoras;
         }
 
         public static List<Card> GetSelectionSource(ArticuloData item, BattleManager battle)
@@ -130,8 +119,7 @@ namespace JuegoDeCartas.Articulos
                 || tipo == TipoEfectoArticulo.DuplicarCartaMejoras)
                 all.RemoveAll(c => c.upgraded);
 
-            if (tipo == TipoEfectoArticulo.DuplicarCarta
-                || tipo == TipoEfectoArticulo.DuplicarCartaMejoras)
+            if (tipo == TipoEfectoArticulo.AgregarCartaEleccion)
             {
                 var unique = new List<Card>();
                 var seen = new HashSet<string>();
@@ -172,11 +160,6 @@ namespace JuegoDeCartas.Articulos
                     battle.RenderHand();
                     break;
                 }
-
-                case TipoEfectoArticulo.ReducirCoste:
-                    selected.data.cost = Mathf.Max(0, selected.data.cost - item.cantidad);
-                    battle.RenderHand();
-                    break;
             }
 
             battle.UpdateUI();
