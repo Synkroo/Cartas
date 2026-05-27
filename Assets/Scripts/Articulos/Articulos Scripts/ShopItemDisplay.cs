@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using JuegoDeCartas.Managers;
+using JuegoDeCartas.Missions;
 using JuegoDeCartas.Cards;
 using JuegoDeCartas.Articulos;
 
@@ -142,13 +143,15 @@ namespace JuegoDeCartas.UI
 
         int GetRarezaCost(Rareza r)
         {
-            return r switch
+            int baseCost = r switch
             {
                 Rareza.Comun => 300,
                 Rareza.Raro => 500,
                 Rareza.Epico => 1000,
                 _ => 300
             };
+
+            return Mathf.RoundToInt(baseCost * MissionRunState.ShopCostMultiplier);
         }
 
         Color GetRarezaColor(Rareza r)

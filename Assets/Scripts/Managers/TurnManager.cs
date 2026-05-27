@@ -93,13 +93,17 @@ namespace JuegoDeCartas.Managers
 
             if (battle.enemy == null)
             {
+                isExecuting = false;
                 StartPlayerTurn();
                 yield break;
             }
 
+            battle.enemy.BeginTurn();
+            battle.UpdateUI();
+
             pendingEnemyDamage = Random.Range(
-                battle.enemy.data.minDamage + battle.enemy.damageModifier,
-                battle.enemy.data.maxDamage + battle.enemy.damageModifier + 1
+                battle.enemy.currentMinDamage + battle.enemy.damageModifier,
+                battle.enemy.currentMaxDamage + battle.enemy.damageModifier + 1
             );
             pendingEnemyDamage = Mathf.Max(0, pendingEnemyDamage);
 

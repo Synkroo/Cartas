@@ -9,6 +9,7 @@ namespace JuegoDeCartas.Cards
     {
         public string cardName;
         public int cost;
+        public bool destroyOnUse;
         public List<CardEffect> effects = new List<CardEffect>();
     }
 }

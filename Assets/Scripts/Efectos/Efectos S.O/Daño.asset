@@ -16,4 +16,4 @@ MonoBehaviour:
   - target: 1
     stat: 0
     operation: 1
-    amount: 1000
+    amount: 10

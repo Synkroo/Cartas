@@ -2,6 +2,7 @@
 using UnityEngine;
 using JuegoDeCartas.Cards;
 using JuegoDeCartas.Enemies;
+using JuegoDeCartas.Missions;
 using JuegoDeCartas.UI;
 
 namespace JuegoDeCartas.Managers
@@ -47,10 +48,13 @@ namespace JuegoDeCartas.Managers
 
             deckManager.OnDeckChanged += RefreshDeckUI;
 
+            ApplySelectedMission();
+
             waveManager.uiManager = uiManager;
             waveManager.gameManager = gameManager;
             waveManager.statsTracker = statsTracker;
             waveManager.enemyHealthBar = GetEnemyHealthBar();
+            waveManager.battleManager = this;
 
             waveManager.OnWaveCleared += OnWaveCleared;
             waveManager.OnEnemyDefeated += OnEnemyDefeated;
@@ -60,6 +64,32 @@ namespace JuegoDeCartas.Managers
             deckManager.InitializeDeck();
 
             turnManager.StartGame();
+        }
+
+        void ApplySelectedMission()
+        {
+            MissionData mission = MissionRunState.SelectedMission;
+            if (mission == null)
+                return;
+
+            waveManager.normalEnemies.Clear();
+            waveManager.miniBossEnemies.Clear();
+
+            for (int i = 0; i < mission.possibleNormalEnemies.Count; i++)
+            {
+                if (mission.possibleNormalEnemies[i] != null)
+                    waveManager.normalEnemies.Add(mission.possibleNormalEnemies[i]);
+            }
+
+            for (int i = 0; i < mission.possibleMiniBosses.Count; i++)
+            {
+                if (mission.possibleMiniBosses[i] != null)
+                    waveManager.miniBossEnemies.Add(mission.possibleMiniBosses[i]);
+            }
+
+            waveManager.finalBoss = mission.boss;
+            waveManager.totalCombats = Mathf.Max(1, mission.combatCount);
+            waveManager.miniBossFrequency = Mathf.Max(1, mission.miniBossFrequency);
         }
 
         EnemyHealthBar GetEnemyHealthBar()
@@ -84,6 +114,11 @@ namespace JuegoDeCartas.Managers
         {
             if (statsTracker != null)
                 statsTracker.PopulateStatsText();
+
+            MissionData mission = MissionRunState.SelectedMission;
+            if (mission != null)
+                mission.MarkCompleted(MissionRunState.SelectedDifficulty);
+
             if (gameManager != null)
                 gameManager.ShowVictory();
         }
@@ -110,7 +145,9 @@ namespace JuegoDeCartas.Managers
             player.stats.mana -= cost;
 
             deckManager.hand.Remove(card);
-            deckManager.discard.Add(card);
+
+            if (!card.data.destroyOnUse)
+                deckManager.discard.Add(card);
 
             int repeats = 1 + card.reactivationCount;
             int totalDamage = 0;

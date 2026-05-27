@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
+  m_Name: SlimeDorado
+  m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
+  enemyName: Slime Dorado
+  maxHealth: 75
+  minDamage: 6
+  maxDamage: 10
+  enemyTier: 1
+  startArmor: 8
+  goldRewardOverride: 260
+  mechanics:
+  - mechanicName: Codicia viscosa
+    mechanicType: 2
+    armorPerTurn: 1
+    healPerTurn: 0
+    damageRampPerTurn: 1
+    junkCard: {fileID: 11400000, guid: d4d2f2d3a1b44d8f9e7c123456789abc, type: 2}
+    cardsToAdd: 1
+    cardDestination: 0
+    shuffleIntoDrawPile: 1
+    firstTriggerTurn: 1
+    triggerEveryXTurns: 1
+    reviveCount: 1
+    maxHealthPercentOnRevive: 80
+    armorPercentOnRevive: 0
+    minDamagePercentOnRevive: 120
+    maxDamagePercentOnRevive: 120
+  sprite: {fileID: -6392734053451439462, guid: 6391341c8c38d8f40985b9179901b19e, type: 3}
+  animatorController: {fileID: 9100000, guid: 9ac1bb997faeb7348b50811a074b7147, type: 2}

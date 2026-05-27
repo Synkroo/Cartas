@@ -10,7 +10,7 @@ namespace JuegoDeCartas.Managers
         [Header("Shop")]
         public ShopManager shopManager;
 
-        public int dinero = 1000;
+        public int dinero = 300;
 
         public void ShowVictory()
         {

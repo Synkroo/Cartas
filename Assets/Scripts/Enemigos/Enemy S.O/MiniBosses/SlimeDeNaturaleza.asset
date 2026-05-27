@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
+  m_Name: SlimeDeNaturaleza
+  m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
+  enemyName: Slime de Naturaleza
+  maxHealth: 60
+  minDamage: 7
+  maxDamage: 12
+  enemyTier: 1
+  startArmor: 0
+  goldRewardOverride: 0
+  mechanics:
+  - mechanicName: Regeneracion verde
+    mechanicType: 1
+    armorPerTurn: 0
+    healPerTurn: 5
+    damageRampPerTurn: 0
+    junkCard: {fileID: 0}
+    cardsToAdd: 1
+    cardDestination: 0
+    shuffleIntoDrawPile: 1
+    firstTriggerTurn: 1
+    triggerEveryXTurns: 1
+    reviveCount: 1
+    maxHealthPercentOnRevive: 80
+    armorPercentOnRevive: 0
+    minDamagePercentOnRevive: 120
+    maxDamagePercentOnRevive: 120
+  - mechanicName: Semillas parasitas
+    mechanicType: 2
+    armorPerTurn: 0
+    healPerTurn: 0
+    damageRampPerTurn: 0
+    junkCard: {fileID: 11400000, guid: d4d2f2d3a1b44d8f9e7c123456789abc, type: 2}
+    cardsToAdd: 1
+    cardDestination: 0
+    shuffleIntoDrawPile: 1
+    firstTriggerTurn: 2
+    triggerEveryXTurns: 2
+    reviveCount: 1
+    maxHealthPercentOnRevive: 80
+    armorPercentOnRevive: 0
+    minDamagePercentOnRevive: 120
+    maxDamagePercentOnRevive: 120
+  sprite: {fileID: 6413804829044496977, guid: 6391341c8c38d8f40985b9179901b19e, type: 3}
+  animatorController: {fileID: 9100000, guid: 860b74fe0fce7e34fb41919191a1ec22, type: 2}

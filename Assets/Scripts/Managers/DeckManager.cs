@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using JuegoDeCartas.Cards;
+using JuegoDeCartas.Enemies;
 
 namespace JuegoDeCartas.Managers
 {
@@ -58,6 +59,30 @@ namespace JuegoDeCartas.Managers
         public void DrawStartingHand()
         {
             DrawCards(cardsPerTurn);
+        }
+
+        public void AddCard(CardData cardData, EnemyCardDestination destination, int amount = 1, bool shuffleIntoDrawPile = true)
+        {
+            if (cardData == null || amount <= 0)
+                return;
+
+            for (int i = 0; i < amount; i++)
+            {
+                Card cardInstance = new Card(cardData);
+
+                if (destination == EnemyCardDestination.DiscardPile)
+                {
+                    discard.Add(cardInstance);
+                    continue;
+                }
+
+                deck.Add(cardInstance);
+            }
+
+            if (destination == EnemyCardDestination.DrawPile && shuffleIntoDrawPile)
+                Shuffle(deck);
+
+            OnDeckChanged?.Invoke();
         }
 
         public void DiscardHand()

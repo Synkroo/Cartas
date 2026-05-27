@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 621bb9e4ea6f3394fadbc589520dffd0, type: 3}
+  m_Name: Mision_Slimes
+  m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Missions.MissionData
+  missionName: Derrotar a los slimes
+  image: {fileID: 0}
+  description: Derrota a todos los slimes del tablon y acaba con King Slime al final
+    de la run.
+  boss: {fileID: 11400000, guid: f12aa39aea7041c41b356d4859877152, type: 2}
+  possibleNormalEnemies:
+  - {fileID: 11400000, guid: c20b544faaa4967489b26e082870b46a, type: 2}
+  - {fileID: 11400000, guid: dec79bf02b2e0b8478d1077a1e8e1bc8, type: 2}
+  - {fileID: 11400000, guid: 74994e212ba90734a97f6e3bd23fbd23, type: 2}
+  - {fileID: 11400000, guid: acf1f1a88fd34d14aa0ca813e73cefad, type: 2}
+  - {fileID: 11400000, guid: a01e5eb851ff80b4883f25a924632142, type: 2}
+  - {fileID: 11400000, guid: c697b5b3e819a0a4b8dc709c3ccab0f2, type: 2}
+  possibleMiniBosses:
+  - {fileID: 11400000, guid: 8e0bff2c1da9a6445b4f24bb883c5a01, type: 2}
+  - {fileID: 11400000, guid: 4bbbe1eca8a61614c9b30016c7b839ca, type: 2}
+  - {fileID: 11400000, guid: 4e5957d14d607e84eae1125b55e85a67, type: 2}
+  - {fileID: 11400000, guid: b47c02826ed12e34593e5d9ce7eeab22, type: 2}
+  combatCount: 10
+  miniBossFrequency: 3
