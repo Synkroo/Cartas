@@ -22,6 +22,7 @@ namespace JuegoDeCartas.Missions
         public GameObject selectedState;
         public Image[] difficultySquares;
         public Button[] difficultyButtons;
+        public Button difficultySelectorButton;
         public GameObject[] difficultyMedals;
 
         [Header("Animation")]
@@ -73,18 +74,21 @@ namespace JuegoDeCartas.Missions
                 button.onClick.AddListener(OnClicked);
             }
 
-            if (difficultyButtons != null)
-            {
-                for (int i = 0; i < difficultyButtons.Length; i++)
-                {
-                    if (difficultyButtons[i] == null)
-                        continue;
+            Button selector = difficultySelectorButton;
+            if (selector == null && difficultyButtons != null && difficultyButtons.Length > 0)
+                selector = difficultyButtons[0];
 
-                    int capturedIndex = i;
-                    difficultyButtons[i].onClick.RemoveAllListeners();
-                    difficultyButtons[i].onClick.AddListener(() => SelectDifficulty((MissionDifficulty)(capturedIndex + 1)));
-                }
+            if (selector != null)
+            {
+                selector.onClick.RemoveAllListeners();
+                selector.onClick.AddListener(OpenDifficultySelector);
             }
+        }
+
+        void OpenDifficultySelector()
+        {
+            if (missionData != null && owner != null)
+                owner.OpenDifficultyPopup(this, missionData);
         }
 
         public void Refresh()
@@ -168,7 +172,20 @@ namespace JuegoDeCartas.Missions
         void OnClicked()
         {
             if (missionData != null && owner != null)
-                owner.OnMissionClicked(this, missionData);
+            {
+                MissionDifficulty diff = MissionDifficulty.Facil;
+                if (!missionData.IsDifficultyUnlocked(diff))
+                {
+                    for (int i = 1; i < 3; i++)
+                    {
+                        MissionDifficulty d = (MissionDifficulty)(i + 1);
+                        if (missionData.IsDifficultyUnlocked(d))
+                        { diff = d; break; }
+                    }
+                }
+                selectedDifficulty = diff;
+                owner.SelectMission(this, missionData, selectedDifficulty);
+            }
         }
 
         void SelectFirstUnlockedDifficulty()

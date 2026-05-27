@@ -468,6 +468,7 @@ MonoBehaviour:
   startButtonText: {fileID: 1619805758}
   gameSceneName: Game
   fadeDuration: 0.2
+  diffPanelFadeDuration: 0.15
 --- !u!224 &279215600
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1977,6 +1978,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missionMenu: {fileID: 279215599}
+  mainMenuButtons: []
 --- !u!1 &1486044476
 GameObject:
   m_ObjectHideFlags: 0
