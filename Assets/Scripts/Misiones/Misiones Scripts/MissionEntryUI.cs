@@ -168,7 +168,7 @@ namespace JuegoDeCartas.Missions
         void OnClicked()
         {
             if (missionData != null && owner != null)
-                SelectFirstUnlockedDifficulty();
+                owner.OnMissionClicked(this, missionData);
         }
 
         void SelectFirstUnlockedDifficulty()

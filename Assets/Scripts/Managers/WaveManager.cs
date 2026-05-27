@@ -154,11 +154,11 @@ namespace JuegoDeCartas.Managers
                 if (enemy.currentGoldRewardOverride > 0)
                     gold = enemy.currentGoldRewardOverride;
                 else if (enemy.data.IsBoss)
-                    gold = 350;
+                    gold = 600;
                 else if (enemy.data.IsMiniBoss)
-                    gold = 170;
+                    gold = 300;
                 else
-                    gold = 90;
+                    gold = 150;
             }
 
             if (gold > 0 && gameManager != null)
