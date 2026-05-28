@@ -8,6 +8,8 @@ namespace JuegoDeCartas.Cards
     public class CardData : ScriptableObject
     {
         public string cardName;
+        [TextArea(2, 5)] public string description;
+        public Sprite sprite;
         public int cost;
         public bool destroyOnUse;
         public List<CardEffect> effects = new List<CardEffect>();

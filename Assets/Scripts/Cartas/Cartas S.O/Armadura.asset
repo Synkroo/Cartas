@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Armadura
   m_EditorClassIdentifier: 
   cardName: Armadura
+  description: Reluciente armadura, proteje por valor de 7
+  sprite: {fileID: 229784085906928952, guid: 96fa96fd6db24ca4e8e5f89e83174ba4, type: 3}
   cost: 1
+  destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: 121d334290859864592458d03b2e4889, type: 2}

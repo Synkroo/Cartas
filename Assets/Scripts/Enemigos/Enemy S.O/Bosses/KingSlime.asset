@@ -13,29 +13,13 @@ MonoBehaviour:
   m_Name: KingSlime
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
   enemyName: King Slime
-  maxHealth: 170
+  maxHealth: 120
   minDamage: 9
   maxDamage: 14
   enemyTier: 2
   startArmor: 22
   goldRewardOverride: 0
   mechanics:
-  - mechanicName: Presion del rey
-    mechanicType: 1
-    armorPerTurn: 3
-    healPerTurn: 5
-    damageRampPerTurn: 1
-    junkCard: {fileID: 0}
-    cardsToAdd: 1
-    cardDestination: 0
-    shuffleIntoDrawPile: 1
-    firstTriggerTurn: 1
-    triggerEveryXTurns: 1
-    reviveCount: 1
-    maxHealthPercentOnRevive: 80
-    armorPercentOnRevive: 0
-    minDamagePercentOnRevive: 120
-    maxDamagePercentOnRevive: 120
   - mechanicName: Renacer tiranico
     mechanicType: 3
     armorPerTurn: 0

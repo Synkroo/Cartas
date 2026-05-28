@@ -44,12 +44,12 @@ namespace JuegoDeCartas.Missions
 
         public float GetEnemyStatMultiplier(MissionDifficulty difficulty)
         {
-            return difficulty >= MissionDifficulty.Media ? 1.2f : 1f;
+            return difficulty >= MissionDifficulty.Letal ? 1.2f : 1f;
         }
 
         public float GetShopCostMultiplier(MissionDifficulty difficulty)
         {
-            return difficulty >= MissionDifficulty.Letal ? 1.2f : 1f;
+            return difficulty >= MissionDifficulty.Media ? 1.2f : 1f;
         }
 
         string GetCompletionKey(MissionDifficulty difficulty)

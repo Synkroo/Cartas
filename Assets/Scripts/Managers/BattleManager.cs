@@ -227,6 +227,8 @@ namespace JuegoDeCartas.Managers
         public void UpdateUI()
         {
             uiManager.Refresh();
+            if (turnManager != null)
+                turnManager.RefreshEnemyIntentPreview();
         }
     }
 }

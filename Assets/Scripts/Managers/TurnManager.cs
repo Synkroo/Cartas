@@ -30,6 +30,11 @@ namespace JuegoDeCartas.Managers
         public AnimationCurve popInCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
         private int pendingEnemyDamage;
+        private object previewEnemyReference;
+        private int previewDamageModifier;
+        private int previewMinDamage;
+        private int previewMaxDamage;
+        private int previewTurnsSurvived;
 
         public void StartGame()
         {
@@ -65,6 +70,7 @@ namespace JuegoDeCartas.Managers
 
             battle.deckManager.DrawStartingHand();
             battle.RenderHand();
+            RefreshEnemyIntentPreview(true);
             battle.UpdateUI();
         }
 
@@ -100,18 +106,6 @@ namespace JuegoDeCartas.Managers
 
             battle.enemy.BeginTurn();
             battle.UpdateUI();
-
-            pendingEnemyDamage = Random.Range(
-                battle.enemy.currentMinDamage + battle.enemy.damageModifier,
-                battle.enemy.currentMaxDamage + battle.enemy.damageModifier + 1
-            );
-            pendingEnemyDamage = Mathf.Max(0, pendingEnemyDamage);
-
-            if (battle.statsTracker != null)
-                battle.statsTracker.RegisterMaxEnemyDamage(pendingEnemyDamage);
-
-            if (enemyNextAttackText != null)
-                enemyNextAttackText.text = pendingEnemyDamage + " DMG";
 
             yield return new WaitForSeconds(0.5f);
 
@@ -180,6 +174,55 @@ namespace JuegoDeCartas.Managers
                 yield return null;
             }
             t.localScale = Vector3.one;
+        }
+
+        public void RefreshEnemyIntentPreview(bool force = false)
+        {
+            if (battle == null || battle.enemy == null)
+            {
+                pendingEnemyDamage = 0;
+                previewEnemyReference = null;
+                if (enemyNextAttackText != null)
+                    enemyNextAttackText.text = "-";
+                return;
+            }
+
+            if (currentTurn != Turn.Player || isExecuting)
+                return;
+
+            if (!force && PreviewStateMatchesCurrentEnemy())
+            {
+                if (enemyNextAttackText != null)
+                    enemyNextAttackText.text = pendingEnemyDamage + " DMG";
+                return;
+            }
+
+            pendingEnemyDamage = Mathf.Max(0, battle.enemy.RollProjectedNextAttackDamage());
+            CachePreviewState();
+
+            if (battle.statsTracker != null)
+                battle.statsTracker.RegisterMaxEnemyDamage(pendingEnemyDamage);
+
+            if (enemyNextAttackText != null)
+                enemyNextAttackText.text = pendingEnemyDamage + " DMG";
+        }
+
+        bool PreviewStateMatchesCurrentEnemy()
+        {
+            return ReferenceEquals(previewEnemyReference, battle.enemy) &&
+                   previewDamageModifier == battle.enemy.damageModifier &&
+                   previewMinDamage == battle.enemy.currentMinDamage &&
+                   previewMaxDamage == battle.enemy.currentMaxDamage &&
+                   previewTurnsSurvived == battle.enemy.turnsSurvived;
+        }
+
+        void CachePreviewState()
+        {
+            previewEnemyReference = battle.enemy;
+            previewDamageModifier = battle.enemy.damageModifier;
+            previewMinDamage = battle.enemy.currentMinDamage;
+            previewMaxDamage = battle.enemy.currentMaxDamage;
+            previewTurnsSurvived = battle.enemy.turnsSurvived;
         }
     }
 }

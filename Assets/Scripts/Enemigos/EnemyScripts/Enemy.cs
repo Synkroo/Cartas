@@ -75,6 +75,14 @@ namespace JuegoDeCartas.Enemies
             return stats.health <= 0;
         }
 
+        public int RollProjectedNextAttackDamage()
+        {
+            int projectedModifier = GetProjectedDamageModifierForNextTurn();
+            int minDamage = Mathf.Max(0, currentMinDamage + projectedModifier);
+            int maxDamage = Mathf.Max(minDamage, currentMaxDamage + projectedModifier);
+            return UnityEngine.Random.Range(minDamage, maxDamage + 1);
+        }
+
         public bool TryHandleDefeat()
         {
             if (data == null || data.mechanics == null)
@@ -149,6 +157,31 @@ namespace JuegoDeCartas.Enemies
                     mechanic.shuffleIntoDrawPile
                 );
             }
+        }
+
+        int GetProjectedDamageModifierForNextTurn()
+        {
+            int projectedModifier = damageModifier;
+            int nextTurnNumber = turnsSurvived + 1;
+
+            if (data == null || data.mechanics == null)
+                return projectedModifier;
+
+            for (int i = 0; i < data.mechanics.Count; i++)
+            {
+                EnemyMechanicData mechanic = data.mechanics[i];
+                if (mechanic == null || mechanic.mechanicType != EnemyMechanicType.StatsPerTurn)
+                    continue;
+
+                int firstTriggerTurn = Mathf.Max(1, mechanic.firstTriggerTurn);
+                if (nextTurnNumber < firstTriggerTurn)
+                    continue;
+
+                if (mechanic.damageRampPerTurn != 0)
+                    projectedModifier += mechanic.damageRampPerTurn;
+            }
+
+            return projectedModifier;
         }
 
         void ApplyRevive(EnemyMechanicData mechanic)

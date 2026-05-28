@@ -1,13 +1,13 @@
+using JuegoDeCartas.Articulos;
+using JuegoDeCartas.Cards;
+using JuegoDeCartas.Managers;
+using JuegoDeCartas.Missions;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using JuegoDeCartas.Managers;
-using JuegoDeCartas.Missions;
-using JuegoDeCartas.Cards;
-using JuegoDeCartas.Articulos;
+using UnityEngine.UI;
 
 namespace JuegoDeCartas.UI
 {
@@ -145,9 +145,9 @@ namespace JuegoDeCartas.UI
         {
             int baseCost = r switch
             {
-                Rareza.Comun => 300,
-                Rareza.Raro => 500,
-                Rareza.Epico => 1000,
+                Rareza.Comun => 200,
+                Rareza.Raro => 400,
+                Rareza.Epico => 800,
                 _ => 300
             };
 

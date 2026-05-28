@@ -597,6 +597,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 3084173181906022052}
+  descriptionText: {fileID: 6923173637032332530}
   costText: {fileID: 914686373473806066}
   artworkImage: {fileID: 1879149896405677965}
   interactable: 1

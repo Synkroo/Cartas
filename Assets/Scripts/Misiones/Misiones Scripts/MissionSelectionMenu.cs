@@ -141,6 +141,15 @@ namespace JuegoDeCartas.Missions
             SetStartButtonState(selectedMission != null);
         }
 
+        public void CloseDifficultyPopups(MissionEntryUI except = null)
+        {
+            for (int i = 0; i < entries.Count; i++)
+            {
+                if (entries[i] != null && entries[i] != except)
+                    entries[i].CloseDifficultySelector(true);
+            }
+        }
+
         void SetStartButtonState(bool hasSelection)
         {
             if (startButton != null)
@@ -159,7 +168,7 @@ namespace JuegoDeCartas.Missions
             SceneManager.LoadScene(gameSceneName);
         }
 
-        // ── Difficulty popup ────────────────────────────────────────────────
+        // Difficulty popup
 
         MissionEntryUI pendingMissionEntry;
         MissionData pendingMissionData;
@@ -173,15 +182,7 @@ namespace JuegoDeCartas.Missions
 
         public void OpenDifficultyPopup(MissionEntryUI entry, MissionData mission)
         {
-            if (diffOverlay != null && diffOverlay.activeSelf)
-            {
-                HideDifficultyPanel();
-                return;
-            }
-
-            pendingMissionEntry = entry;
-            pendingMissionData = mission;
-            ShowDifficultyPanel();
+            Debug.LogWarning("El selector de dificultad debe estar dentro de MisionPrefab y abrirse desde MissionEntryUI.");
         }
 
         void ShowDifficultyPanel()
@@ -197,8 +198,8 @@ namespace JuegoDeCartas.Missions
             string[] descs =
             {
                 "Sin modificadores",
-                "Enemigos +20% estadisticas",
-                "Enemigos +20% estadisticas\ny tienda +20% cara"
+                "Tienda +20% coste",
+                "Tienda +20% coste\ny enemigos +20% stats"
             };
 
             for (int i = 0; i < 3; i++)
@@ -233,12 +234,6 @@ namespace JuegoDeCartas.Missions
 
             PositionPopupAboveEntry();
 
-            if (canvasGroup != null)
-            {
-                canvasGroup.interactable = false;
-                canvasGroup.blocksRaycasts = false;
-            }
-
             diffOverlay.SetActive(true);
             diffPopupRoot.SetActive(true);
             diffPopupGroup.alpha = 0f;
@@ -269,6 +264,9 @@ namespace JuegoDeCartas.Missions
 
         void SelectDifficultyForPending(MissionDifficulty difficulty)
         {
+            if (pendingMissionData == null || !pendingMissionData.IsDifficultyUnlocked(difficulty))
+                return;
+
             if (pendingMissionEntry != null && pendingMissionData != null)
                 SelectMission(pendingMissionEntry, pendingMissionData, difficulty);
             HideDifficultyPanel();
@@ -280,12 +278,6 @@ namespace JuegoDeCartas.Missions
                 diffPopupRoot.SetActive(false);
             if (diffOverlay != null)
                 diffOverlay.SetActive(false);
-
-            if (canvasGroup != null)
-            {
-                canvasGroup.interactable = true;
-                canvasGroup.blocksRaycasts = true;
-            }
 
             pendingMissionEntry = null;
             pendingMissionData = null;

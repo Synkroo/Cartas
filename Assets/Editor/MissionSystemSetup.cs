@@ -101,20 +101,38 @@ public static class MissionSystemSetup
         descriptionRect.anchoredPosition = new Vector2(0f, -244f);
         descriptionRect.sizeDelta = new Vector2(-42f, 96f);
 
-        TextMeshProUGUI difficulty = CreateText("Difficulty", rootRect, "Dificultad", 18f, TextAlignmentOptions.Center);
-        RectTransform difficultyRect = difficulty.GetComponent<RectTransform>();
-        difficultyRect.anchorMin = new Vector2(0.5f, 0f);
-        difficultyRect.anchorMax = new Vector2(0.5f, 0f);
-        difficultyRect.pivot = new Vector2(0.5f, 0f);
-        difficultyRect.anchoredPosition = new Vector2(0f, 72f);
-        difficultyRect.sizeDelta = new Vector2(180f, 28f);
+        GameObject difficultyGroup = CreateUiObject("DifficultyGroup", rootRect);
+        Stretch(difficultyGroup.GetComponent<RectTransform>());
+        Transform difficultyParent = difficultyGroup.transform;
+
+        GameObject difficultyButtonObject = CreateUiObject("DifficultyButton", difficultyParent, typeof(Image), typeof(Button));
+        RectTransform difficultyButtonRect = difficultyButtonObject.GetComponent<RectTransform>();
+        difficultyButtonRect.anchorMin = new Vector2(0.5f, 0f);
+        difficultyButtonRect.anchorMax = new Vector2(0.5f, 0f);
+        difficultyButtonRect.pivot = new Vector2(0.5f, 0.5f);
+        difficultyButtonRect.anchoredPosition = new Vector2(0f, 72f);
+        difficultyButtonRect.sizeDelta = new Vector2(180f, 28f);
+
+        Image difficultyButtonImage = difficultyButtonObject.GetComponent<Image>();
+        Button difficultySelectorButton = difficultyButtonObject.GetComponent<Button>();
+        difficultySelectorButton.targetGraphic = difficultyButtonImage;
+        difficultySelectorButton.transition = Selectable.Transition.None;
+        GameObject difficultyGlow = CreateUiObject("DifficultyButtonGlow", difficultyButtonObject.transform, typeof(Image));
+        Stretch(difficultyGlow.GetComponent<RectTransform>());
+        Image difficultyGlowImage = difficultyGlow.GetComponent<Image>();
+        difficultyGlowImage.color = new Color(1f, 1f, 1f, 0f);
+        difficultyGlowImage.raycastTarget = false;
+
+        TextMeshProUGUI difficulty = CreateText("Difficulty", difficultyButtonObject.transform, "Dificultad", 18f, TextAlignmentOptions.Center);
+        Stretch(difficulty.GetComponent<RectTransform>());
+        difficulty.raycastTarget = false;
 
         Image[] squares = new Image[3];
         Button[] difficultyButtons = new Button[3];
         GameObject[] medals = new GameObject[3];
         for (int i = 0; i < squares.Length; i++)
         {
-            GameObject square = CreateUiObject("Difficulty" + (i + 1), rootRect, typeof(Image), typeof(Button));
+            GameObject square = CreateUiObject("Difficulty" + (i + 1), difficultyParent, typeof(Image), typeof(Button));
             RectTransform squareRect = square.GetComponent<RectTransform>();
             squareRect.anchorMin = new Vector2(0.5f, 0f);
             squareRect.anchorMax = new Vector2(0.5f, 0f);
@@ -125,7 +143,7 @@ public static class MissionSystemSetup
             squares[i].color = new Color(1f, 1f, 1f, 0.25f);
             difficultyButtons[i] = square.GetComponent<Button>();
 
-            GameObject medal = CreateUiObject("Medal" + (i + 1), rootRect, typeof(Image));
+            GameObject medal = CreateUiObject("Medal" + (i + 1), difficultyParent, typeof(Image));
             RectTransform medalRect = medal.GetComponent<RectTransform>();
             medalRect.anchorMin = new Vector2(0.5f, 0f);
             medalRect.anchorMax = new Vector2(0.5f, 0f);
@@ -145,6 +163,36 @@ public static class MissionSystemSetup
         completedRect.anchoredPosition = new Vector2(0f, 18f);
         completedRect.sizeDelta = new Vector2(-40f, 26f);
 
+        GameObject popup = CreateUiObject("DifficultyPopup", rootRect, typeof(Image), typeof(CanvasGroup));
+        RectTransform popupRect = popup.GetComponent<RectTransform>();
+        popupRect.anchorMin = new Vector2(0.5f, 0f);
+        popupRect.anchorMax = new Vector2(0.5f, 0f);
+        popupRect.pivot = new Vector2(0.5f, 0f);
+        popupRect.anchoredPosition = new Vector2(0f, 108f);
+        popupRect.sizeDelta = new Vector2(260f, 230f);
+        popup.GetComponent<Image>().color = new Color(0.12f, 0.12f, 0.12f, 1f);
+        CanvasGroup popupGroup = popup.GetComponent<CanvasGroup>();
+        popupGroup.interactable = false;
+        popupGroup.blocksRaycasts = false;
+
+        CreateText("PopupTitle", popup.transform, "Dificultad", 18f, TextAlignmentOptions.Center)
+            .GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -18f);
+
+        Button[] popupButtons = new Button[3];
+        TextMeshProUGUI[] popupLabels = new TextMeshProUGUI[3];
+        TextMeshProUGUI[] popupStatuses = new TextMeshProUGUI[3];
+        string[] popupNames = { "Facil", "Media", "Letal" };
+        for (int i = 0; i < 3; i++)
+        {
+            Button popupButton = CreateButton("Dificultad " + popupNames[i], popup.transform, popupNames[i],
+                new Vector2(0f, -62f - (i * 54f)), new Vector2(226f, 46f));
+            popupButton.transition = Selectable.Transition.None;
+            popupButtons[i] = popupButton;
+            popupLabels[i] = popupButton.GetComponentInChildren<TextMeshProUGUI>();
+            popupStatuses[i] = CreateText("Status", popupButton.transform, i == 0 ? "Disponible" : "Bloqueada", 10f, TextAlignmentOptions.Right);
+        }
+        popup.SetActive(false);
+
         MissionEntryUI entry = root.GetComponent<MissionEntryUI>();
         entry.button = root.GetComponent<Button>();
         entry.titleText = title;
@@ -156,7 +204,18 @@ public static class MissionSystemSetup
         entry.selectedState = selected;
         entry.difficultySquares = squares;
         entry.difficultyButtons = difficultyButtons;
+        entry.difficultySelectorButton = difficultySelectorButton;
+        entry.difficultySelectorGlowImage = difficultyGlowImage;
         entry.difficultyMedals = medals;
+        entry.difficultyPopupRoot = popup;
+        entry.difficultyPopupCanvasGroup = popupGroup;
+        entry.popupDifficultyButtons = popupButtons;
+        entry.popupDifficultyLabels = popupLabels;
+        entry.popupDifficultyStatuses = popupStatuses;
+        entry.hoverGlowAlpha = 0.12f;
+        entry.selectedGlowAlpha = 0.24f;
+        entry.difficultyButtonHoverGlowAlpha = 0.35f;
+        entry.popupDifficultyHoverLighten = 0.35f;
 
         PrefabUtility.SaveAsPrefabAsset(root, MissionPrefabPath);
         Object.DestroyImmediate(root);

@@ -8,6 +8,7 @@ namespace JuegoDeCartas.Cards
     public class CardView : MonoBehaviour
     {
         public TextMeshProUGUI nameText;
+        public TextMeshProUGUI descriptionText;
         public TextMeshProUGUI costText;
         public Image artworkImage;
 
@@ -33,7 +34,13 @@ namespace JuegoDeCartas.Cards
             battleManager = manager;
 
             if (nameText != null) nameText.text = card.data.cardName;
+            if (descriptionText != null) descriptionText.text = card.data.description;
             if (costText != null) costText.text = card.effectiveCost.ToString();
+            if (artworkImage != null)
+            {
+                artworkImage.sprite = card.data.sprite;
+                artworkImage.enabled = card.data.sprite != null;
+            }
 
             var bg = transform.Find("fondo carta")?.GetComponent<Image>();
             if (bg != null)

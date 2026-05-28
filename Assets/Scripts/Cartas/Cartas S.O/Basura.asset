@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Basura
   m_EditorClassIdentifier: 
   cardName: Basura
+  description: Literalmente basura, usala para descartarla
+  sprite: {fileID: 0}
   cost: 1
   destroyOnUse: 1
   effects: []

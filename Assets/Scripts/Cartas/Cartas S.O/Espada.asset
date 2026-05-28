@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Espada
   m_EditorClassIdentifier: 
   cardName: Espada
+  description: "Arma cuerpo a cuerpo afilada, hace 10 de da\xF1o"
+  sprite: {fileID: 0}
   cost: 1
+  destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: 31c171454cc2c3843b1cb19a1ea4d759, type: 2}

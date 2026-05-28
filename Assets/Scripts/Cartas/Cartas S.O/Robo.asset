@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Robo
   m_EditorClassIdentifier: 
   cardName: Robo
+  description: Pues eso, que roba una carta
+  sprite: {fileID: 0}
   cost: 1
+  destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: aa943d23f4cd66d4392b3d67235326cd, type: 2}
