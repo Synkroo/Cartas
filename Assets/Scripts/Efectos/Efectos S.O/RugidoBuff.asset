@@ -9,11 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0218b216a3afee34eaf53c0f5d47bcb8, type: 3}
-  m_Name: "Da\xF1o"
+  m_Script: {fileID: 11500000, guid: 5ec6414dd65045779ecfcbfd8e5b4f07, type: 3}
+  m_Name: RugidoBuff
   m_EditorClassIdentifier: 
-  modifiers:
-  - target: 1
-    stat: 0
-    operation: 1
-    amount: 10
+  amount: 5
+  turns: 3

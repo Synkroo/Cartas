@@ -81,6 +81,7 @@ namespace JuegoDeCartas.Managers
             if (currentTurn != Turn.Player || isExecuting)
                 return;
 
+            battle.AdvancePlayerDamageBonusTurn();
             isExecuting = true;
             currentTurn = Turn.Enemy;
 

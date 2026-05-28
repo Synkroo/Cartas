@@ -35,6 +35,7 @@ namespace JuegoDeCartas.Articulos
         MejorarCarta,
         DuplicarCarta,
         DuplicarCartaMejoras,
-        ReducirCoste
+        ReducirCoste,
+        DescartarCarta
     }
 }

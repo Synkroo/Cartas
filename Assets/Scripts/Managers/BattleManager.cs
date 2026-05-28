@@ -30,6 +30,8 @@ namespace JuegoDeCartas.Managers
 
         [HideInInspector] public int armorPerTurn;
         [HideInInspector] public int regenPerRound;
+        [HideInInspector] public int playerDamageBonus;
+        [HideInInspector] public int playerDamageBonusTurnsRemaining;
 
         public Enemy enemy => waveManager.enemy;
 
@@ -177,12 +179,14 @@ namespace JuegoDeCartas.Managers
         {
             if (enemy == null) return;
 
-            lastCardDamageDealt += damage;
+            int totalDamage = Mathf.Max(0, damage + playerDamageBonus);
+
+            lastCardDamageDealt += totalDamage;
 
             if (statsTracker != null)
-                statsTracker.RegisterDamageDealt(damage);
+                statsTracker.RegisterDamageDealt(totalDamage);
 
-            waveManager.DamageEnemy(damage, out bool died);
+            waveManager.DamageEnemy(totalDamage, out bool died);
 
             UpdateUI();
         }
@@ -216,6 +220,32 @@ namespace JuegoDeCartas.Managers
 
             turnManager.NextRound();
             turnManager.StartPlayerTurn();
+        }
+
+        public void ApplyPlayerDamageBonus(int amount, int turns)
+        {
+            playerDamageBonus = amount;
+            playerDamageBonusTurnsRemaining = Mathf.Max(0, turns);
+        }
+
+        public void AdvancePlayerDamageBonusTurn()
+        {
+            if (playerDamageBonusTurnsRemaining <= 0)
+                return;
+
+            playerDamageBonusTurnsRemaining--;
+
+            if (playerDamageBonusTurnsRemaining <= 0)
+            {
+                playerDamageBonusTurnsRemaining = 0;
+                playerDamageBonus = 0;
+            }
+        }
+
+        public void ResetTemporaryCombatEffects()
+        {
+            playerDamageBonus = 0;
+            playerDamageBonusTurnsRemaining = 0;
         }
 
         public void RenderHand()

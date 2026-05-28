@@ -181,6 +181,9 @@ namespace JuegoDeCartas.Managers
                 return;
             }
 
+            if (battleManager != null)
+                battleManager.ResetTemporaryCombatEffects();
+
             if (gameManager != null)
                 gameManager.OpenShop();
         }

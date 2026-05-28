@@ -521,10 +521,14 @@ MonoBehaviour:
   startingDeck:
   - {fileID: 11400000, guid: 66ad6bd10a018b94ea561142bcdffdc2, type: 2}
   - {fileID: 11400000, guid: 66ad6bd10a018b94ea561142bcdffdc2, type: 2}
-  - {fileID: 11400000, guid: 66ad6bd10a018b94ea561142bcdffdc2, type: 2}
   - {fileID: 11400000, guid: 22b6fa9e003c6c2478ecd2e68affa5ad, type: 2}
   - {fileID: 11400000, guid: 22b6fa9e003c6c2478ecd2e68affa5ad, type: 2}
   - {fileID: 11400000, guid: 78f51c903e093514687ca9ac10b80ba3, type: 2}
+  - {fileID: 11400000, guid: 78f51c903e093514687ca9ac10b80ba3, type: 2}
+  - {fileID: 11400000, guid: 4d06ce7c3df745c88843b71bff25cf71, type: 2}
+  - {fileID: 11400000, guid: 4d06ce7c3df745c88843b71bff25cf71, type: 2}
+  - {fileID: 11400000, guid: 25184310b7d449f882a03b4c5da3f3da, type: 2}
+  - {fileID: 11400000, guid: 25184310b7d449f882a03b4c5da3f3da, type: 2}
   cardsPerTurn: 4
 --- !u!4 &104779539
 Transform:
@@ -6251,6 +6255,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ec7b084aeff1862449f2ebf6f66974ff, type: 2}
   - {fileID: 11400000, guid: 8020ffa1d4fd3a44faf28b323f13b8e0, type: 2}
   - {fileID: 11400000, guid: 3f8a221904e0850489846cc970655e43, type: 2}
+  - {fileID: 11400000, guid: 5b96ec153d57408ab74f929b8d6b48d8, type: 2}
   restockCost: 200
   slotContainers:
   - {fileID: 1141461236}

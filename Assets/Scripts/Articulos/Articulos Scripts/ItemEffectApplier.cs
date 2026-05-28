@@ -100,7 +100,8 @@ namespace JuegoDeCartas.Articulos
             return tipo == TipoEfectoArticulo.AgregarCartaEleccion
                 || tipo == TipoEfectoArticulo.MejorarCarta
                 || tipo == TipoEfectoArticulo.DuplicarCarta
-                || tipo == TipoEfectoArticulo.DuplicarCartaMejoras;
+                || tipo == TipoEfectoArticulo.DuplicarCartaMejoras
+                || tipo == TipoEfectoArticulo.DescartarCarta;
         }
 
         public static List<Card> GetSelectionSource(ArticuloData item, BattleManager battle)
@@ -160,9 +161,29 @@ namespace JuegoDeCartas.Articulos
                     battle.RenderHand();
                     break;
                 }
+
+                case TipoEfectoArticulo.DescartarCarta:
+                    RemoveSelectedCard(battle, selected);
+                    break;
             }
 
             battle.UpdateUI();
+        }
+
+        static void RemoveSelectedCard(BattleManager battle, Card selected)
+        {
+            if (battle == null || selected == null)
+                return;
+
+            var deckManager = battle.deckManager;
+
+            if (deckManager.hand.Remove(selected) ||
+                deckManager.deck.Remove(selected) ||
+                deckManager.discard.Remove(selected))
+            {
+                battle.RenderHand();
+                deckManager.OnDeckChanged?.Invoke();
+            }
         }
     }
 }
