@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ namespace JuegoDeCartas.Managers
         public TextMeshProUGUI turnText;
         public TextMeshProUGUI roundText;
         public TextMeshProUGUI enemyNextAttackText;
+        public TextMeshProUGUI enemyNextAttackShadowText;
 
         [Header("State")]
         public Turn currentTurn;
@@ -183,8 +185,7 @@ namespace JuegoDeCartas.Managers
             {
                 pendingEnemyDamage = 0;
                 previewEnemyReference = null;
-                if (enemyNextAttackText != null)
-                    enemyNextAttackText.text = "-";
+                SetEnemyIntentText("-");
                 return;
             }
 
@@ -193,8 +194,7 @@ namespace JuegoDeCartas.Managers
 
             if (!force && PreviewStateMatchesCurrentEnemy())
             {
-                if (enemyNextAttackText != null)
-                    enemyNextAttackText.text = pendingEnemyDamage + " DMG";
+                SetEnemyIntentText(BuildEnemyIntentText());
                 return;
             }
 
@@ -204,8 +204,34 @@ namespace JuegoDeCartas.Managers
             if (battle.statsTracker != null)
                 battle.statsTracker.RegisterMaxEnemyDamage(pendingEnemyDamage);
 
+            SetEnemyIntentText(BuildEnemyIntentText());
+        }
+
+        void SetEnemyIntentText(string text)
+        {
             if (enemyNextAttackText != null)
-                enemyNextAttackText.text = pendingEnemyDamage + " DMG";
+                enemyNextAttackText.text = text;
+
+            if (enemyNextAttackShadowText != null)
+                enemyNextAttackShadowText.text = text;
+        }
+
+        string BuildEnemyIntentText()
+        {
+            if (battle == null || battle.enemy == null)
+                return "-";
+
+            var parts = new List<string>
+            {
+                pendingEnemyDamage + " de dano"
+            };
+
+            int nextArmor = Mathf.Max(0, battle.enemy.GetProjectedNextTurnArmorGain());
+
+            if (nextArmor > 0)
+                parts.Add(nextArmor + " de armadura");
+
+            return string.Join(" ", parts);
         }
 
         bool PreviewStateMatchesCurrentEnemy()

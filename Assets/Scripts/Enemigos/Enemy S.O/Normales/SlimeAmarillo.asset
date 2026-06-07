@@ -36,5 +36,5 @@ MonoBehaviour:
     armorPercentOnRevive: 0
     minDamagePercentOnRevive: 120
     maxDamagePercentOnRevive: 120
-  sprite: {fileID: 3199386800230646979, guid: 6391341c8c38d8f40985b9179901b19e, type: 3}
-  animatorController: {fileID: 0}
+  sprite: {fileID: -7424491187847164054, guid: 42f9552004ea53340a632fa0536ed6ff, type: 3}
+  animatorController: {fileID: 9100000, guid: b1000000000000000000000000000005, type: 2}

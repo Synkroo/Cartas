@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: MejorarCarta
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Articulos.ArticuloData
   nombre: Yunque Encantado
-  precio: 0
-  rareza: 0
+  rareza: 1
   imagen: {fileID: 0}
   descripcion: Mejora una carta de tu mazo.
   tipoEfecto: 10

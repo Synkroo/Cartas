@@ -22,6 +22,7 @@ namespace JuegoDeCartas.Enemies
 
         private BattleManager battle;
         private readonly List<int> mechanicUseCounts = new List<int>();
+        private readonly List<int> mechanicDamageAccumulations = new List<int>();
 
         public void Initialize(EnemyData enemyData, BattleManager ownerBattle)
         {
@@ -45,9 +46,13 @@ namespace JuegoDeCartas.Enemies
             turnsSurvived = 0;
 
             mechanicUseCounts.Clear();
+            mechanicDamageAccumulations.Clear();
             int mechanicCount = data.mechanics != null ? data.mechanics.Count : 0;
             for (int i = 0; i < mechanicCount; i++)
+            {
                 mechanicUseCounts.Add(0);
+                mechanicDamageAccumulations.Add(0);
+            }
         }
 
         public void BeginTurn()
@@ -81,6 +86,42 @@ namespace JuegoDeCartas.Enemies
             int minDamage = Mathf.Max(0, currentMinDamage + projectedModifier);
             int maxDamage = Mathf.Max(minDamage, currentMaxDamage + projectedModifier);
             return UnityEngine.Random.Range(minDamage, maxDamage + 1);
+        }
+
+        public int GetProjectedNextTurnArmorGain()
+        {
+            int armorGain = 0;
+            foreach (var mechanic in GetStatsPerTurnMechanicsForNextTurn())
+            {
+                if (mechanic.armorPerTurn > 0)
+                    armorGain += mechanic.armorPerTurn;
+            }
+
+            return armorGain;
+        }
+
+        public int GetProjectedNextTurnHeal()
+        {
+            int heal = 0;
+            foreach (var mechanic in GetStatsPerTurnMechanicsForNextTurn())
+            {
+                if (mechanic.healPerTurn > 0)
+                    heal += mechanic.healPerTurn;
+            }
+
+            return heal;
+        }
+
+        public int GetProjectedNextTurnDamageModifierGain()
+        {
+            int damageGain = 0;
+            foreach (var mechanic in GetStatsPerTurnMechanicsForNextTurn())
+            {
+                if (mechanic.damageRampPerTurn > 0)
+                    damageGain += mechanic.damageRampPerTurn;
+            }
+
+            return damageGain;
         }
 
         public bool TryHandleDefeat()
@@ -130,7 +171,11 @@ namespace JuegoDeCartas.Enemies
                         stats.armor += mechanic.armorPerTurn;
 
                     if (mechanic.damageRampPerTurn > 0)
+                    {
                         damageModifier += mechanic.damageRampPerTurn;
+                        if (i < mechanicDamageAccumulations.Count)
+                            mechanicDamageAccumulations[i] += mechanic.damageRampPerTurn;
+                    }
 
                     continue;
                 }
@@ -162,10 +207,22 @@ namespace JuegoDeCartas.Enemies
         int GetProjectedDamageModifierForNextTurn()
         {
             int projectedModifier = damageModifier;
+
+            foreach (var mechanic in GetStatsPerTurnMechanicsForNextTurn())
+            {
+                if (mechanic.damageRampPerTurn != 0)
+                    projectedModifier += mechanic.damageRampPerTurn;
+            }
+
+            return projectedModifier;
+        }
+
+        IEnumerable<EnemyMechanicData> GetStatsPerTurnMechanicsForNextTurn()
+        {
             int nextTurnNumber = turnsSurvived + 1;
 
             if (data == null || data.mechanics == null)
-                return projectedModifier;
+                yield break;
 
             for (int i = 0; i < data.mechanics.Count; i++)
             {
@@ -177,11 +234,29 @@ namespace JuegoDeCartas.Enemies
                 if (nextTurnNumber < firstTriggerTurn)
                     continue;
 
-                if (mechanic.damageRampPerTurn != 0)
-                    projectedModifier += mechanic.damageRampPerTurn;
+                yield return mechanic;
             }
+        }
 
-            return projectedModifier;
+        public int GetMechanicCurrentDamageAccumulation(int mechanicIndex)
+        {
+            if (mechanicIndex < 0 || mechanicIndex >= mechanicDamageAccumulations.Count)
+                return 0;
+
+            return Mathf.Max(0, mechanicDamageAccumulations[mechanicIndex]);
+        }
+
+        public int GetRemainingRevivesForMechanic(int mechanicIndex)
+        {
+            if (data == null || data.mechanics == null || mechanicIndex < 0 || mechanicIndex >= data.mechanics.Count)
+                return 0;
+
+            EnemyMechanicData mechanic = data.mechanics[mechanicIndex];
+            if (mechanic == null || mechanic.mechanicType != EnemyMechanicType.ReviveOnDeath)
+                return 0;
+
+            int used = mechanicIndex < mechanicUseCounts.Count ? mechanicUseCounts[mechanicIndex] : 0;
+            return Mathf.Max(0, mechanic.reviveCount - used);
         }
 
         void ApplyRevive(EnemyMechanicData mechanic)

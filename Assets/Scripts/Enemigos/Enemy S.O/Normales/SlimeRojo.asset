@@ -20,5 +20,5 @@ MonoBehaviour:
   startArmor: 0
   goldRewardOverride: 0
   mechanics: []
-  sprite: {fileID: -2812238702579840862, guid: 6391341c8c38d8f40985b9179901b19e, type: 3}
-  animatorController: {fileID: 0}
+  sprite: {fileID: 4904064549462593665, guid: 42f9552004ea53340a632fa0536ed6ff, type: 3}
+  animatorController: {fileID: 9100000, guid: b1000000000000000000000000000003, type: 2}

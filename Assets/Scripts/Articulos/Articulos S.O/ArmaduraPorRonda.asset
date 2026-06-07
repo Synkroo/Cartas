@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: ArmaduraPorRonda
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Articulos.ArticuloData
   nombre: Coraza Eterna
-  precio: 0
-  rareza: 1
+  rareza: 0
   imagen: {fileID: 0}
   descripcion: Obtienes 3 de armadura al inicio de cada turno.
   tipoEfecto: 6

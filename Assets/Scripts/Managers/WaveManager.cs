@@ -101,7 +101,7 @@ namespace JuegoDeCartas.Managers
             {
                 enemy = null;
                 if (enemyHealthBar != null)
-                    enemyHealthBar.enabled = false;
+                    enemyHealthBar.SetVisible(false);
                 return;
             }
 
@@ -110,10 +110,13 @@ namespace JuegoDeCartas.Managers
             currentEnemyIndex++;
 
             if (uiManager != null)
-                uiManager.SetEnemySprite(enemy.currentSprite);
+                uiManager.SetEnemyVisual(enemy.data.enemyName, enemy.currentSprite, enemy.currentAnimatorController);
 
             if (enemyHealthBar != null)
-                enemyHealthBar.enabled = true;
+            {
+                enemyHealthBar.SetEnemyTier(enemy.data.enemyTier);
+                enemyHealthBar.SetVisible(true);
+            }
         }
 
         public void DamageEnemy(int damage, out bool died)
@@ -130,10 +133,13 @@ namespace JuegoDeCartas.Managers
                     died = false;
 
                     if (uiManager != null)
-                        uiManager.SetEnemySprite(enemy.currentSprite);
+                        uiManager.SetEnemyVisual(enemy.data.enemyName, enemy.currentSprite, enemy.currentAnimatorController);
 
                     if (enemyHealthBar != null)
-                        enemyHealthBar.enabled = true;
+                    {
+                        enemyHealthBar.SetEnemyTier(enemy.data.enemyTier);
+                        enemyHealthBar.SetVisible(true);
+                    }
 
                     return;
                 }
@@ -172,7 +178,7 @@ namespace JuegoDeCartas.Managers
             if (noMoreEnemies)
             {
                 if (enemyHealthBar != null)
-                    enemyHealthBar.enabled = false;
+                    enemyHealthBar.SetVisible(false);
 
                 if (statsTracker != null)
                     statsTracker.PopulateStatsText();

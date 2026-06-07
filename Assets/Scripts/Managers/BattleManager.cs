@@ -99,11 +99,14 @@ namespace JuegoDeCartas.Managers
             if (waveManager.enemyHealthBar != null)
                 return waveManager.enemyHealthBar;
 
-            var bar = GetComponentInChildren<EnemyHealthBar>();
-            if (bar != null)
-                return bar;
+            var bars = FindObjectsByType<EnemyHealthBar>(FindObjectsInactive.Include);
+            for (int i = 0; i < bars.Length; i++)
+            {
+                if (bars[i].target == EnemyHealthBar.HealthTarget.Enemy)
+                    return bars[i];
+            }
 
-            return FindAnyObjectByType<EnemyHealthBar>();
+            return null;
         }
 
         void RefreshDeckUI()
@@ -154,17 +157,25 @@ namespace JuegoDeCartas.Managers
             int repeats = 1 + card.reactivationCount;
             int totalDamage = 0;
 
-            for (int i = 0; i < repeats; i++)
+            foreach (var effect in card.data.effects)
             {
-                lastCardDamageDealt = 0;
+                if (effect == null)
+                    continue;
 
-                foreach (var effect in card.data.effects)
+                if (effect.UsesReactivationMultiplier)
                 {
-                    if (effect != null)
-                        effect.Apply(this);
+                    lastCardDamageDealt = 0;
+                    effect.Apply(this, repeats);
+                    totalDamage += lastCardDamageDealt;
+                    continue;
                 }
 
-                totalDamage += lastCardDamageDealt;
+                for (int i = 0; i < repeats; i++)
+                {
+                    lastCardDamageDealt = 0;
+                    effect.Apply(this);
+                    totalDamage += lastCardDamageDealt;
+                }
             }
 
             if (statsTracker != null)
@@ -172,7 +183,8 @@ namespace JuegoDeCartas.Managers
 
             RenderHand();
             UpdateUI();
-            if (deckViewer != null) deckViewer.ShowDiscard();
+            if (deckViewer != null && deckViewer.panel != null && deckViewer.panel.activeSelf)
+                deckViewer.ShowDiscard();
         }
 
         public void DamageEnemy(int damage)

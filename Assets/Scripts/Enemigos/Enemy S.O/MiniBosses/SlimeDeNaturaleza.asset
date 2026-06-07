@@ -20,7 +20,7 @@ MonoBehaviour:
   startArmor: 0
   goldRewardOverride: 0
   mechanics:
-  - mechanicName: Regeneracion verde
+  - mechanicName: Regeneracion
     mechanicType: 1
     armorPerTurn: 0
     healPerTurn: 5
@@ -36,5 +36,5 @@ MonoBehaviour:
     armorPercentOnRevive: 0
     minDamagePercentOnRevive: 120
     maxDamagePercentOnRevive: 120
-  sprite: {fileID: 6413804829044496977, guid: 6391341c8c38d8f40985b9179901b19e, type: 3}
+  sprite: {fileID: -7875250371678572320, guid: a40de8003dcf3ad46a5fa8fbb5fb155b, type: 3}
   animatorController: {fileID: 9100000, guid: 860b74fe0fce7e34fb41919191a1ec22, type: 2}

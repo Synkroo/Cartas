@@ -148,19 +148,22 @@ namespace JuegoDeCartas.UI
             if (itemPool.Count == 0) return null;
 
             Rareza rolledRarity = RollRarity();
-            var candidates = itemPool.FindAll(a => a.rareza == rolledRarity);
+            var validItems = itemPool.FindAll(a => a != null);
+            if (validItems.Count == 0) return null;
+
+            var candidates = validItems.FindAll(a => a.rareza == rolledRarity);
 
             if (candidates.Count == 0)
             {
                 for (Rareza fallback = rolledRarity - 1; fallback >= Rareza.Comun; fallback--)
                 {
-                    candidates = itemPool.FindAll(a => a.rareza == fallback);
+                    candidates = validItems.FindAll(a => a.rareza == fallback);
                     if (candidates.Count > 0) break;
                 }
             }
 
             if (candidates.Count == 0)
-                candidates = itemPool;
+                candidates = validItems;
 
             return candidates[Random.Range(0, candidates.Count)];
         }

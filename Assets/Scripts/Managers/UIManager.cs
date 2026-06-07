@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using JuegoDeCartas.UI;
 
 namespace JuegoDeCartas.Managers
 {
@@ -14,8 +15,11 @@ namespace JuegoDeCartas.Managers
 
         [Header("Enemy UI")]
         public TextMeshProUGUI enemyHpText;
+        public TextMeshProUGUI enemyNameText;
 
         public Image enemyImage;
+        public Animator enemyAnimator;
+        public CombatInfoPanelUI combatInfoPanel;
 
         private BattleManager battle;
         private int prevHealth, prevMaxHealth, prevMana, prevMaxMana, prevArmor;
@@ -25,6 +29,9 @@ namespace JuegoDeCartas.Managers
         public void Init(BattleManager battleManager)
         {
             battle = battleManager;
+
+            if (combatInfoPanel != null)
+                combatInfoPanel.Init(battle);
         }
 
         public void Refresh()
@@ -80,9 +87,14 @@ namespace JuegoDeCartas.Managers
             else
             {
                 enemyHpText.text = "-";
+                if (enemyNameText != null)
+                    enemyNameText.text = string.Empty;
                 prevEnemyHealth = -1;
                 prevEnemyMaxHealth = -1;
             }
+
+            if (combatInfoPanel != null)
+                combatInfoPanel.Refresh();
         }
 
         IEnumerator PulseText(Transform t)
@@ -100,14 +112,22 @@ namespace JuegoDeCartas.Managers
             t.localScale = Vector3.one;
         }
 
-        public void SetEnemySprite(Sprite sprite)
+        public void SetEnemyVisual(string enemyName, Sprite sprite, RuntimeAnimatorController animatorController)
         {
+            if (enemyNameText != null)
+                enemyNameText.text = enemyName;
+
             if (enemyImage == null)
                 return;
 
             enemyImage.sprite = sprite;
-
             enemyImage.enabled = sprite != null;
+
+            if (enemyAnimator == null)
+                return;
+
+            enemyAnimator.runtimeAnimatorController = animatorController;
+            enemyAnimator.enabled = animatorController != null;
         }
     }
 }

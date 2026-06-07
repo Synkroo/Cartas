@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: MasVidaMax
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Articulos.ArticuloData
   nombre: Amuleto de Vitalidad
-  precio: 0
-  rareza: 0
+  rareza: 1
   imagen: {fileID: 0}
   descripcion: Aumenta tu vida maxima en 10.
   tipoEfecto: 3

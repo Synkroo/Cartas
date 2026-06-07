@@ -3,10 +3,6 @@
   "WorkspaceRootPath": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|d:\\unity\\proyectos\\juego de cartas incremental\\assets\\scripts\\managers\\entity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\managers\\entity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|D:\\Unity\\Proyectos\\Juego de cartas incremental\\assets\\scripts\\managers\\battlemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5A9C373A-AB94-9203-21AF-0261C70D160F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\managers\\battlemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -18,11 +14,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "BattleManager.cs",
               "DocumentMoniker": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Managers\\BattleManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Managers\\BattleManager.cs",
@@ -31,7 +27,8 @@
               "ViewState": "AgIAAE0AAAAAAAAAAAAIwDIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-06T10:26:11.669Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Bookmark",
@@ -68,19 +65,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:136:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Entity.cs",
-              "DocumentMoniker": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Managers\\Entity.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Managers\\Entity.cs",
-              "ToolTip": "D:\\Unity\\Proyectos\\Juego de cartas incremental\\Assets\\Scripts\\Managers\\Entity.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Managers\\Entity.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-17T09:59:20.82Z",
-              "EditorCaption": ""
             }
           ]
         }

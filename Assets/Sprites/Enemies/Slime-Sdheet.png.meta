@@ -1,0 +1,1115 @@
+fileFormatVersion: 2
+guid: a40de8003dcf3ad46a5fa8fbb5fb155b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8961528746857462508
+    second: Slime-Sdheet_0
+  - first:
+      213: 4647519899686996525
+    second: Slime-Sdheet_1
+  - first:
+      213: -6038025815317232686
+    second: Slime-Sdheet_2
+  - first:
+      213: -2391528159520954507
+    second: Slime-Sdheet_3
+  - first:
+      213: -8435830874455702707
+    second: Slime-Sdheet_4
+  - first:
+      213: 886672614126678370
+    second: Slime-Sdheet_5
+  - first:
+      213: -4711118950556072730
+    second: Slime-Sdheet_6
+  - first:
+      213: -1277067346313170942
+    second: Slime-Sdheet_7
+  - first:
+      213: -6739160514793003808
+    second: Slime-Sdheet_8
+  - first:
+      213: 4471051205900570944
+    second: Slime-Sdheet_9
+  - first:
+      213: -643758110862713604
+    second: Slime-Sdheet_10
+  - first:
+      213: 1555014130134327613
+    second: Slime-Sdheet_11
+  - first:
+      213: -2676194922595625341
+    second: Slime-Sdheet_12
+  - first:
+      213: 8731599310153337255
+    second: Slime-Sdheet_13
+  - first:
+      213: -3156692434496695181
+    second: Slime-Sdheet_14
+  - first:
+      213: -5957756920080888117
+    second: Slime-Sdheet_15
+  - first:
+      213: -7875250371678572320
+    second: Slime-Sdheet_16
+  - first:
+      213: 1173174629328338150
+    second: Slime-Sdheet_17
+  - first:
+      213: -3334782499348662743
+    second: Slime-Sdheet_18
+  - first:
+      213: 4374267540654845415
+    second: Slime-Sdheet_19
+  - first:
+      213: -4752261256873007208
+    second: Slime-Sdheet_20
+  - first:
+      213: 7137427927020187979
+    second: Slime-Sdheet_21
+  - first:
+      213: 6534879006150262396
+    second: Slime-Sdheet_22
+  - first:
+      213: -5455743076566094056
+    second: Slime-Sdheet_23
+  - first:
+      213: 5788549341580851702
+    second: Slime-Sdheet_24
+  - first:
+      213: -1621505696252722184
+    second: Slime-Sdheet_25
+  - first:
+      213: -8041009328507326110
+    second: Slime-Sdheet_26
+  - first:
+      213: 5705861863267091962
+    second: Slime-Sdheet_27
+  - first:
+      213: -8463204628680682609
+    second: Slime-Sdheet_28
+  - first:
+      213: 1088798327884127047
+    second: Slime-Sdheet_29
+  - first:
+      213: -1041440810640273416
+    second: Slime-Sdheet_30
+  - first:
+      213: -2291271734791768465
+    second: Slime-Sdheet_31
+  - first:
+      213: 2163044950010656058
+    second: Slime-Sdheet_32
+  - first:
+      213: -1964800777088646268
+    second: Slime-Sdheet_33
+  - first:
+      213: -3721300671697311214
+    second: Slime-Sdheet_34
+  - first:
+      213: 8136649392853577004
+    second: Slime-Sdheet_35
+  - first:
+      213: -9218668833813227119
+    second: Slime-Sdheet_36
+  - first:
+      213: 8983816024807445234
+    second: Slime-Sdheet_37
+  - first:
+      213: -7548907076427269787
+    second: Slime-Sdheet_38
+  - first:
+      213: -8134670692363516687
+    second: Slime-Sdheet_39
+  - first:
+      213: -4503473979344831170
+    second: Slime-Sdheet_40
+  - first:
+      213: -5544471833720688586
+    second: Slime-Sdheet_41
+  - first:
+      213: 4760283180357255327
+    second: Slime-Sdheet_42
+  - first:
+      213: -1725297324189879496
+    second: Slime-Sdheet_43
+  - first:
+      213: 3511137685760070477
+    second: Slime-Sdheet_44
+  - first:
+      213: -8640661001875341490
+    second: Slime-Sdheet_45
+  - first:
+      213: 4181222756026727426
+    second: Slime-Sdheet_46
+  - first:
+      213: 312940384844998626
+    second: Slime-Sdheet_47
+  - first:
+      213: -3255251693643614940
+    second: Slime-Sdheet_48
+  - first:
+      213: 7499395617050178304
+    second: Slime-Sdheet_49
+  - first:
+      213: -7447403975774206253
+    second: Slime-Sdheet_50
+  - first:
+      213: -408622864787891943
+    second: Slime-Sdheet_51
+  - first:
+      213: -2967810140289323522
+    second: Slime-Sdheet_52
+  - first:
+      213: 7280854841874461388
+    second: Slime-Sdheet_53
+  - first:
+      213: 516940270332689891
+    second: Slime-Sdheet_54
+  - first:
+      213: 5293264972023761765
+    second: Slime-Sdheet_55
+  - first:
+      213: 1323430223238274459
+    second: Slime-Sdheet_56
+  - first:
+      213: -5817845603550658940
+    second: Slime-Sdheet_57
+  - first:
+      213: -4853111816183355720
+    second: Slime-Sdheet_58
+  - first:
+      213: -168426968667046374
+    second: Slime-Sdheet_59
+  - first:
+      213: -6121396083574661473
+    second: Slime-Sdheet_60
+  - first:
+      213: -4692221897557177127
+    second: Slime-Sdheet_61
+  - first:
+      213: -754109692369065805
+    second: Slime-Sdheet_62
+  - first:
+      213: 4242936770445347524
+    second: Slime-Sdheet_63
+  - first:
+      213: -6864874766487854808
+    second: Slime-Sdheet_64
+  - first:
+      213: 8862905526553542031
+    second: Slime-Sdheet_65
+  - first:
+      213: -4211437288738513088
+    second: Slime-Sdheet_66
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Slime-Sdheet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 218
+        width: 51
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4150c1fb51142a380800000000000000
+      internalID: -8961528746857462508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_1
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 218
+        width: 49
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2a0763a9be4f7040800000000000000
+      internalID: 4647519899686996525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_2
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 218
+        width: 52
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d3c065038f943ca0800000000000000
+      internalID: -6038025815317232686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_3
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 218
+        width: 51
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 577e86d4fc59fced0800000000000000
+      internalID: -2391528159520954507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_4
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 218
+        width: 52
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d438bceb388edea80800000000000000
+      internalID: -8435830874455702707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_5
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 218
+        width: 50
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26176157b081e4c00800000000000000
+      internalID: 886672614126678370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_6
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 218
+        width: 49
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e48e79664ebe9eb0800000000000000
+      internalID: -4711118950556072730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_7
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 218
+        width: 51
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 200b0c4c302f64ee0800000000000000
+      internalID: -1277067346313170942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 164
+        width: 52
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e4ac67a731b972a0800000000000000
+      internalID: -6739160514793003808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_9
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 164
+        width: 52
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0411944126d5c0e30800000000000000
+      internalID: 4471051205900570944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_10
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 164
+        width: 51
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cfc50c0b869e017f0800000000000000
+      internalID: -643758110862713604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_11
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 164
+        width: 53
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d31ae5fcc15849510800000000000000
+      internalID: 1555014130134327613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_12
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 164
+        width: 52
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 386dbf0a5ee3cdad0800000000000000
+      internalID: -2676194922595625341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_13
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 164
+        width: 52
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a94cb28f4fdc2970800000000000000
+      internalID: 8731599310153337255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_14
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 164
+        width: 51
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37459a8a4fc2134d0800000000000000
+      internalID: -3156692434496695181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_15
+      rect:
+        serializedVersion: 2
+        x: 365
+        y: 164
+        width: 50
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bce047095abc15da0800000000000000
+      internalID: -5957756920080888117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 108
+        width: 52
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e0f5d6038d75b290800000000000000
+      internalID: -7875250371678572320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_17
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 108
+        width: 49
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ecbd901c14f74010800000000000000
+      internalID: 1173174629328338150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_18
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 108
+        width: 52
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 926322b3cf878b1d0800000000000000
+      internalID: -3334782499348662743
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_19
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 108
+        width: 51
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ede041072584bc30800000000000000
+      internalID: 4374267540654845415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_20
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 108
+        width: 52
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 897ab30c0939c0eb0800000000000000
+      internalID: -4752261256873007208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_21
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 108
+        width: 52
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b41bdf742ec3d0360800000000000000
+      internalID: 7137427927020187979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_22
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 108
+        width: 48
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7e7eb335dd80ba50800000000000000
+      internalID: 6534879006150262396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_23
+      rect:
+        serializedVersion: 2
+        x: 365
+        y: 108
+        width: 50
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81f2b7fd39e4944b0800000000000000
+      internalID: -5455743076566094056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_24
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 0
+        width: 44
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f97fb505fe055050800000000000000
+      internalID: 5788549341580851702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_25
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 0
+        width: 48
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f3859d09214f79e0800000000000000
+      internalID: -1621505696252722184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_26
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 0
+        width: 48
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 261f7ba6e98986090800000000000000
+      internalID: -8041009328507326110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_27
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 0
+        width: 51
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af5cb79322b4f2f40800000000000000
+      internalID: 5705861863267091962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_28
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 0
+        width: 53
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f83db0eea38ac8a80800000000000000
+      internalID: -8463204628680682609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_29
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 0
+        width: 52
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74b929d7f403c1f00800000000000000
+      internalID: 1088798327884127047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_30
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 0
+        width: 51
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ff013bb91f0c81f0800000000000000
+      internalID: -1041440810640273416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_31
+      rect:
+        serializedVersion: 2
+        x: 365
+        y: 0
+        width: 49
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f66f7d33f74c330e0800000000000000
+      internalID: -2291271734791768465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 43e8daff6943a934e9780df6b101fc99
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Slime-Sdheet_0: -8961528746857462508
+      Slime-Sdheet_1: 4647519899686996525
+      Slime-Sdheet_10: -643758110862713604
+      Slime-Sdheet_11: 1555014130134327613
+      Slime-Sdheet_12: -2676194922595625341
+      Slime-Sdheet_13: 8731599310153337255
+      Slime-Sdheet_14: -3156692434496695181
+      Slime-Sdheet_15: -5957756920080888117
+      Slime-Sdheet_16: -7875250371678572320
+      Slime-Sdheet_17: 1173174629328338150
+      Slime-Sdheet_18: -3334782499348662743
+      Slime-Sdheet_19: 4374267540654845415
+      Slime-Sdheet_2: -6038025815317232686
+      Slime-Sdheet_20: -4752261256873007208
+      Slime-Sdheet_21: 7137427927020187979
+      Slime-Sdheet_22: 6534879006150262396
+      Slime-Sdheet_23: -5455743076566094056
+      Slime-Sdheet_24: 5788549341580851702
+      Slime-Sdheet_25: -1621505696252722184
+      Slime-Sdheet_26: -8041009328507326110
+      Slime-Sdheet_27: 5705861863267091962
+      Slime-Sdheet_28: -8463204628680682609
+      Slime-Sdheet_29: 1088798327884127047
+      Slime-Sdheet_3: -2391528159520954507
+      Slime-Sdheet_30: -1041440810640273416
+      Slime-Sdheet_31: -2291271734791768465
+      Slime-Sdheet_32: 2163044950010656058
+      Slime-Sdheet_33: -1964800777088646268
+      Slime-Sdheet_34: -3721300671697311214
+      Slime-Sdheet_35: 8136649392853577004
+      Slime-Sdheet_36: -9218668833813227119
+      Slime-Sdheet_37: 8983816024807445234
+      Slime-Sdheet_38: -7548907076427269787
+      Slime-Sdheet_39: -8134670692363516687
+      Slime-Sdheet_4: -8435830874455702707
+      Slime-Sdheet_40: -4503473979344831170
+      Slime-Sdheet_41: -5544471833720688586
+      Slime-Sdheet_42: 4760283180357255327
+      Slime-Sdheet_43: -1725297324189879496
+      Slime-Sdheet_44: 3511137685760070477
+      Slime-Sdheet_45: -8640661001875341490
+      Slime-Sdheet_46: 4181222756026727426
+      Slime-Sdheet_47: 312940384844998626
+      Slime-Sdheet_48: -3255251693643614940
+      Slime-Sdheet_49: 7499395617050178304
+      Slime-Sdheet_5: 886672614126678370
+      Slime-Sdheet_50: -7447403975774206253
+      Slime-Sdheet_51: -408622864787891943
+      Slime-Sdheet_52: -2967810140289323522
+      Slime-Sdheet_53: 7280854841874461388
+      Slime-Sdheet_54: 516940270332689891
+      Slime-Sdheet_55: 5293264972023761765
+      Slime-Sdheet_56: 1323430223238274459
+      Slime-Sdheet_57: -5817845603550658940
+      Slime-Sdheet_58: -4853111816183355720
+      Slime-Sdheet_59: -168426968667046374
+      Slime-Sdheet_6: -4711118950556072730
+      Slime-Sdheet_60: -6121396083574661473
+      Slime-Sdheet_61: -4692221897557177127
+      Slime-Sdheet_62: -754109692369065805
+      Slime-Sdheet_63: 4242936770445347524
+      Slime-Sdheet_64: -6864874766487854808
+      Slime-Sdheet_65: 8862905526553542031
+      Slime-Sdheet_66: -4211437288738513088
+      Slime-Sdheet_7: -1277067346313170942
+      Slime-Sdheet_8: -6739160514793003808
+      Slime-Sdheet_9: 4471051205900570944
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
