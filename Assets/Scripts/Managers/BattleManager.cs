@@ -27,6 +27,7 @@ namespace JuegoDeCartas.Managers
         public HandRenderer handRenderer = new HandRenderer();
 
         private int lastCardDamageDealt;
+        private bool battleEnded;
 
         [HideInInspector] public int armorPerTurn;
         [HideInInspector] public int regenPerRound;
@@ -34,6 +35,7 @@ namespace JuegoDeCartas.Managers
         [HideInInspector] public int playerDamageBonusTurnsRemaining;
 
         public Enemy enemy => waveManager.enemy;
+        public bool IsBattleEnded => battleEnded;
 
         void OnDestroy()
         {
@@ -46,9 +48,11 @@ namespace JuegoDeCartas.Managers
 
         void Start()
         {
-            uiManager.Init(this);
+            if (uiManager != null)
+                uiManager.Init(this);
 
-            deckManager.OnDeckChanged += RefreshDeckUI;
+            if (deckManager != null)
+                deckManager.OnDeckChanged += RefreshDeckUI;
 
             ApplySelectedMission();
 
@@ -63,9 +67,11 @@ namespace JuegoDeCartas.Managers
 
             waveManager.Initialize();
 
-            deckManager.InitializeDeck();
+            if (deckManager != null)
+                deckManager.InitializeDeck();
 
-            turnManager.StartGame();
+            if (turnManager != null)
+                turnManager.StartGame();
         }
 
         void ApplySelectedMission()
@@ -77,16 +83,22 @@ namespace JuegoDeCartas.Managers
             waveManager.normalEnemies.Clear();
             waveManager.miniBossEnemies.Clear();
 
-            for (int i = 0; i < mission.possibleNormalEnemies.Count; i++)
+            if (mission.possibleNormalEnemies != null)
             {
-                if (mission.possibleNormalEnemies[i] != null)
-                    waveManager.normalEnemies.Add(mission.possibleNormalEnemies[i]);
+                for (int i = 0; i < mission.possibleNormalEnemies.Count; i++)
+                {
+                    if (mission.possibleNormalEnemies[i] != null)
+                        waveManager.normalEnemies.Add(mission.possibleNormalEnemies[i]);
+                }
             }
 
-            for (int i = 0; i < mission.possibleMiniBosses.Count; i++)
+            if (mission.possibleMiniBosses != null)
             {
-                if (mission.possibleMiniBosses[i] != null)
-                    waveManager.miniBossEnemies.Add(mission.possibleMiniBosses[i]);
+                for (int i = 0; i < mission.possibleMiniBosses.Count; i++)
+                {
+                    if (mission.possibleMiniBosses[i] != null)
+                        waveManager.miniBossEnemies.Add(mission.possibleMiniBosses[i]);
+                }
             }
 
             waveManager.finalBoss = mission.boss;
@@ -111,12 +123,14 @@ namespace JuegoDeCartas.Managers
 
         void RefreshDeckUI()
         {
-            if (deckViewer != null && deckViewer.panel.activeSelf)
+            if (deckViewer != null && deckViewer.panel != null && deckViewer.panel.activeSelf)
                 deckViewer.ShowRemaining();
         }
 
         void OnWaveCleared()
         {
+            battleEnded = true;
+
             if (statsTracker != null)
                 statsTracker.PopulateStatsText();
 
@@ -134,12 +148,15 @@ namespace JuegoDeCartas.Managers
 
         public void DrawCards(int amount)
         {
-            deckManager.DrawCards(amount);
+            if (!battleEnded && deckManager != null)
+                deckManager.DrawCards(amount);
         }
 
         public void PlayCard(Card card)
         {
-            if (card == null) return;
+            if (battleEnded || card == null || card.data == null || player == null || deckManager == null || turnManager == null)
+                return;
+
             if (turnManager.currentTurn != TurnManager.Turn.Player || turnManager.isExecuting)
                 return;
 
@@ -189,7 +206,7 @@ namespace JuegoDeCartas.Managers
 
         public void DamageEnemy(int damage)
         {
-            if (enemy == null) return;
+            if (battleEnded || enemy == null) return;
 
             int totalDamage = Mathf.Max(0, damage + playerDamageBonus);
 
@@ -205,7 +222,7 @@ namespace JuegoDeCartas.Managers
 
         public void DamagePlayer(int damage)
         {
-            if (player == null) return;
+            if (battleEnded || player == null) return;
 
             int dealt = player.TakeDamage(damage);
 
@@ -216,6 +233,7 @@ namespace JuegoDeCartas.Managers
 
             if (player.stats.health <= 0 && gameManager != null)
             {
+                battleEnded = true;
                 if (statsTracker != null)
                     statsTracker.PopulateStatsText();
                 gameManager.ShowDefeat();
@@ -224,6 +242,9 @@ namespace JuegoDeCartas.Managers
 
         public void ContinueAfterShop()
         {
+            if (battleEnded || deckManager == null || turnManager == null)
+                return;
+
             waveManager.SpawnNext();
 
             deckManager.deck.AddRange(deckManager.hand);
@@ -262,13 +283,14 @@ namespace JuegoDeCartas.Managers
 
         public void RenderHand()
         {
-            if (handRenderer != null)
+            if (handRenderer != null && deckManager != null)
                 handRenderer.Render(deckManager.hand, this);
         }
 
         public void UpdateUI()
         {
-            uiManager.Refresh();
+            if (uiManager != null)
+                uiManager.Refresh();
             if (turnManager != null)
                 turnManager.RefreshEnemyIntentPreview();
         }

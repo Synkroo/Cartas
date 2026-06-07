@@ -11,6 +11,11 @@ namespace JuegoDeCartas.Cards
         public TextMeshProUGUI descriptionText;
         public TextMeshProUGUI costText;
         public Image artworkImage;
+        public Image backgroundImage;
+
+        [Header("State Colors")]
+        public Color normalColor = new Color(0.3301887f, 0.3301887f, 0.3301887f, 1f);
+        public Color upgradedColor = Color.red;
 
         public bool interactable = true;
 
@@ -33,6 +38,15 @@ namespace JuegoDeCartas.Cards
             card = newCard;
             battleManager = manager;
 
+            if (card == null || card.data == null)
+            {
+                if (nameText != null) nameText.text = "";
+                if (descriptionText != null) descriptionText.text = "";
+                if (costText != null) costText.text = "";
+                if (artworkImage != null) artworkImage.enabled = false;
+                return;
+            }
+
             if (nameText != null) nameText.text = card.data.cardName;
             if (descriptionText != null) descriptionText.text = card.data.description;
             if (costText != null) costText.text = card.effectiveCost.ToString();
@@ -42,9 +56,11 @@ namespace JuegoDeCartas.Cards
                 artworkImage.enabled = card.data.sprite != null;
             }
 
-            var bg = transform.Find("fondo carta")?.GetComponent<Image>();
-            if (bg != null)
-                bg.color = card.upgraded ? Color.red : new Color(0.3301887f, 0.3301887f, 0.3301887f, 1f);
+            if (backgroundImage == null)
+                backgroundImage = transform.Find("fondo carta")?.GetComponent<Image>();
+
+            if (backgroundImage != null)
+                backgroundImage.color = card.upgraded ? upgradedColor : normalColor;
         }
 
         public void OnClick()

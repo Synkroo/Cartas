@@ -25,9 +25,18 @@ namespace JuegoDeCartas.Managers
             hand.Clear();
             discard.Clear();
 
+            cardsPerTurn = Mathf.Max(0, cardsPerTurn);
+
+            if (startingDeck == null)
+            {
+                OnDeckChanged?.Invoke();
+                return;
+            }
+
             foreach (var cardData in startingDeck)
             {
-                deck.Add(new Card(cardData));
+                if (cardData != null)
+                    deck.Add(new Card(cardData));
             }
 
             Shuffle(deck);
@@ -36,6 +45,9 @@ namespace JuegoDeCartas.Managers
 
         public void DrawCards(int amount)
         {
+            if (amount <= 0)
+                return;
+
             for (int i = 0; i < amount; i++)
             {
                 if (deck.Count == 0)
@@ -87,6 +99,9 @@ namespace JuegoDeCartas.Managers
 
         public void DiscardHand()
         {
+            if (hand == null || discard == null)
+                return;
+
             discard.AddRange(hand);
             hand.Clear();
 
@@ -95,6 +110,9 @@ namespace JuegoDeCartas.Managers
 
         public void Shuffle(List<Card> list)
         {
+            if (list == null)
+                return;
+
             for (int i = 0; i < list.Count; i++)
             {
                 Card temp = list[i];

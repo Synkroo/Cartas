@@ -40,12 +40,18 @@ namespace JuegoDeCartas.Managers
 
         public void StartGame()
         {
+            if (battle == null || battle.IsBattleEnded)
+                return;
+
             UpdateRoundUI();
             StartPlayerTurn();
         }
 
         public void StartPlayerTurn()
         {
+            if (battle == null || battle.IsBattleEnded || battle.player == null || battle.deckManager == null)
+                return;
+
             currentTurn = Turn.Player;
 
             turnCount++;
@@ -80,7 +86,7 @@ namespace JuegoDeCartas.Managers
 
         public void EndPlayerTurn()
         {
-            if (currentTurn != Turn.Player || isExecuting)
+            if (battle == null || battle.IsBattleEnded || battle.deckManager == null || currentTurn != Turn.Player || isExecuting)
                 return;
 
             battle.AdvancePlayerDamageBonusTurn();
@@ -100,6 +106,12 @@ namespace JuegoDeCartas.Managers
 
             yield return new WaitForSeconds(0.5f);
 
+            if (battle == null || battle.IsBattleEnded)
+            {
+                isExecuting = false;
+                yield break;
+            }
+
             if (battle.enemy == null)
             {
                 isExecuting = false;
@@ -117,17 +129,26 @@ namespace JuegoDeCartas.Managers
             yield return new WaitForSeconds(0.5f);
 
             isExecuting = false;
+            if (battle == null || battle.IsBattleEnded)
+                yield break;
+
             StartPlayerTurn();
         }
 
         void ExecuteEnemyAttack()
         {
+            if (battle == null || battle.IsBattleEnded)
+                return;
+
             battle.DamagePlayer(pendingEnemyDamage);
             battle.UpdateUI();
         }
 
         public void NextRound()
         {
+            if (battle == null || battle.IsBattleEnded || battle.player == null)
+                return;
+
             roundCount++;
             turnCount = 0;
 

@@ -13,14 +13,23 @@ namespace JuegoDeCartas.Managers
 
         public void Render(List<Card> hand, BattleManager battle)
         {
+            if (handParent == null || cardPrefab == null || hand == null)
+                return;
+
             foreach (Transform child in handParent)
                 Object.Destroy(child.gameObject);
 
             foreach (var card in hand)
             {
+                if (card == null || card.data == null)
+                    continue;
+
                 GameObject obj = Object.Instantiate(cardPrefab, handParent);
                 obj.transform.localScale = new Vector3(0.8f, obj.transform.localScale.y, obj.transform.localScale.z);
-                obj.GetComponent<CardView>().Setup(card, battle);
+                CardView view = obj.GetComponent<CardView>();
+                if (view != null)
+                    view.Setup(card, battle);
+
                 var hover = obj.GetComponent<CardHover>();
                 if (hover != null)
                 {

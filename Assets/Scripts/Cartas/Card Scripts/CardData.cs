@@ -13,5 +13,10 @@ namespace JuegoDeCartas.Cards
         public int cost;
         public bool destroyOnUse;
         public List<CardEffect> effects = new List<CardEffect>();
+
+        void OnValidate()
+        {
+            cost = Mathf.Max(0, cost);
+        }
     }
 }

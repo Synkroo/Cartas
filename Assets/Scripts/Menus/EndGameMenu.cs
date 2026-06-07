@@ -33,7 +33,7 @@ namespace JuegoDeCartas.UI
         {
             if (raycastersCached) return;
             allRaycasters.Clear();
-            allRaycasters.AddRange(FindObjectsByType<GraphicRaycaster>(FindObjectsSortMode.None));
+            allRaycasters.AddRange(FindObjectsByType<GraphicRaycaster>(FindObjectsInactive.Include));
             raycastersCached = true;
         }
 
@@ -66,7 +66,8 @@ namespace JuegoDeCartas.UI
             if (menusCanvas != null)
                 menusCanvas.enabled = true;
 
-            panel.SetActive(true);
+            if (panel != null)
+                panel.SetActive(true);
         }
 
         public void HideAll()

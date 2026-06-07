@@ -28,6 +28,7 @@ namespace JuegoDeCartas.UI
         public Canvas menusCanvas;
 
         public bool pauseTime = true;
+        public string currencySuffix = "\u20ac";
 
         [Header("Item Pool")]
         public List<ArticuloData> itemPool = new List<ArticuloData>();
@@ -46,6 +47,8 @@ namespace JuegoDeCartas.UI
         List<GraphicRaycaster> disabledRaycasters = new List<GraphicRaycaster>();
         List<GraphicRaycaster> allRaycasters = new List<GraphicRaycaster>();
         bool raycastersCached;
+        float previousTimeScale = 1f;
+        bool opened;
 
         void Awake()
         {
@@ -58,7 +61,7 @@ namespace JuegoDeCartas.UI
         {
             if (raycastersCached) return;
             allRaycasters.Clear();
-            allRaycasters.AddRange(FindObjectsByType<GraphicRaycaster>(FindObjectsSortMode.None));
+            allRaycasters.AddRange(FindObjectsByType<GraphicRaycaster>(FindObjectsInactive.Include));
             raycastersCached = true;
         }
 
@@ -88,13 +91,20 @@ namespace JuegoDeCartas.UI
 
         public void Open()
         {
+            if (opened)
+                return;
+
+            opened = true;
+            previousTimeScale = Time.timeScale;
+
             if (pauseTime)
                 Time.timeScale = 0f;
 
             ClearSlots();
             PopulateSlots();
 
-            shopPanel.SetActive(true);
+            if (shopPanel != null)
+                shopPanel.SetActive(true);
 
             SetActiveAndBlockOthers();
 
@@ -108,7 +118,7 @@ namespace JuegoDeCartas.UI
 
             var restockPrecioText = transform.Find("Cabecero/PanelRestock/Precio200")?.GetComponent<TextMeshProUGUI>();
             if (restockPrecioText != null)
-                restockPrecioText.text = restockCost + "€";
+                restockPrecioText.text = restockCost + currencySuffix;
         }
 
         void ClearSlots()
@@ -199,16 +209,23 @@ namespace JuegoDeCartas.UI
 
         public void Close()
         {
+            if (!opened)
+                return;
+
+            opened = false;
+
             foreach (var rc in disabledRaycasters)
                 if (rc != null) rc.enabled = true;
             disabledRaycasters.Clear();
 
-            shopPanel.SetActive(false);
+            if (shopPanel != null)
+                shopPanel.SetActive(false);
 
             if (menusCanvas != null)
                 menusCanvas.enabled = false;
 
-            Time.timeScale = 1f;
+            if (pauseTime)
+                Time.timeScale = previousTimeScale;
 
             if (battle != null)
                 battle.ContinueAfterShop();
@@ -220,7 +237,7 @@ namespace JuegoDeCartas.UI
         {
             if (dineroText != null && gameManager != null)
             {
-                dineroText.text = gameManager.dinero.ToString() + "€";
+                dineroText.text = gameManager.dinero + currencySuffix;
                 if (gameManager.dinero != lastDinero)
                 {
                     lastDinero = gameManager.dinero;
@@ -254,7 +271,8 @@ namespace JuegoDeCartas.UI
         {
             if (deckViewer == null) return;
 
-            shopPanel.SetActive(false);
+            if (shopPanel != null)
+                shopPanel.SetActive(false);
 
             deckViewer.onClose -= OnDeckViewerClosed;
             deckViewer.onClose += OnDeckViewerClosed;
@@ -264,7 +282,8 @@ namespace JuegoDeCartas.UI
         void OnDeckViewerClosed()
         {
             deckViewer.onClose -= OnDeckViewerClosed;
-            shopPanel.SetActive(true);
+            if (shopPanel != null)
+                shopPanel.SetActive(true);
         }
 
         public void OnRestock()

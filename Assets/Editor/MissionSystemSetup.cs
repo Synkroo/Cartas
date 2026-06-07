@@ -289,8 +289,8 @@ public static class MissionSystemSetup
     static void SetupMainMenuScene(MissionEntryUI prefab, List<MissionData> missions)
     {
         Scene scene = EditorSceneManager.OpenScene(MainMenuScenePath, OpenSceneMode.Single);
-        Canvas canvas = Object.FindFirstObjectByType<Canvas>();
-        MainMenuManager menuManager = Object.FindFirstObjectByType<MainMenuManager>();
+        Canvas canvas = Object.FindAnyObjectByType<Canvas>();
+        MainMenuManager menuManager = Object.FindAnyObjectByType<MainMenuManager>();
         if (canvas == null || menuManager == null)
             throw new System.InvalidOperationException("MainMenu necesita Canvas y MainMenuManager.");
 

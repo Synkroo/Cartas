@@ -11,6 +11,11 @@ namespace JuegoDeCartas.Articulos
         [TextArea] public string descripcion;
         public TipoEfectoArticulo tipoEfecto;
         public int cantidad;
+
+        void OnValidate()
+        {
+            cantidad = Mathf.Max(0, cantidad);
+        }
     }
 
     public enum Rareza

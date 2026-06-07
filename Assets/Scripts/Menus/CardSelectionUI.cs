@@ -26,22 +26,23 @@ namespace JuegoDeCartas.UI
         TextMeshProUGUI tituloText;
         GridLayoutGroup grid;
 
+        public bool IsConfigured => panel != null && contentParent != null && cardPrefab != null;
+
         void Awake()
         {
-            panel = gameObject;
-            contentParent = transform.Find("Scroll View/Viewport/Content");
-            tituloText = transform.Find("Cabecero/Titulo")?.GetComponent<TextMeshProUGUI>();
+            if (panel == null)
+                panel = gameObject;
+
+            if (contentParent == null)
+                contentParent = transform.Find("Scroll View/Viewport/Content");
+
+            if (tituloText == null)
+                tituloText = transform.Find("Cabecero/Titulo")?.GetComponent<TextMeshProUGUI>();
+
             if (contentParent != null) grid = contentParent.GetComponent<GridLayoutGroup>();
 
             if (battle == null)
-                battle = FindObjectOfType<BattleManager>();
-
-            if (cardPrefab == null)
-            {
-#if UNITY_EDITOR
-                cardPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Scripts/Prefabs/CardPrefab.prefab");
-#endif
-            }
+                battle = FindAnyObjectByType<BattleManager>();
 
             var volverBtn = transform.Find("Cabecero/BotonVolver")?.GetComponent<Button>();
             if (volverBtn != null)
@@ -53,9 +54,16 @@ namespace JuegoDeCartas.UI
 
         public void OpenForSelection(List<Card> cards, string title, Action<Card> onSelect, Action onCancelAction)
         {
-            if (cardPrefab == null)
+            if (!IsConfigured)
             {
-                Debug.LogError("[CardSelectionUI] cardPrefab is not assigned. Cannot open selection.");
+                Debug.LogError("[CardSelectionUI] Missing panel, contentParent, or cardPrefab. Cannot open selection.");
+                onCancelAction?.Invoke();
+                return;
+            }
+
+            if (cards == null || cards.Count == 0)
+            {
+                onCancelAction?.Invoke();
                 return;
             }
 
@@ -72,10 +80,6 @@ namespace JuegoDeCartas.UI
             if (tituloText != null)
                 tituloText.text = title;
 
-            int totalCards = cards.Count;
-            int columns = 5;
-            int rows = Mathf.CeilToInt((float)totalCards / columns);
-
             Canvas.ForceUpdateCanvases();
 
             if (grid != null)
@@ -89,6 +93,9 @@ namespace JuegoDeCartas.UI
 
             foreach (var card in cards)
             {
+                if (card == null || card.data == null)
+                    continue;
+
                 GameObject obj = Instantiate(cardPrefab, contentParent);
 
                 CardView view = obj.GetComponent<CardView>();
@@ -143,7 +150,9 @@ namespace JuegoDeCartas.UI
 
         public void Close()
         {
-            Debug.Log("[CardSelectionUI] Close() called, panel=" + panel.name);
+            if (panel == null)
+                return;
+
             panel.SetActive(false);
             onCardSelected = null;
             var cancel = onCancel;

@@ -52,6 +52,12 @@ namespace JuegoDeCartas.Missions
             return difficulty >= MissionDifficulty.Media ? 1.2f : 1f;
         }
 
+        void OnValidate()
+        {
+            combatCount = Mathf.Max(1, combatCount);
+            miniBossFrequency = Mathf.Max(1, miniBossFrequency);
+        }
+
         string GetCompletionKey(MissionDifficulty difficulty)
         {
             return "MissionCompleted_" + name + "_" + difficulty;

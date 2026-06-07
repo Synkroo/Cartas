@@ -9,7 +9,7 @@ namespace JuegoDeCartas.Managers
 
         public int TakeDamage(int damage)
         {
-            int remaining = damage;
+            int remaining = Mathf.Max(0, damage);
 
             if (stats.armor > 0)
             {

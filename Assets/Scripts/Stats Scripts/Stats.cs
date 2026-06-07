@@ -15,8 +15,11 @@ namespace JuegoDeCartas.Stats
 
         public void Clamp()
         {
+            maxHealth = Mathf.Max(1, maxHealth);
+            maxMana = Mathf.Max(0, maxMana);
             health = Mathf.Clamp(health, 0, maxHealth);
             mana = Mathf.Clamp(mana, 0, maxMana);
+            armor = Mathf.Max(0, armor);
         }
     }
 }

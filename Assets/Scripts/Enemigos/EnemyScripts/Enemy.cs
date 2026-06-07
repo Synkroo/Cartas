@@ -29,6 +29,24 @@ namespace JuegoDeCartas.Enemies
             data = enemyData;
             battle = ownerBattle;
 
+            if (data == null)
+            {
+                stats.maxHealth = 1;
+                stats.health = 1;
+                stats.armor = 0;
+                currentMinDamage = 0;
+                currentMaxDamage = 0;
+                currentGoldRewardOverride = 0;
+                currentSprite = null;
+                currentAnimatorController = null;
+                damageModifier = 0;
+                lastDamageTaken = 0;
+                turnsSurvived = 0;
+                mechanicUseCounts.Clear();
+                mechanicDamageAccumulations.Clear();
+                return;
+            }
+
             float missionStatMultiplier = MissionRunState.EnemyStatMultiplier;
 
             stats.maxHealth = ApplyMultiplier(data.maxHealth, missionStatMultiplier, 1);
@@ -67,7 +85,8 @@ namespace JuegoDeCartas.Enemies
 
         public bool TakeDamage(int damage)
         {
-            int remaining = damage;
+            int incomingDamage = Mathf.Max(0, damage);
+            int remaining = incomingDamage;
             if (stats.armor > 0)
             {
                 int absorbed = Mathf.Min(stats.armor, remaining);
@@ -76,7 +95,8 @@ namespace JuegoDeCartas.Enemies
             }
 
             stats.health -= remaining;
-            lastDamageTaken += damage;
+            stats.Clamp();
+            lastDamageTaken += incomingDamage;
             return stats.health <= 0;
         }
 
@@ -266,6 +286,7 @@ namespace JuegoDeCartas.Enemies
             stats.armor = ApplyPercent(stats.armor, mechanic.armorPercentOnRevive, 0);
             currentMinDamage = ApplyPercent(currentMinDamage, mechanic.minDamagePercentOnRevive, 0);
             currentMaxDamage = Mathf.Max(currentMinDamage, ApplyPercent(currentMaxDamage, mechanic.maxDamagePercentOnRevive, currentMinDamage));
+            stats.Clamp();
 
             damageModifier = 0;
             lastDamageTaken = 0;
