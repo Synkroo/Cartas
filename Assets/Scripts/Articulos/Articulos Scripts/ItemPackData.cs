@@ -1,0 +1,31 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace JuegoDeCartas.Articulos
+{
+    [Serializable]
+    public class PackRarityWeight
+    {
+        public Rareza rarity;
+        [Min(0f)] public float weight = 1f;
+    }
+
+    [CreateAssetMenu(fileName = "NuevoSobre", menuName = "Tienda/Sobre")]
+    public class ItemPackData : ScriptableObject
+    {
+        public string packName;
+        [TextArea] public string description;
+        public Sprite image;
+        public Rareza displayRarity;
+        [Min(0)] public int price = 200;
+        [Min(1)] public int choiceCount = 3;
+        public List<PackRarityWeight> rarityWeights = new List<PackRarityWeight>();
+
+        void OnValidate()
+        {
+            price = Mathf.Max(0, price);
+            choiceCount = Mathf.Max(1, choiceCount);
+        }
+    }
+}

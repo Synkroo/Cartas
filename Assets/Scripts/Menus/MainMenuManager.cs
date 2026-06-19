@@ -7,11 +7,24 @@ namespace JuegoDeCartas.UI
     public class MainMenuManager : MonoBehaviour
     {
         [SerializeField] MissionSelectionMenu missionMenu;
+        [SerializeField] CharacterSelectionMenu characterMenu;
+        [SerializeField] GameObject mainMenuRoot;
         [SerializeField] Button[] mainMenuButtons;
 
         public void PlayGame()
         {
             SetButtonsInteractable(false);
+
+            if (characterMenu == null)
+                characterMenu = FindAnyObjectByType<CharacterSelectionMenu>(FindObjectsInactive.Include);
+
+            if (characterMenu != null)
+            {
+                if (mainMenuRoot != null)
+                    mainMenuRoot.SetActive(false);
+                characterMenu.Open();
+                return;
+            }
 
             if (missionMenu == null)
                 missionMenu = FindAnyObjectByType<MissionSelectionMenu>(FindObjectsInactive.Include);
@@ -25,11 +38,18 @@ namespace JuegoDeCartas.UI
             Debug.LogWarning("No hay MissionSelectionMenu asignado en MainMenuManager.");
         }
 
+        public void ShowMainMenu()
+        {
+            if (mainMenuRoot != null)
+                mainMenuRoot.SetActive(true);
+            SetButtonsInteractable(true);
+        }
+
         public void CloseMissionMenu()
         {
             if (missionMenu != null)
                 missionMenu.Close();
-            SetButtonsInteractable(true);
+            ShowMainMenu();
         }
 
         void SetButtonsInteractable(bool value)

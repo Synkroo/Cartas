@@ -4,6 +4,7 @@ using JuegoDeCartas.Cards;
 using JuegoDeCartas.Enemies;
 using JuegoDeCartas.Missions;
 using JuegoDeCartas.UI;
+using JuegoDeCartas.Characters;
 
 namespace JuegoDeCartas.Managers
 {
@@ -48,6 +49,8 @@ namespace JuegoDeCartas.Managers
 
         void Start()
         {
+            ApplySelectedCharacter();
+
             if (uiManager != null)
                 uiManager.Init(this);
 
@@ -72,6 +75,24 @@ namespace JuegoDeCartas.Managers
 
             if (turnManager != null)
                 turnManager.StartGame();
+        }
+
+        public void ApplySelectedCharacter()
+        {
+            CharacterData character = CharacterRunState.SelectedCharacter;
+            if (character == null || player == null || deckManager == null)
+                return;
+
+            player.stats.maxHealth = Mathf.Max(1, character.maxHealth);
+            player.stats.health = player.stats.maxHealth;
+            player.stats.maxMana = Mathf.Max(0, character.maxMana);
+            player.stats.mana = player.stats.maxMana;
+            player.stats.armor = 0;
+            deckManager.cardsPerTurn = Mathf.Max(0, character.cardsPerTurn);
+            deckManager.startingDeck = new List<CardData>(character.startingDeck);
+
+            if (gameManager != null)
+                gameManager.dinero = Mathf.Max(0, character.startingGold);
         }
 
         void ApplySelectedMission()

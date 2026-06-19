@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using JuegoDeCartas.Managers;
 using JuegoDeCartas.Articulos;
+using JuegoDeCartas.Cards;
+using JuegoDeCartas.Missions;
 
 namespace JuegoDeCartas.UI
 {
@@ -28,21 +31,29 @@ namespace JuegoDeCartas.UI
         public Canvas menusCanvas;
 
         public bool pauseTime = true;
-        public string currencySuffix = "\u20ac";
+
+        [Header("Text")]
+        public TextMeshProUGUI shopTitleText;
+        public string shopTitle = "Elige un sobre";
+        public string currencySuffix = " oro";
 
         [Header("Item Pool")]
         public List<ArticuloData> itemPool = new List<ArticuloData>();
+
+        [Header("Packs")]
+        public List<ItemPackData> packDefinitions = new List<ItemPackData>();
+        public GameObject packPrefab;
+        public ItemPackSelectionUI packSelectionUI;
 
         [Header("Restock")]
         public int restockCost = 200;
 
         [Header("Slots")]
         public Transform[] slotContainers = new Transform[3];
-        public GameObject itemCardPrefab;
-
-        static readonly float[] rarityWeights = { 0.50f, 0.35f, 0.15f };
 
         List<GameObject> spawnedItems = new List<GameObject>();
+        readonly List<ItemPackOffer> offers = new List<ItemPackOffer>();
+        readonly Dictionary<ItemPackOffer, ItemPackDisplay> displays = new Dictionary<ItemPackOffer, ItemPackDisplay>();
         GraphicRaycaster menusRaycaster;
         List<GraphicRaycaster> disabledRaycasters = new List<GraphicRaycaster>();
         List<GraphicRaycaster> allRaycasters = new List<GraphicRaycaster>();
@@ -50,11 +61,16 @@ namespace JuegoDeCartas.UI
         float previousTimeScale = 1f;
         bool opened;
 
+        public IReadOnlyList<ItemPackOffer> CurrentOffers => new ReadOnlyCollection<ItemPackOffer>(offers);
+
         void Awake()
         {
             if (menusCanvas != null)
                 menusRaycaster = menusCanvas.GetComponent<GraphicRaycaster>()
                                  ?? menusCanvas.gameObject.AddComponent<GraphicRaycaster>();
+
+            if (shopTitleText == null)
+                shopTitleText = transform.Find("Cabecero/TituloText")?.GetComponent<TextMeshProUGUI>();
         }
 
         void CacheRaycasters()
@@ -101,7 +117,7 @@ namespace JuegoDeCartas.UI
                 Time.timeScale = 0f;
 
             ClearSlots();
-            PopulateSlots();
+            GenerateAndPopulatePacks();
 
             if (shopPanel != null)
                 shopPanel.SetActive(true);
@@ -116,6 +132,9 @@ namespace JuegoDeCartas.UI
 
             UpdateDineroUI();
 
+            if (shopTitleText != null)
+                shopTitleText.text = shopTitle;
+
             var restockPrecioText = transform.Find("Cabecero/PanelRestock/Precio200")?.GetComponent<TextMeshProUGUI>();
             if (restockPrecioText != null)
                 restockPrecioText.text = restockCost + currencySuffix;
@@ -128,69 +147,142 @@ namespace JuegoDeCartas.UI
             spawnedItems.Clear();
         }
 
-        void PopulateSlots()
+        void GenerateAndPopulatePacks()
         {
-            if (itemCardPrefab == null) return;
+            offers.Clear();
+            displays.Clear();
+
+            if (packPrefab == null)
+                return;
 
             if (cardSelectionUI == null)
                 cardSelectionUI = GetComponentInChildren<CardSelectionUI>(true);
 
-            for (int i = 0; i < slotContainers.Length; i++)
+            int count = Mathf.Min(slotContainers.Length, packDefinitions.Count);
+            for (int i = 0; i < count; i++)
             {
                 if (slotContainers[i] == null) continue;
 
-                ArticuloData selected = RollItem();
-                if (selected == null) continue;
+                ItemPackData definition = packDefinitions[i];
+                if (definition == null) continue;
 
-                GameObject itemGO = Instantiate(itemCardPrefab, slotContainers[i]);
+                ItemPackOffer offer = ItemPackGenerator.Generate(definition, itemPool);
+                offers.Add(offer);
+
+                GameObject itemGO = Instantiate(packPrefab, slotContainers[i]);
                 itemGO.transform.localPosition = Vector3.zero;
-
-                var display = itemGO.GetComponent<ShopItemDisplay>();
+                ItemPackDisplay display = itemGO.GetComponent<ItemPackDisplay>();
                 if (display != null)
-                    display.Setup(selected, this, battle, cardSelectionUI);
+                {
+                    display.Setup(offer, OpenPack);
+                    displays[offer] = display;
+                }
 
                 spawnedItems.Add(itemGO);
             }
         }
 
-        ArticuloData RollItem()
+        void OpenPack(ItemPackOffer offer)
         {
-            if (itemPool.Count == 0) return null;
-
-            Rareza rolledRarity = RollRarity();
-            var validItems = itemPool.FindAll(a => a != null);
-            if (validItems.Count == 0) return null;
-
-            var candidates = validItems.FindAll(a => a.rareza == rolledRarity);
-
-            if (candidates.Count == 0)
-            {
-                for (Rareza fallback = rolledRarity - 1; fallback >= Rareza.Comun; fallback--)
-                {
-                    candidates = validItems.FindAll(a => a.rareza == fallback);
-                    if (candidates.Count > 0) break;
-                }
-            }
-
-            if (candidates.Count == 0)
-                candidates = validItems;
-
-            return candidates[Random.Range(0, candidates.Count)];
+            TryPurchasePack(offer);
         }
 
-        Rareza RollRarity()
+        public bool TryPurchasePack(ItemPackOffer offer)
         {
-            float roll = Random.value;
-            float cumulative = 0f;
+            if (offer == null || offer.Claimed || offer.Definition == null || gameManager == null)
+                return false;
+            if (packSelectionUI == null || !packSelectionUI.IsConfigured)
+                return false;
+            if (!offer.Contents.Exists(CanAcquireItem))
+                return false;
 
-            for (int i = 0; i < rarityWeights.Length; i++)
+            int price = Mathf.RoundToInt(offer.Definition.price * MissionRunState.ShopCostMultiplier);
+            if (gameManager.dinero < price)
+                return false;
+
+            gameManager.dinero -= price;
+            UpdateDineroUI();
+
+            if (shopPanel != null)
+                shopPanel.SetActive(false);
+
+            if (!packSelectionUI.Open(offer, CanAcquireItem, item => TryClaimItem(offer, item)))
             {
-                cumulative += rarityWeights[i];
-                if (roll < cumulative)
-                    return (Rareza)i;
+                gameManager.dinero += price;
+                UpdateDineroUI();
+                if (shopPanel != null)
+                    shopPanel.SetActive(true);
+                return false;
             }
 
-            return Rareza.Comun;
+            return true;
+        }
+
+        bool CanAcquireItem(ArticuloData item)
+        {
+            if (item == null || battle == null)
+                return false;
+            if (!ItemEffectApplier.NeedsSelection(item.tipoEfecto))
+                return true;
+
+            List<Card> source = ItemEffectApplier.GetSelectionSource(item, battle);
+            return source != null && source.Count > 0 && cardSelectionUI != null && cardSelectionUI.IsConfigured;
+        }
+
+        public bool TryClaimItem(ItemPackOffer offer, ArticuloData item)
+        {
+            if (offer == null || offer.Claimed || item == null || battle == null || !offer.Contents.Contains(item))
+                return false;
+
+            if (!ItemEffectApplier.NeedsSelection(item.tipoEfecto))
+            {
+                ItemEffectApplier.Apply(item, battle);
+                CompleteClaim(offer);
+                return true;
+            }
+
+            List<Card> source = ItemEffectApplier.GetSelectionSource(item, battle);
+            if (source == null || source.Count == 0 || cardSelectionUI == null)
+                return false;
+
+            packSelectionUI.Hide();
+            cardSelectionUI.OpenForSelection(
+                source,
+                item.descripcion,
+                selected =>
+                {
+                    if (selected == null)
+                    {
+                        packSelectionUI.ShowCurrent();
+                        return;
+                    }
+
+                    if (item.tipoEfecto == TipoEfectoArticulo.MejorarCarta &&
+                        upgradeSelectionUI != null &&
+                        upgradeSelectionUI.IsConfigured &&
+                        upgradeSelectionUI.Show(selected, () => CompleteClaim(offer)))
+                    {
+                        return;
+                    }
+
+                    ItemEffectApplier.ApplyToSelected(item, battle, selected);
+                    CompleteClaim(offer);
+                },
+                () => packSelectionUI.ShowCurrent()
+            );
+            return true;
+        }
+
+        void CompleteClaim(ItemPackOffer offer)
+        {
+            offer.Claimed = true;
+            if (displays.TryGetValue(offer, out ItemPackDisplay display) && display != null)
+                display.SetClaimed(true);
+
+            if (packSelectionUI != null)
+                packSelectionUI.Close();
+            if (shopPanel != null)
+                shopPanel.SetActive(true);
         }
 
         void SetActiveAndBlockOthers()
@@ -288,14 +380,22 @@ namespace JuegoDeCartas.UI
 
         public void OnRestock()
         {
-            if (gameManager == null) return;
-            if (gameManager.dinero < restockCost) return;
+            TryRestock();
+        }
+
+        public bool TryRestock()
+        {
+            if (gameManager == null)
+                return false;
+            if (gameManager.dinero < restockCost)
+                return false;
 
             gameManager.dinero -= restockCost;
             UpdateDineroUI();
 
             ClearSlots();
-            PopulateSlots();
+            GenerateAndPopulatePacks();
+            return true;
         }
     }
 }

@@ -39,7 +39,13 @@ namespace JuegoDeCartas.Missions
         public void MarkCompleted(MissionDifficulty difficulty)
         {
             PlayerPrefs.SetInt(GetCompletionKey(difficulty), 1);
+            PlayerPrefs.SetInt(GetGlobalCompletionKey(difficulty), 1);
             PlayerPrefs.Save();
+        }
+
+        public static bool IsAnyDifficultyCompleted(MissionDifficulty difficulty)
+        {
+            return PlayerPrefs.GetInt(GetGlobalCompletionKey(difficulty), 0) == 1;
         }
 
         public float GetEnemyStatMultiplier(MissionDifficulty difficulty)
@@ -61,6 +67,11 @@ namespace JuegoDeCartas.Missions
         string GetCompletionKey(MissionDifficulty difficulty)
         {
             return "MissionCompleted_" + name + "_" + difficulty;
+        }
+
+        static string GetGlobalCompletionKey(MissionDifficulty difficulty)
+        {
+            return "AnyMissionCompleted_" + difficulty;
         }
     }
 }

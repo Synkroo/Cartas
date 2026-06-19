@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d7ae47a9b33da41a7a0930a6c0f862, type: 3}
+  m_Name: SobreRaro
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Articulos.ItemPackData
+  packName: Sobre raro
+  description: Contiene 4 articulos con alta probabilidad de rareza rara.
+  image: {fileID: 0}
+  displayRarity: 1
+  price: 400
+  choiceCount: 4
+  rarityWeights:
+  - rarity: 0
+    weight: 15
+  - rarity: 1
+    weight: 75
+  - rarity: 2
+    weight: 10

@@ -32,6 +32,7 @@ namespace JuegoDeCartas.Missions
         MissionData selectedMission;
         MissionDifficulty selectedDifficulty;
         Coroutine fadeRoutine;
+        public System.Action onClosed;
 
         void Awake()
         {
@@ -73,6 +74,7 @@ namespace JuegoDeCartas.Missions
             {
                 if (panel != null)
                     panel.SetActive(false);
+                onClosed?.Invoke();
             });
         }
 
@@ -165,6 +167,7 @@ namespace JuegoDeCartas.Missions
                 return;
 
             MissionRunState.SelectMission(selectedMission, selectedDifficulty);
+            onClosed = null;
             SceneManager.LoadScene(gameSceneName);
         }
 
