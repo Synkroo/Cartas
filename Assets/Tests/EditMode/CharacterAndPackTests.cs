@@ -160,10 +160,18 @@ namespace JuegoDeCartas.Tests
             ItemPackData common = LoadPack("SobreComun");
             ItemPackData rare = LoadPack("SobreRaro");
             ItemPackData epic = LoadPack("SobreEpico");
+            ItemPackData vitality = LoadPack("SobreVitalidad");
+            ItemPackData arcane = LoadPack("SobreArcano");
+            ItemPackData forge = LoadPack("SobreForja");
+            ItemPackData chaos = LoadPack("SobreCaos");
 
-            AssertPack(common, 200, 3, 65f, 85f, 15f, 0f);
-            AssertPack(rare, 400, 4, 28f, 15f, 75f, 10f);
-            AssertPack(epic, 800, 5, 7f, 0f, 25f, 75f);
+            AssertPack(common, 200, 3, 24f, 85f, 15f, 0f);
+            AssertPack(rare, 400, 4, 12f, 15f, 75f, 10f);
+            AssertPack(epic, 800, 5, 4f, 0f, 25f, 75f);
+            AssertPack(vitality, 250, 4, 20f, 60f, 35f, 5f);
+            AssertPack(arcane, 350, 3, 16f, 45f, 45f, 10f);
+            AssertPack(forge, 450, 3, 14f, 10f, 65f, 25f);
+            AssertPack(chaos, 550, 5, 10f, 20f, 45f, 35f);
         }
 
         [Test]

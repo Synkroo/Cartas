@@ -16,9 +16,10 @@ MonoBehaviour:
   description: Contiene 4 articulos con alta probabilidad de rareza rara.
   image: {fileID: 0}
   displayRarity: 1
-  shopAppearanceWeight: 28
+  shopAppearanceWeight: 12
   price: 400
   choiceCount: 4
+  allowedEffects: 
   rarityWeights:
   - rarity: 0
     weight: 15

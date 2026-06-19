@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using JuegoDeCartas.Enemies;
+using JuegoDeCartas.Characters;
 
 namespace JuegoDeCartas.Missions
 {
@@ -38,14 +39,38 @@ namespace JuegoDeCartas.Missions
 
         public void MarkCompleted(MissionDifficulty difficulty)
         {
+            MarkCompleted(difficulty, CharacterRunState.SelectedCharacter);
+        }
+
+        public void MarkCompleted(MissionDifficulty difficulty, CharacterData character)
+        {
             PlayerPrefs.SetInt(GetCompletionKey(difficulty), 1);
             PlayerPrefs.SetInt(GetGlobalCompletionKey(difficulty), 1);
+            if (character != null)
+            {
+                PlayerPrefs.SetInt(GetCharacterCompletionKey(difficulty, character), 1);
+                PlayerPrefs.SetInt(GetGlobalCharacterCompletionKey(difficulty, character), 1);
+            }
             PlayerPrefs.Save();
+        }
+
+        public bool IsDifficultyCompletedByCharacter(MissionDifficulty difficulty, CharacterData character)
+        {
+            return character != null &&
+                   PlayerPrefs.GetInt(GetCharacterCompletionKey(difficulty, character), 0) == 1;
         }
 
         public static bool IsAnyDifficultyCompleted(MissionDifficulty difficulty)
         {
             return PlayerPrefs.GetInt(GetGlobalCompletionKey(difficulty), 0) == 1;
+        }
+
+        public static bool IsAnyDifficultyCompletedByCharacter(
+            MissionDifficulty difficulty,
+            CharacterData character)
+        {
+            return character != null &&
+                   PlayerPrefs.GetInt(GetGlobalCharacterCompletionKey(difficulty, character), 0) == 1;
         }
 
         public float GetEnemyStatMultiplier(MissionDifficulty difficulty)
@@ -72,6 +97,18 @@ namespace JuegoDeCartas.Missions
         static string GetGlobalCompletionKey(MissionDifficulty difficulty)
         {
             return "AnyMissionCompleted_" + difficulty;
+        }
+
+        string GetCharacterCompletionKey(MissionDifficulty difficulty, CharacterData character)
+        {
+            return "MissionCompleted_" + name + "_" + difficulty + "_" + character.name;
+        }
+
+        static string GetGlobalCharacterCompletionKey(
+            MissionDifficulty difficulty,
+            CharacterData character)
+        {
+            return "AnyMissionCompleted_" + difficulty + "_" + character.name;
         }
     }
 }

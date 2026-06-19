@@ -4,6 +4,7 @@ using UnityEngine;
 using JuegoDeCartas.Enemies;
 using JuegoDeCartas.Stats;
 using JuegoDeCartas.UI;
+using JuegoDeCartas.Progression;
 
 namespace JuegoDeCartas.Managers
 {
@@ -108,6 +109,8 @@ namespace JuegoDeCartas.Managers
             enemy = new Enemy();
             enemy.Initialize(runtimeWave[currentEnemyIndex], battleManager);
             currentEnemyIndex++;
+            CollectionProgress.MarkEnemySeen(enemy.data);
+            PlayerPrefs.Save();
 
             if (uiManager != null)
                 uiManager.SetEnemyVisual(enemy.data.enemyName, enemy.currentSprite, enemy.currentAnimatorController);
@@ -153,6 +156,8 @@ namespace JuegoDeCartas.Managers
         {
             if (statsTracker != null)
                 statsTracker.RegisterEnemyDefeated();
+            if (enemy != null)
+                CollectionProgress.MarkEnemyDefeated(enemy.data);
 
             int gold = 0;
             if (enemy != null && enemy.data != null)

@@ -8,6 +8,7 @@ namespace JuegoDeCartas.UI
     {
         [SerializeField] MissionSelectionMenu missionMenu;
         [SerializeField] CharacterSelectionMenu characterMenu;
+        [SerializeField] CollectionMenu collectionMenu;
         [SerializeField] GameObject mainMenuRoot;
         [SerializeField] Button[] mainMenuButtons;
 
@@ -43,6 +44,21 @@ namespace JuegoDeCartas.UI
             if (mainMenuRoot != null)
                 mainMenuRoot.SetActive(true);
             SetButtonsInteractable(true);
+        }
+
+        public void OpenCollection()
+        {
+            SetButtonsInteractable(false);
+            if (mainMenuRoot != null)
+                mainMenuRoot.SetActive(false);
+
+            if (collectionMenu == null)
+                collectionMenu = FindAnyObjectByType<CollectionMenu>(FindObjectsInactive.Include);
+
+            if (collectionMenu != null)
+                collectionMenu.Open();
+            else
+                ShowMainMenu();
         }
 
         public void CloseMissionMenu()

@@ -5,6 +5,7 @@ using JuegoDeCartas.Enemies;
 using JuegoDeCartas.Missions;
 using JuegoDeCartas.UI;
 using JuegoDeCartas.Characters;
+using JuegoDeCartas.Progression;
 
 namespace JuegoDeCartas.Managers
 {
@@ -29,6 +30,7 @@ namespace JuegoDeCartas.Managers
 
         private int lastCardDamageDealt;
         private bool battleEnded;
+        private bool runRecorded;
 
         [HideInInspector] public int armorPerTurn;
         [HideInInspector] public int regenPerRound;
@@ -50,6 +52,7 @@ namespace JuegoDeCartas.Managers
         void Start()
         {
             ApplySelectedCharacter();
+            CollectionProgress.RegisterRunStarted(CharacterRunState.SelectedCharacter);
 
             if (uiManager != null)
                 uiManager.Init(this);
@@ -157,7 +160,12 @@ namespace JuegoDeCartas.Managers
 
             MissionData mission = MissionRunState.SelectedMission;
             if (mission != null)
-                mission.MarkCompleted(MissionRunState.SelectedDifficulty);
+                mission.MarkCompleted(
+                    MissionRunState.SelectedDifficulty,
+                    CharacterRunState.SelectedCharacter
+                );
+
+            RecordRun(true);
 
             if (gameManager != null)
                 gameManager.ShowVictory();
@@ -257,6 +265,7 @@ namespace JuegoDeCartas.Managers
                 battleEnded = true;
                 if (statsTracker != null)
                     statsTracker.PopulateStatsText();
+                RecordRun(false);
                 gameManager.ShowDefeat();
             }
         }
@@ -314,6 +323,19 @@ namespace JuegoDeCartas.Managers
                 uiManager.Refresh();
             if (turnManager != null)
                 turnManager.RefreshEnemyIntentPreview();
+        }
+
+        void RecordRun(bool completed)
+        {
+            if (runRecorded)
+                return;
+
+            runRecorded = true;
+            CollectionProgress.RegisterRunFinished(
+                CharacterRunState.SelectedCharacter,
+                statsTracker,
+                completed
+            );
         }
     }
 }

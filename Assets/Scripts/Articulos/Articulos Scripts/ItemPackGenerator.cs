@@ -51,7 +51,7 @@ namespace JuegoDeCartas.Articulos
             var available = new List<ArticuloData>();
             for (int i = 0; i < itemPool.Count; i++)
             {
-                if (itemPool[i] != null && !available.Contains(itemPool[i]))
+                if (definition.Allows(itemPool[i]) && !available.Contains(itemPool[i]))
                     available.Add(itemPool[i]);
             }
 

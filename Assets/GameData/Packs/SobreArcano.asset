@@ -10,18 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 54d7ae47a9b33da41a7a0930a6c0f862, type: 3}
-  m_Name: SobreEpico
+  m_Name: SobreArcano
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Articulos.ItemPackData
-  packName: Sobre epico
-  description: Contiene 5 articulos y favorece las recompensas epicas.
+  packName: Sobre arcano
+  description: Recursos de mana y nuevas cartas para ampliar el mazo.
   image: {fileID: 0}
-  displayRarity: 2
-  shopAppearanceWeight: 4
-  price: 800
-  choiceCount: 5
-  allowedEffects: 
+  displayRarity: 1
+  shopAppearanceWeight: 16
+  price: 350
+  choiceCount: 3
+  allowedEffects: 040000000800000009000000
   rarityWeights:
+  - rarity: 0
+    weight: 45
   - rarity: 1
-    weight: 25
+    weight: 45
   - rarity: 2
-    weight: 75
+    weight: 10

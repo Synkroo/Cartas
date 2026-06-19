@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using JuegoDeCartas.Articulos;
+using JuegoDeCartas.Progression;
 
 namespace JuegoDeCartas.UI
 {
@@ -82,11 +83,14 @@ namespace JuegoDeCartas.UI
                 if (item == null)
                     continue;
 
+                CollectionProgress.MarkItemSeen(item);
                 GameObject instance = Instantiate(itemChoicePrefab, content);
                 PackItemChoiceDisplay display = instance.GetComponent<PackItemChoiceDisplay>();
                 if (display != null)
                     display.Setup(item, canSelect == null || canSelect(item), Select);
             }
+
+            PlayerPrefs.Save();
         }
 
         void Select(ArticuloData item)

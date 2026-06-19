@@ -3,6 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System.Text;
+using JuegoDeCartas.Characters;
 
 namespace JuegoDeCartas.Missions
 {
@@ -25,6 +28,8 @@ namespace JuegoDeCartas.Missions
         public Button difficultySelectorButton;
         public Image difficultySelectorGlowImage;
         public GameObject[] difficultyMedals;
+        public TextMeshProUGUI[] difficultyCharacterTexts;
+        public List<CharacterData> medalCharacters = new List<CharacterData>();
 
         [Header("Difficulty Popup")]
         public GameObject difficultyPopupRoot;
@@ -207,7 +212,7 @@ namespace JuegoDeCartas.Missions
                     popupDifficultyButtons[i].interactable = unlocked;
 
                 if (popupDifficultyStatuses != null && i < popupDifficultyStatuses.Length && popupDifficultyStatuses[i] != null)
-                    popupDifficultyStatuses[i].text = completed ? "Completada" : unlocked ? "Disponible" : "Bloqueada";
+                    popupDifficultyStatuses[i].text = BuildDifficultyStatus(difficulty, unlocked, completed);
             }
         }
 
@@ -371,7 +376,49 @@ namespace JuegoDeCartas.Missions
 
                 if (difficultyMedals != null && i < difficultyMedals.Length && difficultyMedals[i] != null)
                     difficultyMedals[i].SetActive(completed);
+
+                if (difficultyCharacterTexts != null &&
+                    i < difficultyCharacterTexts.Length &&
+                    difficultyCharacterTexts[i] != null)
+                {
+                    difficultyCharacterTexts[i].text = BuildCompletedCharacterList(difficulty);
+                }
             }
+        }
+
+        string BuildDifficultyStatus(
+            MissionDifficulty difficulty,
+            bool unlocked,
+            bool globallyCompleted)
+        {
+            if (!unlocked)
+                return "Bloqueada";
+
+            string completedCharacters = BuildCompletedCharacterList(difficulty);
+            if (!string.IsNullOrEmpty(completedCharacters))
+                return "Completada con:\n" + completedCharacters;
+
+            return globallyCompleted ? "Completada" : "Disponible";
+        }
+
+        string BuildCompletedCharacterList(MissionDifficulty difficulty)
+        {
+            var builder = new StringBuilder();
+            for (int i = 0; i < medalCharacters.Count; i++)
+            {
+                CharacterData character = medalCharacters[i];
+                if (character == null ||
+                    !missionData.IsDifficultyCompletedByCharacter(difficulty, character))
+                {
+                    continue;
+                }
+
+                if (builder.Length > 0)
+                    builder.Append(", ");
+                builder.Append(character.characterName);
+            }
+
+            return builder.ToString();
         }
 
         public void SetSelected(bool value, bool instant = false)

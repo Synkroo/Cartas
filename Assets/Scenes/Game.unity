@@ -8743,6 +8743,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e09c85e786fcb144291558282821a527, type: 2}
   - {fileID: 11400000, guid: 465d2dd3d8acd7a43b5188a63546a1ff, type: 2}
   - {fileID: 11400000, guid: 5cc76e6f05dc0344789192e29af8aaa5, type: 2}
+  - {fileID: 11400000, guid: f6938c25b88ecae45a9508c91b6a9ca2, type: 2}
+  - {fileID: 11400000, guid: cb4343db05fb30548b88bf379680b1f7, type: 2}
+  - {fileID: 11400000, guid: 047047455e586474a8918f835ffad8c0, type: 2}
+  - {fileID: 11400000, guid: 589e005915771d343bac8c00cc355081, type: 2}
   packPrefab: {fileID: 8865858709403004232, guid: 94f73a6b6311e71429d8db23a6622900, type: 3}
   packSelectionUI: {fileID: 824557060}
   restockCost: 100

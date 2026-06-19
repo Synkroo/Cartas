@@ -21,7 +21,17 @@ namespace JuegoDeCartas.Articulos
         [Min(0f)] public float shopAppearanceWeight = 1f;
         [Min(0)] public int price = 200;
         [Min(1)] public int choiceCount = 3;
+        [Tooltip("Vacio permite cualquier articulo.")]
+        public List<TipoEfectoArticulo> allowedEffects = new List<TipoEfectoArticulo>();
         public List<PackRarityWeight> rarityWeights = new List<PackRarityWeight>();
+
+        public bool Allows(ArticuloData item)
+        {
+            return item != null &&
+                   (allowedEffects == null ||
+                    allowedEffects.Count == 0 ||
+                    allowedEffects.Contains(item.tipoEfecto));
+        }
 
         void OnValidate()
         {

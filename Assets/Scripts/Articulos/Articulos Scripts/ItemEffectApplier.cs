@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using JuegoDeCartas.Managers;
 using JuegoDeCartas.Cards;
+using JuegoDeCartas.Progression;
 
 namespace JuegoDeCartas.Articulos
 {
@@ -11,6 +12,8 @@ namespace JuegoDeCartas.Articulos
         {
             if (item == null || battle == null || battle.player == null || battle.deckManager == null)
                 return;
+
+            CollectionProgress.MarkItemUsed(item);
 
             switch (item.tipoEfecto)
             {
@@ -163,6 +166,8 @@ namespace JuegoDeCartas.Articulos
         {
             if (item == null || battle == null || battle.deckManager == null || selected == null)
                 return;
+
+            CollectionProgress.MarkItemUsed(item);
 
             switch (item.tipoEfecto)
             {
