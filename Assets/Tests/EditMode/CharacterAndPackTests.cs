@@ -161,9 +161,28 @@ namespace JuegoDeCartas.Tests
             ItemPackData rare = LoadPack("SobreRaro");
             ItemPackData epic = LoadPack("SobreEpico");
 
-            AssertPack(common, 200, 3, 85f, 15f, 0f);
-            AssertPack(rare, 400, 4, 15f, 75f, 10f);
-            AssertPack(epic, 800, 5, 0f, 25f, 75f);
+            AssertPack(common, 200, 3, 65f, 85f, 15f, 0f);
+            AssertPack(rare, 400, 4, 28f, 15f, 75f, 10f);
+            AssertPack(epic, 800, 5, 7f, 0f, 25f, 75f);
+        }
+
+        [Test]
+        public void ShopPackRollUsesAppearanceWeightsAndAllowsRepeatedTypes()
+        {
+            ItemPackData common = CreatePackDefinition("Comun", 3);
+            ItemPackData rare = CreatePackDefinition("Raro", 4);
+            ItemPackData epic = CreatePackDefinition("Epico", 5);
+            common.shopAppearanceWeight = 1f;
+            rare.shopAppearanceWeight = 0f;
+            epic.shopAppearanceWeight = 0f;
+            var definitions = new List<ItemPackData> { common, rare, epic };
+
+            for (int i = 0; i < 10; i++)
+                Assert.AreSame(common, ItemPackGenerator.RollDefinition(definitions, i));
+
+            Object.DestroyImmediate(common);
+            Object.DestroyImmediate(rare);
+            Object.DestroyImmediate(epic);
         }
 
         [Test]
@@ -271,17 +290,21 @@ namespace JuegoDeCartas.Tests
             for (int i = 0; i < fixture.shop.slotContainers.Length; i++)
                 fixture.shop.slotContainers[i].SetParent(fixture.root.transform);
 
-            fixture.gameManager.dinero = 199;
+            fixture.shop.restockCost = 100;
+            fixture.gameManager.dinero = 99;
             Assert.IsFalse(fixture.shop.TryRestock());
-            Assert.AreEqual(199, fixture.gameManager.dinero);
+            Assert.AreEqual(99, fixture.gameManager.dinero);
 
             fixture.gameManager.dinero = 500;
             Assert.IsTrue(fixture.shop.TryRestock());
-            Assert.AreEqual(300, fixture.gameManager.dinero);
+            Assert.AreEqual(400, fixture.gameManager.dinero);
             Assert.AreEqual(3, fixture.shop.CurrentOffers.Count);
-            Assert.AreEqual(3, fixture.shop.CurrentOffers[0].Contents.Count);
-            Assert.AreEqual(4, fixture.shop.CurrentOffers[1].Contents.Count);
-            Assert.AreEqual(5, fixture.shop.CurrentOffers[2].Contents.Count);
+            for (int i = 0; i < fixture.shop.CurrentOffers.Count; i++)
+            {
+                ItemPackOffer offer = fixture.shop.CurrentOffers[i];
+                Assert.NotNull(offer.Definition);
+                Assert.AreEqual(offer.Definition.choiceCount, offer.Contents.Count);
+            }
 
             foreach (ItemPackData definition in fixture.shop.packDefinitions)
                 Object.DestroyImmediate(definition);
@@ -359,6 +382,7 @@ namespace JuegoDeCartas.Tests
             ItemPackData definition = ScriptableObject.CreateInstance<ItemPackData>();
             definition.packName = name;
             definition.choiceCount = count;
+            definition.shopAppearanceWeight = 1f;
             definition.rarityWeights = new List<PackRarityWeight>
             {
                 new PackRarityWeight { rarity = Rareza.Comun, weight = 1f }
@@ -383,6 +407,7 @@ namespace JuegoDeCartas.Tests
             ItemPackData pack,
             int price,
             int count,
+            float appearanceWeight,
             float commonWeight,
             float rareWeight,
             float epicWeight)
@@ -390,6 +415,7 @@ namespace JuegoDeCartas.Tests
             Assert.NotNull(pack);
             Assert.AreEqual(price, pack.price);
             Assert.AreEqual(count, pack.choiceCount);
+            Assert.AreEqual(appearanceWeight, pack.shopAppearanceWeight);
             Assert.AreEqual(commonWeight, GetWeight(pack, Rareza.Comun));
             Assert.AreEqual(rareWeight, GetWeight(pack, Rareza.Raro));
             Assert.AreEqual(epicWeight, GetWeight(pack, Rareza.Epico));

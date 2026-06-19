@@ -18,12 +18,14 @@ namespace JuegoDeCartas.Articulos
         [TextArea] public string description;
         public Sprite image;
         public Rareza displayRarity;
+        [Min(0f)] public float shopAppearanceWeight = 1f;
         [Min(0)] public int price = 200;
         [Min(1)] public int choiceCount = 3;
         public List<PackRarityWeight> rarityWeights = new List<PackRarityWeight>();
 
         void OnValidate()
         {
+            shopAppearanceWeight = Mathf.Max(0f, shopAppearanceWeight);
             price = Mathf.Max(0, price);
             choiceCount = Mathf.Max(1, choiceCount);
         }

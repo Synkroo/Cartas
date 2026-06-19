@@ -16,6 +16,7 @@ MonoBehaviour:
   description: Contiene 3 articulos. Predominan los comunes.
   image: {fileID: 0}
   displayRarity: 0
+  shopAppearanceWeight: 65
   price: 200
   choiceCount: 3
   rarityWeights:

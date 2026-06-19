@@ -8745,7 +8745,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5cc76e6f05dc0344789192e29af8aaa5, type: 2}
   packPrefab: {fileID: 8865858709403004232, guid: 94f73a6b6311e71429d8db23a6622900, type: 3}
   packSelectionUI: {fileID: 824557060}
-  restockCost: 200
+  restockCost: 100
   slotContainers:
   - {fileID: 1141461236}
   - {fileID: 1786291739}

@@ -46,7 +46,7 @@ namespace JuegoDeCartas.UI
         public ItemPackSelectionUI packSelectionUI;
 
         [Header("Restock")]
-        public int restockCost = 200;
+        public int restockCost = 100;
 
         [Header("Slots")]
         public Transform[] slotContainers = new Transform[3];
@@ -158,12 +158,12 @@ namespace JuegoDeCartas.UI
             if (cardSelectionUI == null)
                 cardSelectionUI = GetComponentInChildren<CardSelectionUI>(true);
 
-            int count = Mathf.Min(slotContainers.Length, packDefinitions.Count);
+            int count = slotContainers.Length;
             for (int i = 0; i < count; i++)
             {
                 if (slotContainers[i] == null) continue;
 
-                ItemPackData definition = packDefinitions[i];
+                ItemPackData definition = ItemPackGenerator.RollDefinition(packDefinitions);
                 if (definition == null) continue;
 
                 ItemPackOffer offer = ItemPackGenerator.Generate(definition, itemPool);

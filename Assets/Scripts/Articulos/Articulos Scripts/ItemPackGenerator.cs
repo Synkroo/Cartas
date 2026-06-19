@@ -6,6 +6,42 @@ namespace JuegoDeCartas.Articulos
 {
     public static class ItemPackGenerator
     {
+        public static ItemPackData RollDefinition(List<ItemPackData> definitions, int? seed = null)
+        {
+            if (definitions == null)
+                return null;
+
+            var available = new List<ItemPackData>();
+            float totalWeight = 0f;
+            for (int i = 0; i < definitions.Count; i++)
+            {
+                ItemPackData definition = definitions[i];
+                if (definition == null || definition.shopAppearanceWeight <= 0f)
+                    continue;
+
+                available.Add(definition);
+                totalWeight += definition.shopAppearanceWeight;
+            }
+
+            if (available.Count == 0 || totalWeight <= 0f)
+                return null;
+
+            var random = seed.HasValue
+                ? new System.Random(seed.Value)
+                : new System.Random(UnityEngine.Random.Range(0, int.MaxValue));
+            double roll = random.NextDouble() * totalWeight;
+            float cumulative = 0f;
+
+            for (int i = 0; i < available.Count; i++)
+            {
+                cumulative += available[i].shopAppearanceWeight;
+                if (roll < cumulative)
+                    return available[i];
+            }
+
+            return available[available.Count - 1];
+        }
+
         public static ItemPackOffer Generate(ItemPackData definition, List<ArticuloData> itemPool, int? seed = null)
         {
             var contents = new List<ArticuloData>();

@@ -16,6 +16,7 @@ MonoBehaviour:
   description: Contiene 5 articulos y favorece las recompensas epicas.
   image: {fileID: 0}
   displayRarity: 2
+  shopAppearanceWeight: 7
   price: 800
   choiceCount: 5
   rarityWeights:
