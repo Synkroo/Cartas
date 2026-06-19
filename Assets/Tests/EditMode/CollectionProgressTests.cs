@@ -187,10 +187,12 @@ namespace JuegoDeCartas.Tests
 
         void Track(string key)
         {
-            previousValues[key] = PlayerPrefs.HasKey(key)
-                ? PlayerPrefs.GetInt(key)
+            ProfileManager.Load(0);
+            string scopedKey = ProfileManager.ScopedKey(key);
+            previousValues[scopedKey] = PlayerPrefs.HasKey(scopedKey)
+                ? PlayerPrefs.GetInt(scopedKey)
                 : null;
-            PlayerPrefs.DeleteKey(key);
+            PlayerPrefs.DeleteKey(scopedKey);
         }
     }
 }

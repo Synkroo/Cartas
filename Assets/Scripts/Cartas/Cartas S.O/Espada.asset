@@ -19,3 +19,16 @@ MonoBehaviour:
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: 31c171454cc2c3843b1cb19a1ea4d759, type: 2}
+  upgradeOptions:
+  - upgradeName: Empunadura ligera
+    description: Reduce su coste en 1.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Doble corte
+    description: Ataca una segunda vez.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []

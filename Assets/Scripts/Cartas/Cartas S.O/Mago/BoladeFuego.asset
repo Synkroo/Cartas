@@ -19,3 +19,16 @@ MonoBehaviour:
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: d0379660ceabe2349ac772591ea1b8d9, type: 2}
+  upgradeOptions:
+  - upgradeName: Combustion estable
+    description: Reduce su coste en 1.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Eco igneo
+    description: Lanza una segunda bola de fuego.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []

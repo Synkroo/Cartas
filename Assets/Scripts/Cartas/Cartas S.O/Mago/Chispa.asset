@@ -19,3 +19,16 @@ MonoBehaviour:
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: 894f8eaa882343c4eb8707dd1106978f, type: 2}
+  upgradeOptions:
+  - upgradeName: Descarga gratuita
+    description: Reduce su coste en 1.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Arco electrico
+    description: Golpea una segunda vez.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []

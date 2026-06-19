@@ -18,3 +18,18 @@ MonoBehaviour:
   cost: 1
   destroyOnUse: 1
   effects: []
+  upgradeOptions:
+  - upgradeName: Reciclar
+    description: Cuesta 0 y roba 1 carta.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects:
+    - {fileID: 11400000, guid: b6ed2d3661fcc0242b7a6b23f70da75a, type: 2}
+  - upgradeName: Chatarra util
+    description: Cuesta 0 y obtiene 3 de armadura.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects:
+    - {fileID: 11400000, guid: 0f8cdcb571c9da24aacf410a1f6552cc, type: 2}

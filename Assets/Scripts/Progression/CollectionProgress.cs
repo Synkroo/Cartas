@@ -22,11 +22,12 @@ namespace JuegoDeCartas.Progression
 
             MarkEnemySeen(enemy);
             Add("EnemyDefeated", enemy, 1);
-            PlayerPrefs.Save();
+            ProfilePrefs.Save();
         }
 
         public static bool IsEnemySeen(EnemyData enemy) => GetFlag("EnemySeen", enemy);
-        public static int GetEnemyDefeatedCount(EnemyData enemy) => GetInt("EnemyDefeated", enemy);
+        public static int GetEnemyDefeatedCount(EnemyData enemy) =>
+            ProfileManager.IsTemporary ? 99 : GetInt("EnemyDefeated", enemy);
 
         public static void MarkItemSeen(ArticuloData item)
         {
@@ -40,16 +41,24 @@ namespace JuegoDeCartas.Progression
 
             MarkItemSeen(item);
             Add("ItemUsed", item, 1);
-            PlayerPrefs.Save();
+            ProfilePrefs.Save();
         }
 
         public static bool IsItemSeen(ArticuloData item) => GetFlag("ItemSeen", item);
-        public static int GetItemUsedCount(ArticuloData item) => GetInt("ItemUsed", item);
+        public static int GetItemUsedCount(ArticuloData item) =>
+            ProfileManager.IsTemporary ? 25 : GetInt("ItemUsed", item);
+
+        public static void MarkPackSeen(ItemPackData pack)
+        {
+            SetFlag("PackSeen", pack);
+        }
+
+        public static bool IsPackSeen(ItemPackData pack) => GetFlag("PackSeen", pack);
 
         public static void RegisterRunStarted(CharacterData character)
         {
             Add("HeroRuns", character, 1);
-            PlayerPrefs.Save();
+            ProfilePrefs.Save();
         }
 
         public static void RegisterRunFinished(CharacterData character, GameStatsTracker stats, bool completed)
@@ -69,26 +78,27 @@ namespace JuegoDeCartas.Progression
                 Add("HeroCardsUsed", character, stats.cardsUsed);
             }
 
-            PlayerPrefs.Save();
+            ProfilePrefs.Save();
         }
 
-        public static int GetHeroRuns(CharacterData character) => GetInt("HeroRuns", character);
-        public static int GetHeroWins(CharacterData character) => GetInt("HeroWins", character);
-        public static int GetHeroMaxCardDamage(CharacterData character) => GetInt("HeroMaxCardDamage", character);
-        public static int GetHeroMaxRunDamage(CharacterData character) => GetInt("HeroMaxRunDamage", character);
-        public static int GetHeroMaxArmor(CharacterData character) => GetInt("HeroMaxArmor", character);
-        public static int GetHeroEnemiesDefeated(CharacterData character) => GetInt("HeroEnemiesDefeated", character);
-        public static int GetHeroCardsUsed(CharacterData character) => GetInt("HeroCardsUsed", character);
+        public static int GetHeroRuns(CharacterData character) => ProfileManager.IsTemporary ? 50 : GetInt("HeroRuns", character);
+        public static int GetHeroWins(CharacterData character) => ProfileManager.IsTemporary ? 50 : GetInt("HeroWins", character);
+        public static int GetHeroMaxCardDamage(CharacterData character) => ProfileManager.IsTemporary ? 999 : GetInt("HeroMaxCardDamage", character);
+        public static int GetHeroMaxRunDamage(CharacterData character) => ProfileManager.IsTemporary ? 9999 : GetInt("HeroMaxRunDamage", character);
+        public static int GetHeroMaxArmor(CharacterData character) => ProfileManager.IsTemporary ? 999 : GetInt("HeroMaxArmor", character);
+        public static int GetHeroEnemiesDefeated(CharacterData character) => ProfileManager.IsTemporary ? 999 : GetInt("HeroEnemiesDefeated", character);
+        public static int GetHeroCardsUsed(CharacterData character) => ProfileManager.IsTemporary ? 999 : GetInt("HeroCardsUsed", character);
 
         static void SetFlag(string category, Object asset)
         {
             if (asset != null)
-                PlayerPrefs.SetInt(Key(category, asset), 1);
+                ProfilePrefs.SetInt(Key(category, asset), 1);
         }
 
         static bool GetFlag(string category, Object asset)
         {
-            return asset != null && PlayerPrefs.GetInt(Key(category, asset), 0) == 1;
+            return asset != null &&
+                   (ProfileManager.IsTemporary || ProfilePrefs.GetInt(Key(category, asset), 0) == 1);
         }
 
         static void Add(string category, Object asset, int amount)
@@ -97,18 +107,18 @@ namespace JuegoDeCartas.Progression
                 return;
 
             string key = Key(category, asset);
-            PlayerPrefs.SetInt(key, PlayerPrefs.GetInt(key, 0) + amount);
+            ProfilePrefs.SetInt(key, ProfilePrefs.GetInt(key, 0) + amount);
         }
 
         static void SetMaximum(string category, Object asset, int value)
         {
             if (asset != null && value > GetInt(category, asset))
-                PlayerPrefs.SetInt(Key(category, asset), value);
+                ProfilePrefs.SetInt(Key(category, asset), value);
         }
 
         static int GetInt(string category, Object asset)
         {
-            return asset != null ? PlayerPrefs.GetInt(Key(category, asset), 0) : 0;
+            return asset != null ? ProfilePrefs.GetInt(Key(category, asset), 0) : 0;
         }
 
         static string Key(string category, Object asset)

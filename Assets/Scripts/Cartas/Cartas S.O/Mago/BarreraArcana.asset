@@ -19,3 +19,16 @@ MonoBehaviour:
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: 42daa1f0dd6ba384187fa628ce7fa2a9, type: 2}
+  upgradeOptions:
+  - upgradeName: Glifo eficiente
+    description: Reduce su coste en 1.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Barrera doble
+    description: Obtiene la armadura dos veces.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []

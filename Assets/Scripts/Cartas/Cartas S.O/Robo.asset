@@ -19,3 +19,16 @@ MonoBehaviour:
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: aa943d23f4cd66d4392b3d67235326cd, type: 2}
+  upgradeOptions:
+  - upgradeName: Manos rapidas
+    description: Reduce su coste en 1.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Inspiracion
+    description: Roba una carta adicional.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []

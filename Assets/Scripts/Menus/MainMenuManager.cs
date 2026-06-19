@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using JuegoDeCartas.Missions;
+using JuegoDeCartas.Progression;
+using TMPro;
 
 namespace JuegoDeCartas.UI
 {
@@ -9,8 +11,21 @@ namespace JuegoDeCartas.UI
         [SerializeField] MissionSelectionMenu missionMenu;
         [SerializeField] CharacterSelectionMenu characterMenu;
         [SerializeField] CollectionMenu collectionMenu;
+        [SerializeField] ProfileMenu profileMenu;
         [SerializeField] GameObject mainMenuRoot;
         [SerializeField] Button[] mainMenuButtons;
+        [SerializeField] TextMeshProUGUI activeProfileText;
+
+        void OnEnable()
+        {
+            ProfileManager.ProfileChanged += RefreshProfileText;
+            RefreshProfileText();
+        }
+
+        void OnDisable()
+        {
+            ProfileManager.ProfileChanged -= RefreshProfileText;
+        }
 
         public void PlayGame()
         {
@@ -59,6 +74,27 @@ namespace JuegoDeCartas.UI
                 collectionMenu.Open();
             else
                 ShowMainMenu();
+        }
+
+        public void OpenProfiles()
+        {
+            SetButtonsInteractable(false);
+            if (mainMenuRoot != null)
+                mainMenuRoot.SetActive(false);
+
+            if (profileMenu == null)
+                profileMenu = FindAnyObjectByType<ProfileMenu>(FindObjectsInactive.Include);
+
+            if (profileMenu != null)
+                profileMenu.Open();
+            else
+                ShowMainMenu();
+        }
+
+        void RefreshProfileText()
+        {
+            if (activeProfileText != null)
+                activeProfileText.text = ProfileManager.ActiveProfileName;
         }
 
         public void CloseMissionMenu()

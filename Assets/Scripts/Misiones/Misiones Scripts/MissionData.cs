@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using JuegoDeCartas.Enemies;
 using JuegoDeCartas.Characters;
+using JuegoDeCartas.Progression;
 
 namespace JuegoDeCartas.Missions
 {
@@ -34,7 +35,8 @@ namespace JuegoDeCartas.Missions
 
         public bool IsDifficultyCompleted(MissionDifficulty difficulty)
         {
-            return PlayerPrefs.GetInt(GetCompletionKey(difficulty), 0) == 1;
+            return ProfileManager.IsTemporary ||
+                   ProfilePrefs.GetInt(GetCompletionKey(difficulty), 0) == 1;
         }
 
         public void MarkCompleted(MissionDifficulty difficulty)
@@ -44,25 +46,27 @@ namespace JuegoDeCartas.Missions
 
         public void MarkCompleted(MissionDifficulty difficulty, CharacterData character)
         {
-            PlayerPrefs.SetInt(GetCompletionKey(difficulty), 1);
-            PlayerPrefs.SetInt(GetGlobalCompletionKey(difficulty), 1);
+            ProfilePrefs.SetInt(GetCompletionKey(difficulty), 1);
+            ProfilePrefs.SetInt(GetGlobalCompletionKey(difficulty), 1);
             if (character != null)
             {
-                PlayerPrefs.SetInt(GetCharacterCompletionKey(difficulty, character), 1);
-                PlayerPrefs.SetInt(GetGlobalCharacterCompletionKey(difficulty, character), 1);
+                ProfilePrefs.SetInt(GetCharacterCompletionKey(difficulty, character), 1);
+                ProfilePrefs.SetInt(GetGlobalCharacterCompletionKey(difficulty, character), 1);
             }
-            PlayerPrefs.Save();
+            ProfilePrefs.Save();
         }
 
         public bool IsDifficultyCompletedByCharacter(MissionDifficulty difficulty, CharacterData character)
         {
             return character != null &&
-                   PlayerPrefs.GetInt(GetCharacterCompletionKey(difficulty, character), 0) == 1;
+                   (ProfileManager.IsTemporary ||
+                    ProfilePrefs.GetInt(GetCharacterCompletionKey(difficulty, character), 0) == 1);
         }
 
         public static bool IsAnyDifficultyCompleted(MissionDifficulty difficulty)
         {
-            return PlayerPrefs.GetInt(GetGlobalCompletionKey(difficulty), 0) == 1;
+            return ProfileManager.IsTemporary ||
+                   ProfilePrefs.GetInt(GetGlobalCompletionKey(difficulty), 0) == 1;
         }
 
         public static bool IsAnyDifficultyCompletedByCharacter(
@@ -70,7 +74,8 @@ namespace JuegoDeCartas.Missions
             CharacterData character)
         {
             return character != null &&
-                   PlayerPrefs.GetInt(GetGlobalCharacterCompletionKey(difficulty, character), 0) == 1;
+                   (ProfileManager.IsTemporary ||
+                    ProfilePrefs.GetInt(GetGlobalCharacterCompletionKey(difficulty, character), 0) == 1);
         }
 
         public float GetEnemyStatMultiplier(MissionDifficulty difficulty)

@@ -6,6 +6,7 @@ using JuegoDeCartas.Characters;
 using JuegoDeCartas.Managers;
 using JuegoDeCartas.Missions;
 using JuegoDeCartas.UI;
+using JuegoDeCartas.Progression;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -53,17 +54,19 @@ namespace JuegoDeCartas.Tests
             Assert.AreEqual(10, mage.startingDeck.Count);
             Assert.NotNull(mage.unlockCondition);
 
-            Assert.IsTrue(rogue.comingSoon);
-            Assert.IsFalse(rogue.IsSelectable);
+            Assert.IsFalse(rogue.comingSoon);
+            Assert.AreEqual(10, rogue.startingDeck.Count);
             Assert.NotNull(rogue.unlockCondition);
         }
 
         [Test]
         public void CompletingMediumDifficultyMeetsMageUnlockCondition()
         {
+            ProfileManager.Load(0);
             const string globalKey = "AnyMissionCompleted_Media";
-            bool hadGlobal = PlayerPrefs.HasKey(globalKey);
-            int previousGlobal = PlayerPrefs.GetInt(globalKey, 0);
+            string scopedGlobalKey = ProfileManager.ScopedKey(globalKey);
+            bool hadGlobal = PlayerPrefs.HasKey(scopedGlobalKey);
+            int previousGlobal = PlayerPrefs.GetInt(scopedGlobalKey, 0);
 
             MissionData mission = ScriptableObject.CreateInstance<MissionData>();
             mission.name = "CodexUnlockTestMission";
@@ -71,9 +74,9 @@ namespace JuegoDeCartas.Tests
             condition.requiredDifficulty = MissionDifficulty.Media;
             condition.missions = new List<MissionData> { mission };
 
-            string missionKey = "MissionCompleted_" + mission.name + "_Media";
+            string missionKey = ProfileManager.ScopedKey("MissionCompleted_" + mission.name + "_Media");
             PlayerPrefs.DeleteKey(missionKey);
-            PlayerPrefs.DeleteKey(globalKey);
+            PlayerPrefs.DeleteKey(scopedGlobalKey);
 
             Assert.IsFalse(condition.IsMet());
             mission.MarkCompleted(MissionDifficulty.Media);
@@ -81,9 +84,9 @@ namespace JuegoDeCartas.Tests
 
             PlayerPrefs.DeleteKey(missionKey);
             if (hadGlobal)
-                PlayerPrefs.SetInt(globalKey, previousGlobal);
+                PlayerPrefs.SetInt(scopedGlobalKey, previousGlobal);
             else
-                PlayerPrefs.DeleteKey(globalKey);
+                PlayerPrefs.DeleteKey(scopedGlobalKey);
             PlayerPrefs.Save();
 
             Object.DestroyImmediate(condition);

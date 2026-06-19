@@ -110,7 +110,7 @@ namespace JuegoDeCartas.Managers
             enemy.Initialize(runtimeWave[currentEnemyIndex], battleManager);
             currentEnemyIndex++;
             CollectionProgress.MarkEnemySeen(enemy.data);
-            PlayerPrefs.Save();
+            ProfilePrefs.Save();
 
             if (uiManager != null)
                 uiManager.SetEnemyVisual(enemy.data.enemyName, enemy.currentSprite, enemy.currentAnimatorController);

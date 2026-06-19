@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
+  m_Name: Punal
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
+  cardName: Punal
+  description: Inflige 7 de dano sin gastar mana.
+  sprite: {fileID: 0}
+  cost: 0
+  destroyOnUse: 0
+  effects:
+  - {fileID: 11400000, guid: c04c20b327a43584f870773914ada377, type: 2}
+  upgradeOptions:
+  - upgradeName: Filo oculto
+    description: Se reactiva una vez y golpea de nuevo.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Guardia improvisada
+    description: Obtiene 3 de armadura al usarla.
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects:
+    - {fileID: 11400000, guid: 0f8cdcb571c9da24aacf410a1f6552cc, type: 2}

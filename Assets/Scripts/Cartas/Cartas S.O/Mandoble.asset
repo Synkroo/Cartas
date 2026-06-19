@@ -19,3 +19,16 @@ MonoBehaviour:
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: 7a5a2d5e1b2a43c4a05699b716c0f3fd, type: 2}
+  upgradeOptions:
+  - upgradeName: Contrapeso
+    description: Reduce su coste en 1.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Impacto brutal
+    description: Ataca una segunda vez.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []

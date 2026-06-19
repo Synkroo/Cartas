@@ -19,3 +19,16 @@ MonoBehaviour:
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: c0e26f3543d84a1a9d3bbfeb347ee2bf, type: 2}
+  upgradeOptions:
+  - upgradeName: Aliento profundo
+    description: Reduce su coste en 1.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Rugido feroz
+    description: Duplica la bonificacion de dano.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []

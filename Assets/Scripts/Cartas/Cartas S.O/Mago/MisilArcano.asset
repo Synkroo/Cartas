@@ -20,3 +20,16 @@ MonoBehaviour:
   effects:
   - {fileID: 11400000, guid: 3d3f155257904b241a142a65e1b2aa0c, type: 2}
   - {fileID: 11400000, guid: d47528f99022eec459cee0d87d91c0ee, type: 2}
+  upgradeOptions:
+  - upgradeName: Formula eficiente
+    description: Reduce su coste en 1.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Misiles gemelos
+    description: Repite el dano y el robo.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []

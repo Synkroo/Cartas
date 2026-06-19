@@ -48,7 +48,13 @@ namespace JuegoDeCartas.Cards
             }
 
             if (nameText != null) nameText.text = card.data.cardName;
-            if (descriptionText != null) descriptionText.text = card.data.description;
+            if (descriptionText != null)
+            {
+                CardUpgradeOption upgrade = card.SelectedUpgrade;
+                descriptionText.text = upgrade != null && !string.IsNullOrWhiteSpace(upgrade.description)
+                    ? card.data.description + "\n" + upgrade.description
+                    : card.data.description;
+            }
             if (costText != null) costText.text = card.effectiveCost.ToString();
             if (artworkImage != null)
             {

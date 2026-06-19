@@ -197,7 +197,7 @@ namespace JuegoDeCartas.Managers
 
             deckManager.hand.Remove(card);
 
-            if (!card.data.destroyOnUse)
+            if (!card.effectiveDestroyOnUse)
                 deckManager.discard.Add(card);
 
             int repeats = 1 + card.reactivationCount;
@@ -218,6 +218,20 @@ namespace JuegoDeCartas.Managers
 
                 for (int i = 0; i < repeats; i++)
                 {
+                    lastCardDamageDealt = 0;
+                    effect.Apply(this);
+                    totalDamage += lastCardDamageDealt;
+                }
+            }
+
+            CardUpgradeOption upgrade = card.SelectedUpgrade;
+            if (upgrade != null && upgrade.bonusEffects != null)
+            {
+                foreach (var effect in upgrade.bonusEffects)
+                {
+                    if (effect == null)
+                        continue;
+
                     lastCardDamageDealt = 0;
                     effect.Apply(this);
                     totalDamage += lastCardDamageDealt;

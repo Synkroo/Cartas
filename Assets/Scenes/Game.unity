@@ -8771,6 +8771,8 @@ MonoBehaviour:
   titleText: {fileID: 61698089}
   costUpgradeButton: {fileID: 535036035}
   reactivationUpgradeButton: {fileID: 1748631897}
+  firstUpgradeText: {fileID: 415801430}
+  secondUpgradeText: {fileID: 1000706508}
   cardTitleFormat: 'Mejorar: {0}'
 --- !u!1 &1079733725
 GameObject:

@@ -90,7 +90,7 @@ namespace JuegoDeCartas.UI
                     display.Setup(item, canSelect == null || canSelect(item), Select);
             }
 
-            PlayerPrefs.Save();
+            ProfilePrefs.Save();
         }
 
         void Select(ArticuloData item)

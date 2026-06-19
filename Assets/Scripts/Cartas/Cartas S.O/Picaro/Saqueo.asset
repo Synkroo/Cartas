@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
+  m_Name: Saqueo
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
+  cardName: Saqueo
+  description: Roba 2 cartas para continuar la cadena.
+  sprite: {fileID: 0}
+  cost: 1
+  destroyOnUse: 0
+  effects:
+  - {fileID: 11400000, guid: 0015c065089f7d649afefbcb7ba7cded, type: 2}
+  upgradeOptions:
+  - upgradeName: Manos rapidas
+    description: Reduce su coste en 1.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Botin extra
+    description: Roba 2 cartas adicionales.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []

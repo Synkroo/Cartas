@@ -8,6 +8,7 @@ using JuegoDeCartas.Managers;
 using JuegoDeCartas.Articulos;
 using JuegoDeCartas.Cards;
 using JuegoDeCartas.Missions;
+using JuegoDeCartas.Progression;
 
 namespace JuegoDeCartas.UI
 {
@@ -166,6 +167,7 @@ namespace JuegoDeCartas.UI
                 ItemPackData definition = ItemPackGenerator.RollDefinition(packDefinitions);
                 if (definition == null) continue;
 
+                CollectionProgress.MarkPackSeen(definition);
                 ItemPackOffer offer = ItemPackGenerator.Generate(definition, itemPool);
                 offers.Add(offer);
 
@@ -180,6 +182,8 @@ namespace JuegoDeCartas.UI
 
                 spawnedItems.Add(itemGO);
             }
+
+            ProfilePrefs.Save();
         }
 
         void OpenPack(ItemPackOffer offer)

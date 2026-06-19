@@ -14,13 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.CharacterData
   characterName: Picaro
   portrait: {fileID: 0}
-  description: Personaje futuro orientado a combos, descarte y ataques consecutivos.
-  mechanicDescription: 'Mecanica prevista: preparar cadenas y aprovechar cartas descartadas.'
+  description: Especialista en cartas baratas, robo y cadenas largas de ataques.
+  mechanicDescription: 'Mecanica: encadenar varias cartas en un turno y mantener
+    la mano llena.'
   maxHealth: 42
   maxMana: 3
   cardsPerTurn: 5
   startingGold: 300
-  startingDeck: []
+  startingDeck:
+  - {fileID: 11400000, guid: 084a201847c627b45a097d00a2f06df4, type: 2}
+  - {fileID: 11400000, guid: 084a201847c627b45a097d00a2f06df4, type: 2}
+  - {fileID: 11400000, guid: 084a201847c627b45a097d00a2f06df4, type: 2}
+  - {fileID: 11400000, guid: 8bfaa640a2d58f447937873c30b021c6, type: 2}
+  - {fileID: 11400000, guid: 8bfaa640a2d58f447937873c30b021c6, type: 2}
+  - {fileID: 11400000, guid: 1041abf20c1d48b478ec5019ecd8d893, type: 2}
+  - {fileID: 11400000, guid: 1041abf20c1d48b478ec5019ecd8d893, type: 2}
+  - {fileID: 11400000, guid: c1713dd55b63bc641bb84848649d6154, type: 2}
+  - {fileID: 11400000, guid: c1713dd55b63bc641bb84848649d6154, type: 2}
+  - {fileID: 11400000, guid: 94df614082522b741b9080c0ee5955f5, type: 2}
   unlockedByDefault: 0
-  comingSoon: 1
+  comingSoon: 0
   unlockCondition: {fileID: 11400000, guid: 0f3b1e7c92104c5448eaa616dd16f8f5, type: 2}

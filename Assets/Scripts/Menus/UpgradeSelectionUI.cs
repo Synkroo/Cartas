@@ -14,6 +14,8 @@ namespace JuegoDeCartas.UI
         public TextMeshProUGUI titleText;
         public Button costUpgradeButton;
         public Button reactivationUpgradeButton;
+        public TextMeshProUGUI firstUpgradeText;
+        public TextMeshProUGUI secondUpgradeText;
 
         [Header("Text")]
         public string cardTitleFormat = "Mejorar: {0}";
@@ -50,15 +52,19 @@ namespace JuegoDeCartas.UI
             if (costUpgradeButton != null)
             {
                 costUpgradeButton.onClick.RemoveAllListeners();
-                costUpgradeButton.onClick.AddListener(ApplyCostUpgrade);
-                costUpgradeButton.interactable = card.effectiveCost > 0;
+                costUpgradeButton.onClick.AddListener(() => ApplyUpgrade(0));
+                costUpgradeButton.interactable = HasOption(card, 0);
             }
 
             if (reactivationUpgradeButton != null)
             {
                 reactivationUpgradeButton.onClick.RemoveAllListeners();
-                reactivationUpgradeButton.onClick.AddListener(ApplyReactivationUpgrade);
+                reactivationUpgradeButton.onClick.AddListener(() => ApplyUpgrade(1));
+                reactivationUpgradeButton.interactable = HasOption(card, 1);
             }
+
+            SetOptionText(firstUpgradeText, card, 0);
+            SetOptionText(secondUpgradeText, card, 1);
 
             if (panel != null)
                 panel.SetActive(true);
@@ -75,22 +81,39 @@ namespace JuegoDeCartas.UI
             return false;
         }
 
-        void ApplyCostUpgrade()
+        static bool HasOption(Card card, int index)
         {
-            if (currentCard == null)
-                return;
-
-            currentCard.ReduceCost();
-            Close();
+            return card?.data != null &&
+                   card.selectedUpgradeIndex < 0 &&
+                   index >= 0 &&
+                   index < card.data.upgradeOptions.Count &&
+                   card.data.upgradeOptions[index] != null;
         }
 
-        void ApplyReactivationUpgrade()
+        static void SetOptionText(TextMeshProUGUI label, Card card, int index)
+        {
+            if (label == null)
+                return;
+
+            if (!HasOption(card, index))
+            {
+                label.text = "No disponible";
+                return;
+            }
+
+            CardUpgradeOption option = card.data.upgradeOptions[index];
+            label.text = string.IsNullOrWhiteSpace(option.description)
+                ? option.upgradeName
+                : option.upgradeName + "\n" + option.description;
+        }
+
+        void ApplyUpgrade(int optionIndex)
         {
             if (currentCard == null)
                 return;
 
-            currentCard.AddReactivation();
-            Close();
+            if (currentCard.ApplyUpgrade(optionIndex))
+                Close();
         }
 
         void Close()

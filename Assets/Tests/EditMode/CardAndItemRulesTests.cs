@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using JuegoDeCartas.Articulos;
 using JuegoDeCartas.Cards;
 using JuegoDeCartas.Managers;
+using JuegoDeCartas.Effects;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -44,6 +45,35 @@ namespace JuegoDeCartas.Tests
             Assert.AreEqual(3, copiedWithoutUpgrades.effectiveCost);
             Assert.AreEqual(0, copiedWithoutUpgrades.reactivationCount);
             Assert.IsFalse(copiedWithoutUpgrades.upgraded);
+
+            Object.DestroyImmediate(data);
+        }
+
+        [Test]
+        public void CardAppliesConfiguredUpgradeOnlyOnce()
+        {
+            CardData data = ScriptableObject.CreateInstance<CardData>();
+            data.cost = 2;
+            data.upgradeOptions = new List<CardUpgradeOption>
+            {
+                new CardUpgradeOption
+                {
+                    upgradeName = "Rapida",
+                    costReduction = 1,
+                    reactivations = 1,
+                    preventDestroyOnUse = true
+                },
+                new CardUpgradeOption { upgradeName = "Alternativa" }
+            };
+
+            Card card = new Card(data);
+
+            Assert.IsTrue(card.ApplyUpgrade(0));
+            Assert.IsFalse(card.ApplyUpgrade(1));
+            Assert.AreEqual(1, card.effectiveCost);
+            Assert.AreEqual(1, card.reactivationCount);
+            Assert.IsTrue(card.preventDestroyOnUse);
+            Assert.AreEqual("Rapida", card.SelectedUpgrade.upgradeName);
 
             Object.DestroyImmediate(data);
         }

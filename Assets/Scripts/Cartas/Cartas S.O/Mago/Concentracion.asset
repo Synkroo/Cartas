@@ -19,3 +19,16 @@ MonoBehaviour:
   destroyOnUse: 1
   effects:
   - {fileID: 11400000, guid: a84a6a544131cee46b4a752aaf1bcb29, type: 2}
+  upgradeOptions:
+  - upgradeName: Canalizacion
+    description: Recupera mana una segunda vez.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Meditacion
+    description: Ya no se destruye al usarla.
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 1
+    bonusEffects: []

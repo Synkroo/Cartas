@@ -18,7 +18,8 @@ namespace JuegoDeCartas.UI
         {
             Enemies,
             Heroes,
-            Items
+            Items,
+            Packs
         }
 
         [Header("Panel")]
@@ -29,6 +30,7 @@ namespace JuegoDeCartas.UI
         public Button enemiesButton;
         public Button heroesButton;
         public Button itemsButton;
+        public Button packsButton;
         public Button backButton;
 
         [Header("Entries")]
@@ -37,6 +39,7 @@ namespace JuegoDeCartas.UI
         public List<EnemyData> enemies = new List<EnemyData>();
         public List<CharacterData> heroes = new List<CharacterData>();
         public List<ArticuloData> items = new List<ArticuloData>();
+        public List<ItemPackData> packs = new List<ItemPackData>();
 
         [Header("Detail")]
         public Image detailImage;
@@ -65,6 +68,8 @@ namespace JuegoDeCartas.UI
                 heroesButton.onClick.AddListener(ShowHeroes);
             if (itemsButton != null)
                 itemsButton.onClick.AddListener(ShowItems);
+            if (packsButton != null)
+                packsButton.onClick.AddListener(ShowPacks);
             if (backButton != null)
                 backButton.onClick.AddListener(Close);
         }
@@ -144,6 +149,27 @@ namespace JuegoDeCartas.UI
 
             if (items.Count > 0)
                 ShowItem(items[0]);
+            else
+                ClearDetail();
+        }
+
+        public void ShowPacks()
+        {
+            currentTab = CollectionTab.Packs;
+            ClearEntries();
+
+            for (int i = 0; i < packs.Count; i++)
+            {
+                ItemPackData pack = packs[i];
+                if (pack == null)
+                    continue;
+
+                bool discovered = CollectionProgress.IsPackSeen(pack);
+                CreateEntry(pack.packName, pack.image, discovered, () => ShowPack(pack));
+            }
+
+            if (packs.Count > 0)
+                ShowPack(packs[0]);
             else
                 ClearDetail();
         }
@@ -233,6 +259,42 @@ namespace JuegoDeCartas.UI
                 item.descripcion,
                 $"Rareza: {GetRarityLabel(item.rareza)}\nEfecto: {GetEffectLabel(item.tipoEfecto)}\nCantidad: {item.cantidad}",
                 $"Usado: {CollectionProgress.GetItemUsedCount(item)} veces"
+            );
+        }
+
+        void ShowPack(ItemPackData pack)
+        {
+            ClearDeck();
+            SetDeckVisible(false);
+            bool discovered = pack != null && CollectionProgress.IsPackSeen(pack);
+            SetDiscovered(discovered);
+
+            if (!discovered || pack == null)
+            {
+                SetDetail("Sobre desconocido", null, "Encuentralo en una tienda para revelar su contenido.", "", "");
+                return;
+            }
+
+            var rarityBuilder = new StringBuilder();
+            for (int i = 0; i < pack.rarityWeights.Count; i++)
+            {
+                PackRarityWeight weight = pack.rarityWeights[i];
+                if (weight == null || weight.weight <= 0f)
+                    continue;
+                if (rarityBuilder.Length > 0)
+                    rarityBuilder.Append(" | ");
+                rarityBuilder.Append(GetRarityLabel(weight.rarity));
+                rarityBuilder.Append(": ");
+                rarityBuilder.Append(weight.weight);
+                rarityBuilder.Append("%");
+            }
+
+            SetDetail(
+                pack.packName,
+                pack.image,
+                pack.description,
+                $"Precio base: {pack.price}\nOpciones: {pack.choiceCount}\nRareza visual: {GetRarityLabel(pack.displayRarity)}",
+                rarityBuilder.ToString()
             );
         }
 
