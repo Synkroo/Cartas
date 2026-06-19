@@ -32,3 +32,15 @@ MonoBehaviour:
     reactivations: 1
     preventDestroyOnUse: 0
     bonusEffects: []
+  - upgradeName: Furia sostenida
+    description: Reduce su coste en 1 y se reactiva una vez.
+    costReduction: 1
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Grito de guerra
+    description: Se reactiva dos veces adicionales.
+    costReduction: 0
+    reactivations: 2
+    preventDestroyOnUse: 0
+    bonusEffects: []

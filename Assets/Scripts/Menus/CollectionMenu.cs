@@ -19,7 +19,8 @@ namespace JuegoDeCartas.UI
             Enemies,
             Heroes,
             Items,
-            Packs
+            Packs,
+            Cards
         }
 
         [Header("Panel")]
@@ -31,6 +32,7 @@ namespace JuegoDeCartas.UI
         public Button heroesButton;
         public Button itemsButton;
         public Button packsButton;
+        public Button cardsButton;
         public Button backButton;
 
         [Header("Entries")]
@@ -40,6 +42,7 @@ namespace JuegoDeCartas.UI
         public List<CharacterData> heroes = new List<CharacterData>();
         public List<ArticuloData> items = new List<ArticuloData>();
         public List<ItemPackData> packs = new List<ItemPackData>();
+        public List<CardData> cards = new List<CardData>();
 
         [Header("Detail")]
         public Image detailImage;
@@ -55,8 +58,6 @@ namespace JuegoDeCartas.UI
         public GameObject cardPrefab;
         public Vector2 deckCardSlotSize = new Vector2(150f, 220f);
 
-        CollectionTab currentTab;
-
         void Awake()
         {
             if (panel == null)
@@ -70,6 +71,8 @@ namespace JuegoDeCartas.UI
                 itemsButton.onClick.AddListener(ShowItems);
             if (packsButton != null)
                 packsButton.onClick.AddListener(ShowPacks);
+            if (cardsButton != null)
+                cardsButton.onClick.AddListener(ShowCards);
             if (backButton != null)
                 backButton.onClick.AddListener(Close);
         }
@@ -93,7 +96,6 @@ namespace JuegoDeCartas.UI
 
         public void ShowEnemies()
         {
-            currentTab = CollectionTab.Enemies;
             ClearEntries();
 
             for (int i = 0; i < enemies.Count; i++)
@@ -114,7 +116,6 @@ namespace JuegoDeCartas.UI
 
         public void ShowHeroes()
         {
-            currentTab = CollectionTab.Heroes;
             ClearEntries();
 
             for (int i = 0; i < heroes.Count; i++)
@@ -134,7 +135,6 @@ namespace JuegoDeCartas.UI
 
         public void ShowItems()
         {
-            currentTab = CollectionTab.Items;
             ClearEntries();
 
             for (int i = 0; i < items.Count; i++)
@@ -155,7 +155,6 @@ namespace JuegoDeCartas.UI
 
         public void ShowPacks()
         {
-            currentTab = CollectionTab.Packs;
             ClearEntries();
 
             for (int i = 0; i < packs.Count; i++)
@@ -170,6 +169,25 @@ namespace JuegoDeCartas.UI
 
             if (packs.Count > 0)
                 ShowPack(packs[0]);
+            else
+                ClearDetail();
+        }
+
+        public void ShowCards()
+        {
+            ClearEntries();
+
+            for (int i = 0; i < cards.Count; i++)
+            {
+                CardData card = cards[i];
+                if (card == null)
+                    continue;
+
+                CreateEntry(card.cardName, card.sprite, true, () => ShowCard(card));
+            }
+
+            if (cards.Count > 0)
+                ShowCard(cards[0]);
             else
                 ClearDetail();
         }
@@ -295,6 +313,50 @@ namespace JuegoDeCartas.UI
                 pack.description,
                 $"Precio base: {pack.price}\nOpciones: {pack.choiceCount}\nRareza visual: {GetRarityLabel(pack.displayRarity)}",
                 rarityBuilder.ToString()
+            );
+        }
+
+        void ShowCard(CardData card)
+        {
+            ClearDeck();
+            SetDeckVisible(false);
+            SetDiscovered(true);
+
+            if (card == null)
+            {
+                ClearDetail();
+                return;
+            }
+
+            var upgrades = new StringBuilder();
+            upgrades.AppendLine($"Usada: {CollectionProgress.GetCardUsedCount(card)} veces");
+            if (card.upgradeOptions != null && card.upgradeOptions.Count > 0)
+            {
+                upgrades.AppendLine();
+                upgrades.AppendLine("Mejoras:");
+                for (int i = 0; i < card.upgradeOptions.Count; i++)
+                {
+                    CardUpgradeOption option = card.upgradeOptions[i];
+                    if (option == null)
+                        continue;
+
+                    upgrades.Append("- ");
+                    upgrades.Append(option.upgradeName);
+                    if (!string.IsNullOrWhiteSpace(option.description))
+                    {
+                        upgrades.Append(": ");
+                        upgrades.Append(option.description);
+                    }
+                    upgrades.AppendLine();
+                }
+            }
+
+            SetDetail(
+                card.cardName,
+                card.sprite,
+                card.description,
+                $"Coste: {card.cost}\nSe destruye al usar: {(card.destroyOnUse ? "Si" : "No")}\nEfectos: {(card.effects != null ? card.effects.Count : 0)}",
+                upgrades.ToString().TrimEnd()
             );
         }
 

@@ -6,6 +6,7 @@ using JuegoDeCartas.Enemies;
 using JuegoDeCartas.Missions;
 using JuegoDeCartas.Progression;
 using JuegoDeCartas.Stats;
+using JuegoDeCartas.Cards;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -58,6 +59,22 @@ namespace JuegoDeCartas.Tests
 
             Object.DestroyImmediate(enemy);
             Object.DestroyImmediate(item);
+        }
+
+        [Test]
+        public void CardUsageIsPersistedPerCard()
+        {
+            CardData card = ScriptableObject.CreateInstance<CardData>();
+            card.name = "CollectionCardTest";
+            Track("Collection_CardUsed_" + card.name);
+
+            Assert.AreEqual(0, CollectionProgress.GetCardUsedCount(card));
+
+            CollectionProgress.MarkCardUsed(card);
+            CollectionProgress.MarkCardUsed(card);
+
+            Assert.AreEqual(2, CollectionProgress.GetCardUsedCount(card));
+            Object.DestroyImmediate(card);
         }
 
         [Test]

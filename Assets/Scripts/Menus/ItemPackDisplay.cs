@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using JuegoDeCartas.Articulos;
 using JuegoDeCartas.Missions;
+using System.Collections;
 
 namespace JuegoDeCartas.UI
 {
@@ -23,6 +24,8 @@ namespace JuegoDeCartas.UI
         public Color epicColor = new Color(0.6f, 0.2f, 0.7f, 1f);
         public string currencySuffix = "\u20ac";
         public string choicesFormat = "Elige 1 de {0}";
+        public UITransitionAnimator transition;
+        [Min(0.01f)] public float openDuration = 0.18f;
 
         ItemPackOffer offer;
         Action<ItemPackOffer> onSelected;
@@ -69,10 +72,38 @@ namespace JuegoDeCartas.UI
             gameObject.SetActive(!claimed);
         }
 
+        public void PlayEntrance(float delay)
+        {
+            if (transition != null)
+                transition.PlayIn(delay);
+        }
+
         void Select()
         {
             if (offer != null && !offer.Claimed)
-                onSelected?.Invoke(offer);
+                StartCoroutine(OpenRoutine());
+        }
+
+        IEnumerator OpenRoutine()
+        {
+            if (button != null)
+                button.interactable = false;
+
+            float elapsed = 0f;
+            Vector3 baseScale = transform.localScale;
+            while (elapsed < openDuration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float progress = Mathf.Clamp01(elapsed / openDuration);
+                float scale = 1f + Mathf.Sin(progress * Mathf.PI) * 0.12f;
+                transform.localScale = baseScale * scale;
+                yield return null;
+            }
+
+            transform.localScale = baseScale;
+            onSelected?.Invoke(offer);
+            if (button != null && offer != null && !offer.Claimed)
+                button.interactable = true;
         }
 
         Color GetRarityColor(Rareza rarity)

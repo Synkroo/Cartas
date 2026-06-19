@@ -32,3 +32,15 @@ MonoBehaviour:
     reactivations: 1
     preventDestroyOnUse: 0
     bonusEffects: []
+  - upgradeName: Prisma protector
+    description: Reduce su coste en 1 y se reactiva una vez.
+    costReduction: 1
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Fortaleza arcana
+    description: Se reactiva dos veces adicionales.
+    costReduction: 0
+    reactivations: 2
+    preventDestroyOnUse: 0
+    bonusEffects: []

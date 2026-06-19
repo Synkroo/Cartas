@@ -17,6 +17,7 @@ namespace JuegoDeCartas.UI
         public Color commonColor = new Color(0.15f, 0.45f, 0.75f, 1f);
         public Color rareColor = new Color(0.15f, 0.65f, 0.25f, 1f);
         public Color epicColor = new Color(0.6f, 0.2f, 0.7f, 1f);
+        public UITransitionAnimator transition;
 
         ArticuloData item;
         Action<ArticuloData> onSelected;
@@ -29,7 +30,11 @@ namespace JuegoDeCartas.UI
                 button.onClick.AddListener(Select);
         }
 
-        public void Setup(ArticuloData newItem, bool canSelect, Action<ArticuloData> selected)
+        public void Setup(
+            ArticuloData newItem,
+            bool canSelect,
+            Action<ArticuloData> selected,
+            float entranceDelay = 0f)
         {
             item = newItem;
             onSelected = selected;
@@ -48,6 +53,8 @@ namespace JuegoDeCartas.UI
                 background.color = GetRarityColor(item.rareza);
             if (button != null)
                 button.interactable = canSelect;
+            if (transition != null)
+                transition.PlayIn(entranceDelay);
         }
 
         void Select()

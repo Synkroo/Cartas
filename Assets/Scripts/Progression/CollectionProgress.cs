@@ -3,6 +3,7 @@ using JuegoDeCartas.Articulos;
 using JuegoDeCartas.Characters;
 using JuegoDeCartas.Enemies;
 using JuegoDeCartas.Stats;
+using JuegoDeCartas.Cards;
 
 namespace JuegoDeCartas.Progression
 {
@@ -54,6 +55,18 @@ namespace JuegoDeCartas.Progression
         }
 
         public static bool IsPackSeen(ItemPackData pack) => GetFlag("PackSeen", pack);
+
+        public static void MarkCardUsed(CardData card)
+        {
+            if (card == null)
+                return;
+
+            Add("CardUsed", card, 1);
+            ProfilePrefs.Save();
+        }
+
+        public static int GetCardUsedCount(CardData card) =>
+            ProfileManager.IsTemporary ? 999 : GetInt("CardUsed", card);
 
         public static void RegisterRunStarted(CharacterData character)
         {

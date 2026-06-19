@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 1554935244018374610}
   - component: {fileID: 8730951887900759333}
   - component: {fileID: 8147968330556273201}
+  - component: {fileID: 8771241909524020321}
+  - component: {fileID: 5357217778170144911}
   m_Layer: 5
   m_Name: PackItemChoicePrefab
   m_TagString: Untagged
@@ -146,6 +148,60 @@ MonoBehaviour:
   commonColor: {r: 0.18, g: 0.42, b: 0.58, a: 1}
   rareColor: {r: 0.18, g: 0.55, b: 0.3, a: 1}
   epicColor: {r: 0.52, g: 0.24, b: 0.62, a: 1}
+  transition: {fileID: 5357217778170144911}
+--- !u!225 &8771241909524020321
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220687189319328136}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &5357217778170144911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220687189319328136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90bdbad9ee9ff344a8d0c2873e55a4a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.UI.UITransitionAnimator
+  canvasGroup: {fileID: 8771241909524020321}
+  target: {fileID: 3265377790378288771}
+  duration: 0.25
+  hiddenOffset: {x: 0, y: -45}
+  hiddenScale: 0.92
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &4619546850171292067
 GameObject:
   m_ObjectHideFlags: 0

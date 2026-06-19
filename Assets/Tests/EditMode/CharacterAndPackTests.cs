@@ -323,6 +323,61 @@ namespace JuegoDeCartas.Tests
             fixture.Destroy();
         }
 
+        [Test]
+        public void InterestUsesGoldThresholdsAndMaximum()
+        {
+            GameObject root = new GameObject("InterestTest");
+            ShopManager shop = root.AddComponent<ShopManager>();
+            shop.goldPerInterestStep = 100;
+            shop.interestPerStep = 25;
+            shop.maxInterest = 125;
+
+            Assert.AreEqual(0, shop.CalculateInterest(99));
+            Assert.AreEqual(25, shop.CalculateInterest(100));
+            Assert.AreEqual(100, shop.CalculateInterest(499));
+            Assert.AreEqual(125, shop.CalculateInterest(1000));
+
+            Object.DestroyImmediate(root);
+        }
+
+        [Test]
+        public void CancellingOpenedPackConsumesItWithoutApplyingAnItem()
+        {
+            ShopFixture fixture = CreateShopFixture();
+            fixture.shop.interestPerStep = 0;
+            fixture.shop.packPrefab = fixture.packPrefab;
+            fixture.shop.packDefinitions = new List<ItemPackData>
+            {
+                CreatePackDefinition("Comun", 1)
+            };
+            ArticuloData heal = CreateItem("CuracionCancelada", Rareza.Comun);
+            heal.tipoEfecto = TipoEfectoArticulo.CurarVida;
+            heal.cantidad = 5;
+            fixture.shop.itemPool = new List<ArticuloData> { heal };
+            fixture.shop.slotContainers = new[]
+            {
+                new GameObject("Slot").transform
+            };
+            fixture.shop.slotContainers[0].SetParent(fixture.root.transform);
+            fixture.gameManager.dinero = 300;
+            fixture.battle.player.stats.maxHealth = 20;
+            fixture.battle.player.stats.health = 10;
+
+            fixture.shop.Open();
+            ItemPackOffer offer = fixture.shop.CurrentOffers[0];
+
+            Assert.IsTrue(fixture.shop.TryPurchasePack(offer));
+            Assert.IsTrue(fixture.shop.CancelPack(offer));
+            Assert.AreEqual(100, fixture.gameManager.dinero);
+            Assert.AreEqual(10, fixture.battle.player.stats.health);
+            Assert.IsTrue(offer.Claimed);
+            Assert.IsTrue(fixture.shopPanel.activeSelf);
+
+            Object.DestroyImmediate(fixture.shop.packDefinitions[0]);
+            Object.DestroyImmediate(heal);
+            fixture.Destroy();
+        }
+
         static ShopFixture CreateShopFixture(bool withCardSelection = false)
         {
             var fixture = new ShopFixture();

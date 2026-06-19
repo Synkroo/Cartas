@@ -33,3 +33,15 @@ MonoBehaviour:
     reactivations: 0
     preventDestroyOnUse: 0
     bonusEffects: []
+  - upgradeName: Cadena de cortes
+    description: Reduce su coste en 1 y se reactiva una vez.
+    costReduction: 1
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Danza letal
+    description: Se reactiva dos veces adicionales.
+    costReduction: 0
+    reactivations: 2
+    preventDestroyOnUse: 0
+    bonusEffects: []

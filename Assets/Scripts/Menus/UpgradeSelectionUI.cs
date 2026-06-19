@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,8 @@ namespace JuegoDeCartas.UI
         public Button reactivationUpgradeButton;
         public TextMeshProUGUI firstUpgradeText;
         public TextMeshProUGUI secondUpgradeText;
+        public List<Button> upgradeButtons = new List<Button>();
+        public List<TextMeshProUGUI> upgradeLabels = new List<TextMeshProUGUI>();
 
         [Header("Text")]
         public string cardTitleFormat = "Mejorar: {0}";
@@ -23,7 +26,7 @@ namespace JuegoDeCartas.UI
         Card currentCard;
         Action onComplete;
 
-        public bool IsConfigured => panel != null && costUpgradeButton != null && reactivationUpgradeButton != null;
+        public bool IsConfigured => panel != null && GetButtons().Count > 0;
 
         void Awake()
         {
@@ -49,27 +52,51 @@ namespace JuegoDeCartas.UI
             if (titleText != null && card.data != null)
                 titleText.text = string.Format(cardTitleFormat, card.data.cardName);
 
-            if (costUpgradeButton != null)
+            List<Button> buttons = GetButtons();
+            List<TextMeshProUGUI> labels = GetLabels();
+            for (int i = 0; i < buttons.Count; i++)
             {
-                costUpgradeButton.onClick.RemoveAllListeners();
-                costUpgradeButton.onClick.AddListener(() => ApplyUpgrade(0));
-                costUpgradeButton.interactable = HasOption(card, 0);
+                int optionIndex = i;
+                Button button = buttons[i];
+                if (button == null)
+                    continue;
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(() => ApplyUpgrade(optionIndex));
+                button.interactable = HasOption(card, optionIndex);
+                if (i < labels.Count)
+                    SetOptionText(labels[i], card, optionIndex);
             }
-
-            if (reactivationUpgradeButton != null)
-            {
-                reactivationUpgradeButton.onClick.RemoveAllListeners();
-                reactivationUpgradeButton.onClick.AddListener(() => ApplyUpgrade(1));
-                reactivationUpgradeButton.interactable = HasOption(card, 1);
-            }
-
-            SetOptionText(firstUpgradeText, card, 0);
-            SetOptionText(secondUpgradeText, card, 1);
 
             if (panel != null)
                 panel.SetActive(true);
 
             return true;
+        }
+
+        List<Button> GetButtons()
+        {
+            if (upgradeButtons != null && upgradeButtons.Count > 0)
+                return upgradeButtons;
+
+            upgradeButtons = new List<Button>();
+            if (costUpgradeButton != null)
+                upgradeButtons.Add(costUpgradeButton);
+            if (reactivationUpgradeButton != null)
+                upgradeButtons.Add(reactivationUpgradeButton);
+            return upgradeButtons;
+        }
+
+        List<TextMeshProUGUI> GetLabels()
+        {
+            if (upgradeLabels != null && upgradeLabels.Count > 0)
+                return upgradeLabels;
+
+            upgradeLabels = new List<TextMeshProUGUI>();
+            if (firstUpgradeText != null)
+                upgradeLabels.Add(firstUpgradeText);
+            if (secondUpgradeText != null)
+                upgradeLabels.Add(secondUpgradeText);
+            return upgradeLabels;
         }
 
         bool HasRequiredReferences()

@@ -26,6 +26,7 @@ namespace JuegoDeCartas.UI
         public UpgradeSelectionUI upgradeSelectionUI;
 
         public GameObject shopPanel;
+        public UITransitionAnimator shopTransition;
 
         public TextMeshProUGUI dineroText;
 
@@ -37,6 +38,13 @@ namespace JuegoDeCartas.UI
         public TextMeshProUGUI shopTitleText;
         public string shopTitle = "Elige un sobre";
         public string currencySuffix = " oro";
+        public TextMeshProUGUI interestText;
+        public string interestFormat = "Intereses: +{0} oro";
+
+        [Header("Interest")]
+        [Min(1)] public int goldPerInterestStep = 100;
+        [Min(0)] public int interestPerStep = 25;
+        [Min(0)] public int maxInterest = 125;
 
         [Header("Item Pool")]
         public List<ArticuloData> itemPool = new List<ArticuloData>();
@@ -61,8 +69,10 @@ namespace JuegoDeCartas.UI
         bool raycastersCached;
         float previousTimeScale = 1f;
         bool opened;
+        int lastInterestEarned;
 
         public IReadOnlyList<ItemPackOffer> CurrentOffers => new ReadOnlyCollection<ItemPackOffer>(offers);
+        public int LastInterestEarned => lastInterestEarned;
 
         void Awake()
         {
@@ -117,11 +127,15 @@ namespace JuegoDeCartas.UI
             if (pauseTime)
                 Time.timeScale = 0f;
 
-            ClearSlots();
-            GenerateAndPopulatePacks();
+            ApplyInterest();
 
             if (shopPanel != null)
                 shopPanel.SetActive(true);
+            if (shopTransition != null)
+                shopTransition.PlayIn();
+
+            ClearSlots();
+            GenerateAndPopulatePacks();
 
             SetActiveAndBlockOthers();
 
@@ -135,6 +149,8 @@ namespace JuegoDeCartas.UI
 
             if (shopTitleText != null)
                 shopTitleText.text = shopTitle;
+            if (interestText != null)
+                interestText.text = string.Format(interestFormat, lastInterestEarned);
 
             var restockPrecioText = transform.Find("Cabecero/PanelRestock/Precio200")?.GetComponent<TextMeshProUGUI>();
             if (restockPrecioText != null)
@@ -177,6 +193,7 @@ namespace JuegoDeCartas.UI
                 if (display != null)
                 {
                     display.Setup(offer, OpenPack);
+                    display.PlayEntrance(i * 0.08f);
                     displays[offer] = display;
                 }
 
@@ -210,7 +227,11 @@ namespace JuegoDeCartas.UI
             if (shopPanel != null)
                 shopPanel.SetActive(false);
 
-            if (!packSelectionUI.Open(offer, CanAcquireItem, item => TryClaimItem(offer, item)))
+            if (!packSelectionUI.Open(
+                offer,
+                CanAcquireItem,
+                item => TryClaimItem(offer, item),
+                () => CancelPack(offer)))
             {
                 gameManager.dinero += price;
                 UpdateDineroUI();
@@ -279,6 +300,20 @@ namespace JuegoDeCartas.UI
 
         void CompleteClaim(ItemPackOffer offer)
         {
+            CompleteOffer(offer);
+        }
+
+        public bool CancelPack(ItemPackOffer offer)
+        {
+            if (offer == null || offer.Claimed || !offers.Contains(offer))
+                return false;
+
+            CompleteOffer(offer);
+            return true;
+        }
+
+        void CompleteOffer(ItemPackOffer offer)
+        {
             offer.Claimed = true;
             if (displays.TryGetValue(offer, out ItemPackDisplay display) && display != null)
                 display.SetClaimed(true);
@@ -310,21 +345,49 @@ namespace JuegoDeCartas.UI
 
             opened = false;
 
+            if (shopTransition != null && shopPanel != null && shopPanel.activeSelf)
+                shopTransition.PlayOut(FinishClose);
+            else
+                FinishClose();
+        }
+
+        void FinishClose()
+        {
             foreach (var rc in disabledRaycasters)
                 if (rc != null) rc.enabled = true;
             disabledRaycasters.Clear();
 
             if (shopPanel != null)
                 shopPanel.SetActive(false);
-
             if (menusCanvas != null)
                 menusCanvas.enabled = false;
-
             if (pauseTime)
                 Time.timeScale = previousTimeScale;
-
             if (battle != null)
                 battle.ContinueAfterShop();
+        }
+
+        public int CalculateInterest(int gold)
+        {
+            if (gold <= 0 || goldPerInterestStep <= 0 || interestPerStep <= 0)
+                return 0;
+
+            int steps = gold / goldPerInterestStep;
+            return Mathf.Min(maxInterest, steps * interestPerStep);
+        }
+
+        void ApplyInterest()
+        {
+            lastInterestEarned = gameManager != null
+                ? CalculateInterest(gameManager.dinero)
+                : 0;
+
+            if (lastInterestEarned <= 0 || gameManager == null)
+                return;
+
+            gameManager.dinero += lastInterestEarned;
+            if (battle != null && battle.statsTracker != null)
+                battle.statsTracker.RegisterInterestEarned(lastInterestEarned);
         }
 
         int lastDinero = -1;

@@ -33,3 +33,15 @@ MonoBehaviour:
     preventDestroyOnUse: 0
     bonusEffects:
     - {fileID: 11400000, guid: 0f8cdcb571c9da24aacf410a1f6552cc, type: 2}
+  - upgradeName: Filo envenenado
+    description: Se reactiva una vez adicional.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Lluvia de acero
+    description: Se reactiva dos veces adicionales.
+    costReduction: 0
+    reactivations: 2
+    preventDestroyOnUse: 0
+    bonusEffects: []

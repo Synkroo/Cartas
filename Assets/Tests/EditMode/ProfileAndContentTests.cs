@@ -83,7 +83,7 @@ namespace JuegoDeCartas.Tests
         }
 
         [Test]
-        public void EveryCardHasTwoConfiguredUpgrades()
+        public void EveryCardHasFourConfiguredUpgrades()
         {
             string[] guids = AssetDatabase.FindAssets(
                 "t:CardData",
@@ -97,7 +97,7 @@ namespace JuegoDeCartas.Tests
             Assert.GreaterOrEqual(cards.Length, 16);
             Assert.IsTrue(cards.All(card =>
                 card.upgradeOptions != null &&
-                card.upgradeOptions.Count == 2 &&
+                card.upgradeOptions.Count == 4 &&
                 card.upgradeOptions.All(option =>
                     option != null && !string.IsNullOrWhiteSpace(option.upgradeName))));
         }

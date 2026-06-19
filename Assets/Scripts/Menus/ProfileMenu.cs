@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using JuegoDeCartas.Articulos;
 using JuegoDeCartas.Characters;
+using JuegoDeCartas.Cards;
 using JuegoDeCartas.Enemies;
 using JuegoDeCartas.Missions;
 using JuegoDeCartas.Progression;
@@ -24,6 +25,7 @@ namespace JuegoDeCartas.UI
         public List<CharacterData> heroes = new List<CharacterData>();
         public List<ArticuloData> items = new List<ArticuloData>();
         public List<ItemPackData> packs = new List<ItemPackData>();
+        public List<CardData> cards = new List<CardData>();
         public List<MissionData> missions = new List<MissionData>();
 
         void Awake()
@@ -114,7 +116,7 @@ namespace JuegoDeCartas.UI
         float CalculateCompletionForSlot(int slot)
         {
             int completed = 0;
-            int total = enemies.Count + items.Count + packs.Count + heroes.Count;
+            int total = enemies.Count + items.Count + packs.Count + cards.Count + heroes.Count;
 
             for (int i = 0; i < enemies.Count; i++)
                 if (HasCollectionFlag(slot, "EnemySeen", enemies[i])) completed++;
@@ -122,6 +124,8 @@ namespace JuegoDeCartas.UI
                 if (HasCollectionFlag(slot, "ItemSeen", items[i])) completed++;
             for (int i = 0; i < packs.Count; i++)
                 if (HasCollectionFlag(slot, "PackSeen", packs[i])) completed++;
+            for (int i = 0; i < cards.Count; i++)
+                if (GetCollectionCount(slot, "CardUsed", cards[i]) > 0) completed++;
             for (int i = 0; i < heroes.Count; i++)
                 if (IsHeroUnlockedInSlot(slot, heroes[i])) completed++;
 
@@ -154,7 +158,7 @@ namespace JuegoDeCartas.UI
                 return 1f;
 
             int completed = 0;
-            int total = enemies.Count + items.Count + packs.Count + heroes.Count;
+            int total = enemies.Count + items.Count + packs.Count + cards.Count + heroes.Count;
 
             for (int i = 0; i < enemies.Count; i++)
                 if (CollectionProgress.IsEnemySeen(enemies[i])) completed++;
@@ -162,6 +166,8 @@ namespace JuegoDeCartas.UI
                 if (CollectionProgress.IsItemSeen(items[i])) completed++;
             for (int i = 0; i < packs.Count; i++)
                 if (CollectionProgress.IsPackSeen(packs[i])) completed++;
+            for (int i = 0; i < cards.Count; i++)
+                if (CollectionProgress.GetCardUsedCount(cards[i]) > 0) completed++;
             for (int i = 0; i < heroes.Count; i++)
                 if (heroes[i] != null && heroes[i].IsUnlocked) completed++;
 
@@ -190,6 +196,13 @@ namespace JuegoDeCartas.UI
         {
             return asset != null &&
                    ProfilePrefs.GetIntForSlot(slot, $"Collection_{category}_{asset.name}", 0) == 1;
+        }
+
+        static int GetCollectionCount(int slot, string category, Object asset)
+        {
+            return asset != null
+                ? ProfilePrefs.GetIntForSlot(slot, $"Collection_{category}_{asset.name}", 0)
+                : 0;
         }
 
         static bool IsHeroUnlockedInSlot(int slot, CharacterData hero)

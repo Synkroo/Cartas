@@ -194,6 +194,7 @@ namespace JuegoDeCartas.Managers
                 return;
 
             player.stats.mana -= cost;
+            CollectionProgress.MarkCardUsed(card.data);
 
             deckManager.hand.Remove(card);
 

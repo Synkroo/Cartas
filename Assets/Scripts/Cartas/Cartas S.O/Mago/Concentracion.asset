@@ -32,3 +32,15 @@ MonoBehaviour:
     reactivations: 0
     preventDestroyOnUse: 1
     bonusEffects: []
+  - upgradeName: Trance profundo
+    description: Se reactiva una vez adicional.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Mente infinita
+    description: Se reactiva dos veces y deja de destruirse al usarla.
+    costReduction: 0
+    reactivations: 2
+    preventDestroyOnUse: 1
+    bonusEffects: []

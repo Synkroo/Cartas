@@ -33,3 +33,15 @@ MonoBehaviour:
     preventDestroyOnUse: 0
     bonusEffects:
     - {fileID: 11400000, guid: 0f8cdcb571c9da24aacf410a1f6552cc, type: 2}
+  - upgradeName: Reciclaje agresivo
+    description: Reduce su coste en 1 y se reactiva una vez.
+    costReduction: 1
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Residuo infinito
+    description: Se reactiva dos veces y deja de destruirse al usarla.
+    costReduction: 0
+    reactivations: 2
+    preventDestroyOnUse: 1
+    bonusEffects: []
