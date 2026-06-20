@@ -92,6 +92,26 @@ namespace JuegoDeCartas.Tests
         }
 
         [Test]
+        public void EndGameStatsUseIndependentColumnsWithoutTabs()
+        {
+            GameObject gameObject = new GameObject("StatsColumns");
+            GameStatsTracker stats = gameObject.AddComponent<GameStatsTracker>();
+            stats.enemiesDefeated = 14;
+            stats.maxEnemyDamage = 16;
+            stats.totalDamageDealt = 1234;
+
+            string primary = stats.GetPrimaryStatsText();
+            string secondary = stats.GetSecondaryStatsText();
+
+            StringAssert.Contains("Enemigos derrotados: 14", primary);
+            StringAssert.Contains("Dano maximo enemigo: 16", secondary);
+            Assert.IsFalse(primary.Contains("\t"));
+            Assert.IsFalse(secondary.Contains("\t"));
+
+            Object.DestroyImmediate(gameObject);
+        }
+
+        [Test]
         public void HeroRecordsKeepTotalsAndMaximums()
         {
             CharacterData hero = ScriptableObject.CreateInstance<CharacterData>();

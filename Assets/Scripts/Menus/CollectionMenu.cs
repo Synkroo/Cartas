@@ -51,12 +51,25 @@ namespace JuegoDeCartas.UI
         public TextMeshProUGUI detailStatsText;
         public TextMeshProUGUI detailProgressText;
         public GameObject undiscoveredOverlay;
+        public Button subclassesButton;
+        public SubclassInfoPanelUI subclassInfoPanel;
+        public Button deckToggleButton;
+        public TextMeshProUGUI deckToggleLabel;
+        public string showDeckLabel = "Mazo inicial";
+        public string hideDeckLabel = "Cerrar mazo";
+        public Vector2 deckButtonInfoAnchorMin = new Vector2(0.17f, 0.49f);
+        public Vector2 deckButtonInfoAnchorMax = new Vector2(0.30f, 0.55f);
+        public Vector2 deckButtonOpenAnchorMin = new Vector2(0.82f, 0.75f);
+        public Vector2 deckButtonOpenAnchorMax = new Vector2(0.95f, 0.82f);
 
         [Header("Hero Deck")]
         public GameObject deckSection;
         public Transform deckContent;
         public GameObject cardPrefab;
         public Vector2 deckCardSlotSize = new Vector2(150f, 220f);
+
+        CharacterData currentHero;
+        bool heroDeckVisible;
 
         void Awake()
         {
@@ -75,6 +88,10 @@ namespace JuegoDeCartas.UI
                 cardsButton.onClick.AddListener(ShowCards);
             if (backButton != null)
                 backButton.onClick.AddListener(Close);
+            if (subclassesButton != null)
+                subclassesButton.onClick.AddListener(ShowCurrentHeroSubclasses);
+            if (deckToggleButton != null)
+                deckToggleButton.onClick.AddListener(ToggleHeroDeck);
         }
 
         public void Open()
@@ -88,6 +105,8 @@ namespace JuegoDeCartas.UI
 
         public void Close()
         {
+            if (subclassInfoPanel != null)
+                subclassInfoPanel.Close();
             if (panel != null)
                 panel.SetActive(false);
             if (mainMenuManager != null)
@@ -96,6 +115,7 @@ namespace JuegoDeCartas.UI
 
         public void ShowEnemies()
         {
+            SetHeroControlsVisible(false);
             ClearEntries();
 
             for (int i = 0; i < enemies.Count; i++)
@@ -116,6 +136,7 @@ namespace JuegoDeCartas.UI
 
         public void ShowHeroes()
         {
+            SetHeroControlsVisible(true);
             ClearEntries();
 
             for (int i = 0; i < heroes.Count; i++)
@@ -135,6 +156,7 @@ namespace JuegoDeCartas.UI
 
         public void ShowItems()
         {
+            SetHeroControlsVisible(false);
             ClearEntries();
 
             for (int i = 0; i < items.Count; i++)
@@ -155,6 +177,7 @@ namespace JuegoDeCartas.UI
 
         public void ShowPacks()
         {
+            SetHeroControlsVisible(false);
             ClearEntries();
 
             for (int i = 0; i < packs.Count; i++)
@@ -175,6 +198,7 @@ namespace JuegoDeCartas.UI
 
         public void ShowCards()
         {
+            SetHeroControlsVisible(false);
             ClearEntries();
 
             for (int i = 0; i < cards.Count; i++)
@@ -235,8 +259,10 @@ namespace JuegoDeCartas.UI
 
         void ShowHero(CharacterData hero)
         {
+            currentHero = hero;
             SetDiscovered(true);
-            SetDeckVisible(true);
+            SetHeroControlsVisible(true);
+            SetHeroDeckMode(false);
             RenderDeck(hero);
 
             if (hero == null)
@@ -252,7 +278,7 @@ namespace JuegoDeCartas.UI
             SetDetail(
                 hero.characterName,
                 hero.portrait,
-                hero.description + "\n\n" + hero.mechanicDescription + BuildSubclassDescription(hero),
+                hero.description + "\n\n" + hero.mechanicDescription,
                 $"Vida: {hero.maxHealth}\nMana: {hero.maxMana}\nRobo: {hero.cardsPerTurn}\nOro inicial: {hero.startingGold}",
                 BuildHeroProgress(hero, availability)
             );
@@ -387,35 +413,69 @@ namespace JuegoDeCartas.UI
             return builder.ToString();
         }
 
-        static string BuildSubclassDescription(CharacterData hero)
+        public void ShowCurrentHeroSubclasses()
         {
-            if (hero == null || hero.subclasses == null || hero.subclasses.Count == 0)
-                return "";
+            if (subclassInfoPanel != null && currentHero != null)
+                subclassInfoPanel.Open(currentHero);
+        }
 
-            var builder = new StringBuilder();
-            builder.AppendLine();
-            builder.AppendLine();
-            builder.AppendLine("Subclases:");
+        public void ToggleHeroDeck()
+        {
+            if (currentHero != null)
+                SetHeroDeckMode(!heroDeckVisible);
+        }
 
-            for (int i = 0; i < hero.subclasses.Count; i++)
+        void SetHeroControlsVisible(bool visible)
+        {
+            if (!visible)
             {
-                SubclassData subclass = hero.subclasses[i];
-                if (subclass == null)
-                    continue;
-
-                if (!CollectionProgress.IsSubclassSeen(subclass))
-                {
-                    builder.AppendLine("- ???: No descubierta");
-                    continue;
-                }
-
-                builder.Append("- ");
-                builder.Append(subclass.subclassName);
-                builder.Append(": ");
-                builder.AppendLine(subclass.passiveDescription);
+                currentHero = null;
+                SetHeroDeckMode(false);
             }
 
-            return builder.ToString().TrimEnd();
+            if (subclassesButton != null)
+                subclassesButton.gameObject.SetActive(visible);
+            if (deckToggleButton != null)
+                deckToggleButton.gameObject.SetActive(visible);
+        }
+
+        void SetHeroDeckMode(bool visible)
+        {
+            heroDeckVisible = visible;
+            SetDeckVisible(visible);
+
+            SetInfoObjectVisible(detailImage != null ? detailImage.gameObject : null, !visible);
+            SetInfoObjectVisible(detailNameText != null ? detailNameText.gameObject : null, !visible);
+            SetInfoObjectVisible(detailDescriptionText != null ? detailDescriptionText.gameObject : null, !visible);
+            SetInfoObjectVisible(detailStatsText != null ? detailStatsText.gameObject : null, !visible);
+            SetInfoObjectVisible(detailProgressText != null ? detailProgressText.gameObject : null, !visible);
+            SetInfoObjectVisible(subclassesButton != null ? subclassesButton.gameObject : null, !visible);
+            SetInfoObjectVisible(undiscoveredOverlay, !visible && undiscoveredOverlay != null && undiscoveredOverlay.activeSelf);
+
+            if (deckToggleLabel != null)
+                deckToggleLabel.text = visible ? hideDeckLabel : showDeckLabel;
+            if (deckToggleButton != null)
+            {
+                RectTransform buttonRect = deckToggleButton.transform as RectTransform;
+                if (buttonRect != null)
+                {
+                    buttonRect.anchorMin = visible
+                        ? deckButtonOpenAnchorMin
+                        : deckButtonInfoAnchorMin;
+                    buttonRect.anchorMax = visible
+                        ? deckButtonOpenAnchorMax
+                        : deckButtonInfoAnchorMax;
+                    buttonRect.offsetMin = Vector2.zero;
+                    buttonRect.offsetMax = Vector2.zero;
+                }
+                deckToggleButton.transform.SetAsLastSibling();
+            }
+        }
+
+        static void SetInfoObjectVisible(GameObject target, bool visible)
+        {
+            if (target != null)
+                target.SetActive(visible);
         }
 
         static string BuildMechanicDescription(EnemyData enemy)

@@ -167,10 +167,6 @@ namespace JuegoDeCartas.UI
             }
 
             SetShopContentVisible(false);
-            for (int i = 0; i < character.subclasses.Count; i++)
-                CollectionProgress.MarkSubclassSeen(character.subclasses[i]);
-            ProfilePrefs.Save();
-
             if (subclassSelectionUI.Open(character, SelectSubclass))
                 return true;
 

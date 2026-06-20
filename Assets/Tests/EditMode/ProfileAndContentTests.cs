@@ -5,6 +5,7 @@ using JuegoDeCartas.Progression;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
+using JuegoDeCartas.UI;
 
 namespace JuegoDeCartas.Tests
 {
@@ -119,6 +120,46 @@ namespace JuegoDeCartas.Tests
             Assert.AreEqual(5, rogue.startingDeck.Distinct().Count());
             Assert.NotNull(condition);
             Assert.AreEqual(JuegoDeCartas.Missions.MissionDifficulty.Letal, condition.requiredDifficulty);
+        }
+
+        [Test]
+        public void SubclassInfoListsUnusedSubclassesInsteadOfHidingThem()
+        {
+            CharacterData character = ScriptableObject.CreateInstance<CharacterData>();
+            character.characterName = "Heroe";
+            SubclassData first = ScriptableObject.CreateInstance<SubclassData>();
+            SubclassData second = ScriptableObject.CreateInstance<SubclassData>();
+            first.name = "UnusedSubclassA";
+            first.subclassName = "Primera";
+            first.passiveDescription = "Pasiva uno.";
+            second.name = "UnusedSubclassB";
+            second.subclassName = "Segunda";
+            second.passiveDescription = "Pasiva dos.";
+            character.subclasses = new System.Collections.Generic.List<SubclassData> { first, second };
+
+            string content = SubclassInfoPanelUI.BuildContent(character);
+
+            StringAssert.Contains("Primera", content);
+            StringAssert.Contains("Segunda", content);
+            StringAssert.Contains("Aun no usada", content);
+
+            Object.DestroyImmediate(first);
+            Object.DestroyImmediate(second);
+            Object.DestroyImmediate(character);
+        }
+
+        [Test]
+        public void CombatTooltipCanOpenWhenItsRootStartsInactive()
+        {
+            GameObject root = new GameObject("Tooltip");
+            CombatTooltipUI tooltip = root.AddComponent<CombatTooltipUI>();
+            tooltip.root = root;
+            root.SetActive(false);
+
+            tooltip.Show("Pasiva", "Descripcion");
+
+            Assert.IsTrue(root.activeSelf);
+            Object.DestroyImmediate(root);
         }
     }
 }

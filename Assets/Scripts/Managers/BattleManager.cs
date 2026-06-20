@@ -43,6 +43,8 @@ namespace JuegoDeCartas.Managers
         public Enemy enemy => waveManager.enemy;
         public bool IsBattleEnded => battleEnded;
         public SubclassData ActiveSubclass => CharacterRunState.SelectedSubclass;
+        public bool ArePlayerDamageBuffsStackable =>
+            HasPassive(SubclassPassiveType.StackDamageBuffs);
 
         void OnDestroy()
         {
@@ -92,6 +94,9 @@ namespace JuegoDeCartas.Managers
             ApplySelectedSubclassPassive();
             CollectionProgress.MarkSubclassSeen(subclass);
             ProfilePrefs.Save();
+            RenderHand();
+            if (deckManager != null)
+                deckManager.OnDeckChanged?.Invoke();
             UpdateUI();
             return true;
         }
@@ -401,6 +406,21 @@ namespace JuegoDeCartas.Managers
         bool HasPassive(SubclassPassiveType passiveType)
         {
             return ActiveSubclass != null && ActiveSubclass.passiveType == passiveType;
+        }
+
+        public string GetRuntimeCardDescription(CardData cardData)
+        {
+            if (cardData == null)
+                return "";
+
+            string description = cardData.description ?? "";
+            if (!ArePlayerDamageBuffsStackable)
+                return description;
+
+            return description
+                .Replace(" No se acumula.", "")
+                .Replace("No se acumula.", "")
+                .Trim();
         }
 
         public void DamagePlayer(int damage)

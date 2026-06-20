@@ -8,6 +8,8 @@ namespace JuegoDeCartas.Stats
         [Header("Stats Texts")]
         public TextMeshProUGUI victoryStatsText;
         public TextMeshProUGUI defeatStatsText;
+        public TextMeshProUGUI victorySecondaryStatsText;
+        public TextMeshProUGUI defeatSecondaryStatsText;
 
         [Header("Stats")]
         public int turnsPlayed;
@@ -44,21 +46,40 @@ namespace JuegoDeCartas.Stats
 
         public string GetStatsText()
         {
-            return $"Turnos jugados: {turnsPlayed}\t\tRondas jugadas: {roundsPlayed}\n\n" +
-                   $"Enemigos derrotados: {enemiesDefeated}\t\tDano maximo enemigo: {maxEnemyDamage}\n\n" +
-                   $"Dano realizado: {totalDamageDealt}\t\tDano recibido: {totalDamageReceived}\n\n" +
-                   $"Armadura total: {totalArmorGained}\t\tArmadura maxima: {maxArmor}\n\n" +
-                   $"Cartas usadas: {cardsUsed}\t\tDano maximo cartas: {maxCardDamage}\n\n" +
+            return GetPrimaryStatsText() + "\n\n" + GetSecondaryStatsText();
+        }
+
+        public string GetPrimaryStatsText()
+        {
+            return $"Turnos jugados: {turnsPlayed}\n\n" +
+                   $"Enemigos derrotados: {enemiesDefeated}\n\n" +
+                   $"Dano realizado: {totalDamageDealt}\n\n" +
+                   $"Armadura total: {totalArmorGained}\n\n" +
+                   $"Cartas usadas: {cardsUsed}\n\n" +
                    $"Intereses obtenidos: {totalInterestEarned}";
+        }
+
+        public string GetSecondaryStatsText()
+        {
+            return $"Rondas jugadas: {roundsPlayed}\n\n" +
+                   $"Dano maximo enemigo: {maxEnemyDamage}\n\n" +
+                   $"Dano recibido: {totalDamageReceived}\n\n" +
+                   $"Armadura maxima: {maxArmor}\n\n" +
+                   $"Dano maximo cartas: {maxCardDamage}";
         }
 
         public void PopulateStatsText()
         {
-            string text = GetStatsText();
+            string primary = GetPrimaryStatsText();
+            string secondary = GetSecondaryStatsText();
             if (victoryStatsText != null)
-                victoryStatsText.text = text;
+                victoryStatsText.text = primary;
             if (defeatStatsText != null)
-                defeatStatsText.text = text;
+                defeatStatsText.text = primary;
+            if (victorySecondaryStatsText != null)
+                victorySecondaryStatsText.text = secondary;
+            if (defeatSecondaryStatsText != null)
+                defeatSecondaryStatsText.text = secondary;
         }
     }
 }

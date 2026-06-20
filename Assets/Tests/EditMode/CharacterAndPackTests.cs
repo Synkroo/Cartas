@@ -232,6 +232,36 @@ namespace JuegoDeCartas.Tests
         }
 
         [Test]
+        public void StackingSubclassRemovesNonStackingWarningFromRuntimeCardText()
+        {
+            CharacterData character = ScriptableObject.CreateInstance<CharacterData>();
+            SubclassData leader = ScriptableObject.CreateInstance<SubclassData>();
+            leader.character = character;
+            leader.passiveType = SubclassPassiveType.StackDamageBuffs;
+            character.subclasses = new List<SubclassData> { leader };
+
+            CardData card = ScriptableObject.CreateInstance<CardData>();
+            card.description = "Ganas 5 de dano durante 3 turnos. No se acumula.";
+
+            GameObject root = new GameObject("RuntimeDescriptionTest");
+            BattleManager battle = root.AddComponent<BattleManager>();
+            battle.player = new Entity();
+            battle.deckManager = root.AddComponent<DeckManager>();
+
+            CharacterRunState.Select(character);
+            Assert.IsTrue(battle.ActivateSubclass(leader));
+
+            string description = battle.GetRuntimeCardDescription(card);
+            Assert.AreEqual("Ganas 5 de dano durante 3 turnos.", description);
+            StringAssert.DoesNotContain("No se acumula", description);
+
+            Object.DestroyImmediate(root);
+            Object.DestroyImmediate(card);
+            Object.DestroyImmediate(leader);
+            Object.DestroyImmediate(character);
+        }
+
+        [Test]
         public void PackGeneratorReturnsRequestedCountWithoutDuplicates()
         {
             ItemPackData pack = ScriptableObject.CreateInstance<ItemPackData>();

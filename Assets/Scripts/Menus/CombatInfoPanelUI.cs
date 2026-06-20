@@ -13,6 +13,7 @@ namespace JuegoDeCartas.UI
         public Sprite playerDamageStatusSprite;
         public Sprite playerArmorStatusSprite;
         public Sprite playerRegenStatusSprite;
+        public Sprite playerSubclassStatusSprite;
 
         [Header("Enemy Current Armor")]
         public TextMeshProUGUI enemyArmorText;
@@ -58,6 +59,20 @@ namespace JuegoDeCartas.UI
 
             int statusCount = 0;
 
+            if (battle.ActiveSubclass != null)
+            {
+                Sprite subclassSprite = battle.ActiveSubclass.icon != null
+                    ? battle.ActiveSubclass.icon
+                    : playerSubclassStatusSprite;
+                SetPlayerStatus(
+                    statusCount++,
+                    subclassSprite,
+                    "P",
+                    battle.ActiveSubclass.subclassName,
+                    battle.ActiveSubclass.passiveDescription
+                );
+            }
+
             if (damageBonus > 0 && damageTurns > 0)
             {
                 SetPlayerStatus(
@@ -65,7 +80,7 @@ namespace JuegoDeCartas.UI
                     playerDamageStatusSprite,
                     damageTurns.ToString(),
                     "Aumento de dano",
-                    "Rugido: +" + damageBonus + ". Quedan " + damageTurns + " turnos."
+                    BuildPlayerDamageBuffDescription(damageBonus, damageTurns)
                 );
             }
 
@@ -332,6 +347,17 @@ namespace JuegoDeCartas.UI
         static string BuildEnemyDamageRampDescription(int damagePerTurn, int currentBonus)
         {
             return "Escala " + damagePerTurn + " en dano min/max cada turno. Actualmente: +" + currentBonus + ".";
+        }
+
+        string BuildPlayerDamageBuffDescription(int damageBonus, int damageTurns)
+        {
+            string description =
+                "Rugido: +" + damageBonus + ". Quedan " + damageTurns + " turnos.";
+
+            if (battle.ArePlayerDamageBuffsStackable)
+                description += " Los aumentos se acumulan y reinician la duracion.";
+
+            return description;
         }
 
         static string BuildEnemyHealDescription(int healPerTurn)

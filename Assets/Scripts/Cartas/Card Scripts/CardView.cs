@@ -51,9 +51,12 @@ namespace JuegoDeCartas.Cards
             if (descriptionText != null)
             {
                 CardUpgradeOption upgrade = card.SelectedUpgrade;
-                descriptionText.text = upgrade != null && !string.IsNullOrWhiteSpace(upgrade.description)
-                    ? card.data.description + "\n" + upgrade.description
+                string baseDescription = battleManager != null
+                    ? battleManager.GetRuntimeCardDescription(card.data)
                     : card.data.description;
+                descriptionText.text = upgrade != null && !string.IsNullOrWhiteSpace(upgrade.description)
+                    ? baseDescription + "\n" + upgrade.description
+                    : baseDescription;
             }
             if (costText != null) costText.text = card.effectiveCost.ToString();
             if (artworkImage != null)

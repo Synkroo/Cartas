@@ -11,11 +11,6 @@ namespace JuegoDeCartas.UI
 
         object currentOwner;
 
-        void Awake()
-        {
-            Hide();
-        }
-
         public void Show(string title, string description)
         {
             Show(null, title, description);
