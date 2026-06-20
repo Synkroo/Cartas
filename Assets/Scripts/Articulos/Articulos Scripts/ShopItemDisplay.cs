@@ -243,6 +243,11 @@ namespace JuegoDeCartas.UI
                                 if (capturedButton != null)
                                     capturedButton.interactable = false;
                                 capturedGO.SetActive(false);
+                            }, () =>
+                            {
+                                Refund(capturedBattle, shopManager, spent);
+                                if (capturedButton != null)
+                                    capturedButton.interactable = true;
                             }))
                             {
                                 return;

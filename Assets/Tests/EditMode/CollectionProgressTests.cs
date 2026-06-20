@@ -78,6 +78,20 @@ namespace JuegoDeCartas.Tests
         }
 
         [Test]
+        public void SubclassDiscoveryIsPersistedPerProfile()
+        {
+            SubclassData subclass = ScriptableObject.CreateInstance<SubclassData>();
+            subclass.name = "CollectionSubclassTest";
+            Track("Collection_SubclassSeen_" + subclass.name);
+
+            Assert.IsFalse(CollectionProgress.IsSubclassSeen(subclass));
+            CollectionProgress.MarkSubclassSeen(subclass);
+            Assert.IsTrue(CollectionProgress.IsSubclassSeen(subclass));
+
+            Object.DestroyImmediate(subclass);
+        }
+
+        [Test]
         public void HeroRecordsKeepTotalsAndMaximums()
         {
             CharacterData hero = ScriptableObject.CreateInstance<CharacterData>();

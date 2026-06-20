@@ -56,6 +56,13 @@ namespace JuegoDeCartas.Progression
 
         public static bool IsPackSeen(ItemPackData pack) => GetFlag("PackSeen", pack);
 
+        public static void MarkSubclassSeen(SubclassData subclass)
+        {
+            SetFlag("SubclassSeen", subclass);
+        }
+
+        public static bool IsSubclassSeen(SubclassData subclass) => GetFlag("SubclassSeen", subclass);
+
         public static void MarkCardUsed(CardData card)
         {
             if (card == null)

@@ -67,14 +67,10 @@ namespace JuegoDeCartas.Managers
                 battle.statsTracker.RegisterMaxArmor(player.stats.armor);
 
             player.stats.mana = player.stats.maxMana;
-            player.stats.armor = 0;
+            player.stats.armor = battle.GetArmorAtPlayerTurnStart(player.stats.armor);
 
             if (battle.armorPerTurn > 0)
-            {
-                player.stats.armor += battle.armorPerTurn;
-                if (battle.statsTracker != null)
-                    battle.statsTracker.RegisterArmorGained(battle.armorPerTurn);
-            }
+                battle.GainPlayerArmor(battle.armorPerTurn);
 
             battle.deckManager.DrawStartingHand();
             battle.RenderHand();

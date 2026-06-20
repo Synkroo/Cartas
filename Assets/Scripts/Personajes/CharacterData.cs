@@ -22,6 +22,9 @@ namespace JuegoDeCartas.Characters
         [Header("Deck")]
         public List<CardData> startingDeck = new List<CardData>();
 
+        [Header("Subclasses")]
+        public List<SubclassData> subclasses = new List<SubclassData>();
+
         [Header("Unlock")]
         public bool unlockedByDefault;
         public bool comingSoon;

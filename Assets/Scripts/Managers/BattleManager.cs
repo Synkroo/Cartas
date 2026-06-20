@@ -31,6 +31,9 @@ namespace JuegoDeCartas.Managers
         private int lastCardDamageDealt;
         private bool battleEnded;
         private bool runRecorded;
+        private bool subclassApplied;
+        private int cardsPlayedThisTurn;
+        private int pendingFirstCardDamageBonus;
 
         [HideInInspector] public int armorPerTurn;
         [HideInInspector] public int regenPerRound;
@@ -39,6 +42,7 @@ namespace JuegoDeCartas.Managers
 
         public Enemy enemy => waveManager.enemy;
         public bool IsBattleEnded => battleEnded;
+        public SubclassData ActiveSubclass => CharacterRunState.SelectedSubclass;
 
         void OnDestroy()
         {
@@ -78,6 +82,34 @@ namespace JuegoDeCartas.Managers
 
             if (turnManager != null)
                 turnManager.StartGame();
+        }
+
+        public bool ActivateSubclass(SubclassData subclass)
+        {
+            if (!CharacterRunState.SelectSubclass(subclass))
+                return false;
+
+            ApplySelectedSubclassPassive();
+            CollectionProgress.MarkSubclassSeen(subclass);
+            ProfilePrefs.Save();
+            UpdateUI();
+            return true;
+        }
+
+        void ApplySelectedSubclassPassive()
+        {
+            if (subclassApplied || ActiveSubclass == null || player == null)
+                return;
+
+            subclassApplied = true;
+
+            if (ActiveSubclass.passiveType == SubclassPassiveType.BonusMaxMana)
+            {
+                int bonus = Mathf.Max(0, ActiveSubclass.amount);
+                player.stats.maxMana += bonus;
+                player.stats.mana += bonus;
+                player.stats.Clamp();
+            }
         }
 
         public void ApplySelectedCharacter()
@@ -195,6 +227,7 @@ namespace JuegoDeCartas.Managers
 
             player.stats.mana -= cost;
             CollectionProgress.MarkCardUsed(card.data);
+            BeginCardResolution();
 
             deckManager.hand.Remove(card);
 
@@ -242,6 +275,7 @@ namespace JuegoDeCartas.Managers
             if (statsTracker != null)
                 statsTracker.RegisterCardPlayed(totalDamage);
 
+            FinishCardResolution();
             RenderHand();
             UpdateUI();
             if (deckViewer != null && deckViewer.panel != null && deckViewer.panel.activeSelf)
@@ -252,7 +286,9 @@ namespace JuegoDeCartas.Managers
         {
             if (battleEnded || enemy == null) return;
 
-            int totalDamage = Mathf.Max(0, damage + playerDamageBonus);
+            int firstCardBonus = pendingFirstCardDamageBonus;
+            pendingFirstCardDamageBonus = 0;
+            int totalDamage = Mathf.Max(0, damage + playerDamageBonus + firstCardBonus);
 
             lastCardDamageDealt += totalDamage;
 
@@ -262,6 +298,109 @@ namespace JuegoDeCartas.Managers
             waveManager.DamageEnemy(totalDamage, out bool died);
 
             UpdateUI();
+        }
+
+        public int GainPlayerArmor(int amount)
+        {
+            if (battleEnded || player == null || amount <= 0)
+                return 0;
+
+            int previous = player.stats.armor;
+            player.stats.armor += amount;
+            player.stats.Clamp();
+            int gained = player.stats.armor - previous;
+
+            if (gained <= 0)
+                return 0;
+
+            if (statsTracker != null)
+            {
+                statsTracker.RegisterArmorGained(gained);
+                statsTracker.RegisterMaxArmor(player.stats.armor);
+            }
+
+            if (HasPassive(SubclassPassiveType.ArmorToDamage) &&
+                enemy != null &&
+                enemy.stats.health > 0)
+            {
+                int damage = Mathf.Max(
+                    ActiveSubclass.amount,
+                    Mathf.CeilToInt(gained * ActiveSubclass.percentage / 100f)
+                );
+                if (damage > 0)
+                    DamageEnemy(damage);
+            }
+
+            UpdateUI();
+            return gained;
+        }
+
+        public int RestorePlayerMana(int amount)
+        {
+            if (battleEnded || player == null || amount <= 0)
+                return 0;
+
+            int previous = player.stats.mana;
+            player.stats.mana = Mathf.Min(player.stats.maxMana, player.stats.mana + amount);
+            int restored = player.stats.mana - previous;
+            if (restored > 0)
+                UpdateUI();
+            return restored;
+        }
+
+        public int GetArmorAtPlayerTurnStart(int currentArmor)
+        {
+            cardsPlayedThisTurn = 0;
+            pendingFirstCardDamageBonus = 0;
+
+            if (!HasPassive(SubclassPassiveType.RetainArmor))
+                return 0;
+
+            return Mathf.Max(0, Mathf.FloorToInt(currentArmor * ActiveSubclass.percentage / 100f));
+        }
+
+        void BeginCardResolution()
+        {
+            pendingFirstCardDamageBonus =
+                cardsPlayedThisTurn == 0 && HasPassive(SubclassPassiveType.FirstCardBonusDamage)
+                    ? Mathf.Max(0, ActiveSubclass.amount)
+                    : 0;
+        }
+
+        void FinishCardResolution()
+        {
+            pendingFirstCardDamageBonus = 0;
+            cardsPlayedThisTurn++;
+
+            if (HasPassive(SubclassPassiveType.DrawEveryCards) &&
+                cardsPlayedThisTurn % ActiveSubclass.triggerCount == 0)
+            {
+                DrawCards(Mathf.Max(1, ActiveSubclass.amount));
+            }
+
+            if (HasPassive(SubclassPassiveType.RestoreManaEveryCards) &&
+                cardsPlayedThisTurn % ActiveSubclass.triggerCount == 0)
+            {
+                RestorePlayerMana(Mathf.Max(1, ActiveSubclass.amount));
+            }
+
+            if (HasPassive(SubclassPassiveType.GoldEveryCards) &&
+                cardsPlayedThisTurn % ActiveSubclass.triggerCount == 0 &&
+                gameManager != null)
+            {
+                gameManager.dinero += Mathf.Max(0, ActiveSubclass.amount);
+            }
+
+            if (HasPassive(SubclassPassiveType.ArmorEveryCards) &&
+                cardsPlayedThisTurn % ActiveSubclass.triggerCount == 0)
+            {
+                GainPlayerArmor(Mathf.Max(1, ActiveSubclass.amount));
+            }
+        }
+
+        bool HasPassive(SubclassPassiveType passiveType)
+        {
+            return ActiveSubclass != null && ActiveSubclass.passiveType == passiveType;
         }
 
         public void DamagePlayer(int damage)
@@ -302,6 +441,13 @@ namespace JuegoDeCartas.Managers
 
         public void ApplyPlayerDamageBonus(int amount, int turns)
         {
+            if (HasPassive(SubclassPassiveType.StackDamageBuffs))
+            {
+                playerDamageBonus += amount;
+                playerDamageBonusTurnsRemaining = Mathf.Max(0, turns);
+                return;
+            }
+
             playerDamageBonus = amount;
             playerDamageBonusTurnsRemaining = Mathf.Max(0, turns);
         }

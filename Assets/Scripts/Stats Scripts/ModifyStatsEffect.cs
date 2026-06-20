@@ -58,7 +58,10 @@ namespace JuegoDeCartas.Effects
                     break;
 
                 case StatType.Mana:
-                    stats.mana += value;
+                    if (value > 0)
+                        battle.RestorePlayerMana(value);
+                    else
+                        stats.mana += value;
                     break;
 
                 case StatType.MaxMana:
@@ -66,12 +69,10 @@ namespace JuegoDeCartas.Effects
                     break;
 
                 case StatType.Armor:
-                    stats.armor += value;
-                    if (value > 0 && battle.statsTracker != null)
-                    {
-                        battle.statsTracker.RegisterArmorGained(value);
-                        battle.statsTracker.RegisterMaxArmor(stats.armor);
-                    }
+                    if (value > 0)
+                        battle.GainPlayerArmor(value);
+                    else
+                        stats.armor += value;
                     break;
             }
         }

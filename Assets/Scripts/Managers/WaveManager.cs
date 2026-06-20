@@ -23,6 +23,9 @@ namespace JuegoDeCartas.Managers
         private int currentEnemyIndex = 0;
 
         public Enemy enemy { get; private set; }
+        public int CompletedCombatCount => currentEnemyIndex;
+        public int TotalCombatCount => runtimeWave.Count > 0 ? runtimeWave.Count : Mathf.Max(1, totalCombats);
+        public int SubclassSelectionCombat => Mathf.Max(1, (TotalCombatCount + 1) / 2);
 
         public UIManager uiManager;
         public GameManager gameManager;

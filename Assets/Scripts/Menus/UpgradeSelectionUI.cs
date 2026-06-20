@@ -19,12 +19,14 @@ namespace JuegoDeCartas.UI
         public TextMeshProUGUI secondUpgradeText;
         public List<Button> upgradeButtons = new List<Button>();
         public List<TextMeshProUGUI> upgradeLabels = new List<TextMeshProUGUI>();
+        public Button cancelButton;
 
         [Header("Text")]
         public string cardTitleFormat = "Mejorar: {0}";
 
         Card currentCard;
         Action onComplete;
+        Action onCancel;
 
         public bool IsConfigured => panel != null && GetButtons().Count > 0;
 
@@ -33,15 +35,21 @@ namespace JuegoDeCartas.UI
             if (panel != null)
                 panel.SetActive(false);
 
+            if (cancelButton != null)
+            {
+                cancelButton.onClick.RemoveAllListeners();
+                cancelButton.onClick.AddListener(Cancel);
+            }
         }
 
-        public bool Show(Card card, Action onUpgradeComplete)
+        public bool Show(Card card, Action onUpgradeComplete, Action onUpgradeCancel = null)
         {
             if (card == null)
                 return false;
 
             currentCard = card;
             onComplete = onUpgradeComplete;
+            onCancel = onUpgradeCancel;
 
             if (!HasRequiredReferences())
                 return false;
@@ -140,10 +148,15 @@ namespace JuegoDeCartas.UI
                 return;
 
             if (currentCard.ApplyUpgrade(optionIndex))
-                Close();
+                Close(true);
         }
 
-        void Close()
+        public void Cancel()
+        {
+            Close(false);
+        }
+
+        void Close(bool completed)
         {
             if (panel != null)
                 panel.SetActive(false);
@@ -151,10 +164,11 @@ namespace JuegoDeCartas.UI
             if (overlay != null)
                 overlay.SetActive(false);
 
-            Action completed = onComplete;
+            Action callback = completed ? onComplete : onCancel;
             currentCard = null;
             onComplete = null;
-            completed?.Invoke();
+            onCancel = null;
+            callback?.Invoke();
         }
     }
 }

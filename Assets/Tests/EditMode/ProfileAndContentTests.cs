@@ -72,14 +72,17 @@ namespace JuegoDeCartas.Tests
         {
             ProfileManager.LoadTemporary();
             var pack = ScriptableObject.CreateInstance<JuegoDeCartas.Articulos.ItemPackData>();
+            var subclass = ScriptableObject.CreateInstance<SubclassData>();
 
             ProfilePrefs.SetInt(TestKey, 42);
 
             Assert.IsTrue(ProfileManager.IsTemporary);
             Assert.IsTrue(CollectionProgress.IsPackSeen(pack));
+            Assert.IsTrue(CollectionProgress.IsSubclassSeen(subclass));
             Assert.IsFalse(PlayerPrefs.HasKey(ProfileManager.ScopedKey(TestKey)));
 
             Object.DestroyImmediate(pack);
+            Object.DestroyImmediate(subclass);
         }
 
         [Test]

@@ -252,7 +252,7 @@ namespace JuegoDeCartas.UI
             SetDetail(
                 hero.characterName,
                 hero.portrait,
-                hero.description + "\n\n" + hero.mechanicDescription,
+                hero.description + "\n\n" + hero.mechanicDescription + BuildSubclassDescription(hero),
                 $"Vida: {hero.maxHealth}\nMana: {hero.maxMana}\nRobo: {hero.cardsPerTurn}\nOro inicial: {hero.startingGold}",
                 BuildHeroProgress(hero, availability)
             );
@@ -385,6 +385,37 @@ namespace JuegoDeCartas.UI
             }
 
             return builder.ToString();
+        }
+
+        static string BuildSubclassDescription(CharacterData hero)
+        {
+            if (hero == null || hero.subclasses == null || hero.subclasses.Count == 0)
+                return "";
+
+            var builder = new StringBuilder();
+            builder.AppendLine();
+            builder.AppendLine();
+            builder.AppendLine("Subclases:");
+
+            for (int i = 0; i < hero.subclasses.Count; i++)
+            {
+                SubclassData subclass = hero.subclasses[i];
+                if (subclass == null)
+                    continue;
+
+                if (!CollectionProgress.IsSubclassSeen(subclass))
+                {
+                    builder.AppendLine("- ???: No descubierta");
+                    continue;
+                }
+
+                builder.Append("- ");
+                builder.Append(subclass.subclassName);
+                builder.Append(": ");
+                builder.AppendLine(subclass.passiveDescription);
+            }
+
+            return builder.ToString().TrimEnd();
         }
 
         static string BuildMechanicDescription(EnemyData enemy)

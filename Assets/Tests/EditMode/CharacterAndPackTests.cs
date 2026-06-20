@@ -127,6 +127,111 @@ namespace JuegoDeCartas.Tests
         }
 
         [Test]
+        public void EveryCharacterHasThreeOwnedSubclasses()
+        {
+            CharacterData[] characters =
+            {
+                AssetDatabase.LoadAssetAtPath<CharacterData>("Assets/GameData/Characters/Caballero.asset"),
+                AssetDatabase.LoadAssetAtPath<CharacterData>("Assets/GameData/Characters/Mago.asset"),
+                AssetDatabase.LoadAssetAtPath<CharacterData>("Assets/GameData/Characters/Picaro.asset")
+            };
+
+            foreach (CharacterData character in characters)
+            {
+                Assert.NotNull(character);
+                Assert.AreEqual(3, character.subclasses.Count);
+                Assert.IsTrue(character.subclasses.All(subclass =>
+                    subclass != null &&
+                    subclass.character == character &&
+                    !string.IsNullOrWhiteSpace(subclass.subclassName) &&
+                    !string.IsNullOrWhiteSpace(subclass.passiveDescription)));
+                Assert.AreEqual(3, character.subclasses.Select(subclass => subclass.passiveType).Distinct().Count());
+            }
+        }
+
+        [TestCase(4, 2)]
+        [TestCase(5, 3)]
+        [TestCase(6, 3)]
+        public void SubclassSelectionCombatUsesRunMidpoint(int combats, int expected)
+        {
+            WaveManager waves = new WaveManager { totalCombats = combats };
+            Assert.AreEqual(expected, waves.SubclassSelectionCombat);
+        }
+
+        [Test]
+        public void RunCanSelectOnlyOneOwnedSubclass()
+        {
+            CharacterData character = ScriptableObject.CreateInstance<CharacterData>();
+            SubclassData first = ScriptableObject.CreateInstance<SubclassData>();
+            SubclassData second = ScriptableObject.CreateInstance<SubclassData>();
+            first.character = character;
+            second.character = character;
+            character.subclasses = new List<SubclassData> { first, second };
+
+            CharacterRunState.Select(character);
+
+            Assert.IsTrue(CharacterRunState.SelectSubclass(first));
+            Assert.AreSame(first, CharacterRunState.SelectedSubclass);
+            Assert.IsFalse(CharacterRunState.SelectSubclass(second));
+            Assert.AreSame(first, CharacterRunState.SelectedSubclass);
+
+            Object.DestroyImmediate(first);
+            Object.DestroyImmediate(second);
+            Object.DestroyImmediate(character);
+        }
+
+        [Test]
+        public void SubclassPassivesApplyManaBuffStackingAndArmorRetention()
+        {
+            CharacterData character = ScriptableObject.CreateInstance<CharacterData>();
+            SubclassData channeler = ScriptableObject.CreateInstance<SubclassData>();
+            channeler.character = character;
+            channeler.passiveType = SubclassPassiveType.BonusMaxMana;
+            channeler.amount = 1;
+            character.subclasses = new List<SubclassData> { channeler };
+
+            GameObject root = new GameObject("SubclassBattleTest");
+            BattleManager battle = root.AddComponent<BattleManager>();
+            battle.player = new Entity();
+            battle.player.stats.maxMana = 3;
+            battle.player.stats.mana = 2;
+            battle.deckManager = root.AddComponent<DeckManager>();
+
+            CharacterRunState.Select(character);
+            Assert.IsTrue(battle.ActivateSubclass(channeler));
+            Assert.AreEqual(4, battle.player.stats.maxMana);
+            Assert.AreEqual(3, battle.player.stats.mana);
+
+            CharacterRunState.Clear();
+            SubclassData leader = ScriptableObject.CreateInstance<SubclassData>();
+            leader.character = character;
+            leader.passiveType = SubclassPassiveType.StackDamageBuffs;
+            character.subclasses = new List<SubclassData> { leader };
+            CharacterRunState.Select(character);
+            Assert.IsTrue(battle.ActivateSubclass(leader));
+            battle.ApplyPlayerDamageBonus(3, 2);
+            battle.ApplyPlayerDamageBonus(5, 4);
+            Assert.AreEqual(8, battle.playerDamageBonus);
+            Assert.AreEqual(4, battle.playerDamageBonusTurnsRemaining);
+
+            CharacterRunState.Clear();
+            SubclassData bastion = ScriptableObject.CreateInstance<SubclassData>();
+            bastion.character = character;
+            bastion.passiveType = SubclassPassiveType.RetainArmor;
+            bastion.percentage = 50;
+            character.subclasses = new List<SubclassData> { bastion };
+            CharacterRunState.Select(character);
+            Assert.IsTrue(battle.ActivateSubclass(bastion));
+            Assert.AreEqual(9, battle.GetArmorAtPlayerTurnStart(19));
+
+            Object.DestroyImmediate(root);
+            Object.DestroyImmediate(channeler);
+            Object.DestroyImmediate(leader);
+            Object.DestroyImmediate(bastion);
+            Object.DestroyImmediate(character);
+        }
+
+        [Test]
         public void PackGeneratorReturnsRequestedCountWithoutDuplicates()
         {
             ItemPackData pack = ScriptableObject.CreateInstance<ItemPackData>();
@@ -340,6 +445,46 @@ namespace JuegoDeCartas.Tests
             Assert.IsTrue(offer.Claimed);
             Assert.IsFalse(fixture.upgradePanel.activeSelf);
             Assert.IsTrue(fixture.shopContent.activeSelf);
+
+            fixture.Destroy();
+            Object.DestroyImmediate(upgrade);
+            Object.DestroyImmediate(offer.Definition);
+            Object.DestroyImmediate(cardData);
+        }
+
+        [Test]
+        public void CancellingUpgradeReturnsToPackWithoutClaimingOrChangingCard()
+        {
+            ShopFixture fixture = CreateShopFixture(true);
+            ConfigureUpgradeSelection(fixture);
+            fixture.gameManager.dinero = 300;
+
+            CardData cardData = ScriptableObject.CreateInstance<CardData>();
+            cardData.cardName = "Carta";
+            cardData.cost = 2;
+            cardData.upgradeOptions = new List<CardUpgradeOption>
+            {
+                new CardUpgradeOption { upgradeName = "Mejora", costReduction = 1 }
+            };
+            Card card = new Card(cardData);
+            fixture.battle.deckManager.hand.Add(card);
+
+            ArticuloData upgrade = CreateItem("MejorarCancelado", Rareza.Raro);
+            upgrade.tipoEfecto = TipoEfectoArticulo.MejorarCarta;
+            ItemPackOffer offer = CreateOffer(upgrade, 200);
+
+            Assert.IsTrue(fixture.shop.TryPurchasePack(offer));
+            Assert.IsTrue(fixture.shop.TryClaimItem(offer, upgrade));
+            fixture.cardSelection.contentParent.GetComponentInChildren<Button>().onClick.Invoke();
+            Assert.IsTrue(fixture.upgradePanel.activeSelf);
+
+            fixture.upgradeSelection.Cancel();
+
+            Assert.IsFalse(fixture.upgradePanel.activeSelf);
+            Assert.IsTrue(fixture.packPanel.activeSelf);
+            Assert.IsFalse(offer.Claimed);
+            Assert.IsFalse(card.upgraded);
+            Assert.AreEqual(-1, card.selectedUpgradeIndex);
 
             fixture.Destroy();
             Object.DestroyImmediate(upgrade);

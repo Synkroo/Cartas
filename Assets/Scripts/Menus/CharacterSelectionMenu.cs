@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using JuegoDeCartas.Cards;
 using JuegoDeCartas.Characters;
 using JuegoDeCartas.Missions;
+using JuegoDeCartas.Progression;
 
 namespace JuegoDeCartas.UI
 {
@@ -148,7 +149,9 @@ namespace JuegoDeCartas.UI
             if (descriptionText != null)
                 descriptionText.text = hasCharacter ? selected.description : "";
             if (mechanicText != null)
-                mechanicText.text = hasCharacter ? selected.mechanicDescription : "";
+                mechanicText.text = hasCharacter
+                    ? selected.mechanicDescription + BuildSubclassPreview(selected)
+                    : "";
             if (statsText != null)
             {
                 statsText.text = hasCharacter
@@ -224,6 +227,37 @@ namespace JuegoDeCartas.UI
             }
 
             return 0;
+        }
+
+        static string BuildSubclassPreview(CharacterData character)
+        {
+            if (character == null || character.subclasses == null || character.subclasses.Count == 0)
+                return "";
+
+            var builder = new System.Text.StringBuilder();
+            builder.AppendLine();
+            builder.AppendLine();
+            builder.AppendLine("Subclases de mitad de run:");
+
+            for (int i = 0; i < character.subclasses.Count; i++)
+            {
+                SubclassData subclass = character.subclasses[i];
+                if (subclass == null)
+                    continue;
+
+                if (!CollectionProgress.IsSubclassSeen(subclass))
+                {
+                    builder.AppendLine("- ???");
+                    continue;
+                }
+
+                builder.Append("- ");
+                builder.Append(subclass.subclassName);
+                builder.Append(": ");
+                builder.AppendLine(subclass.passiveDescription);
+            }
+
+            return builder.ToString().TrimEnd();
         }
 
         void FadeTo(float target, System.Action completed = null)

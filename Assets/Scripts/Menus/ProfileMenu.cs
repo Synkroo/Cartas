@@ -116,7 +116,8 @@ namespace JuegoDeCartas.UI
         float CalculateCompletionForSlot(int slot)
         {
             int completed = 0;
-            int total = enemies.Count + items.Count + packs.Count + cards.Count + heroes.Count;
+            int total = enemies.Count + items.Count + packs.Count + cards.Count + heroes.Count +
+                        GetSubclassCount();
 
             for (int i = 0; i < enemies.Count; i++)
                 if (HasCollectionFlag(slot, "EnemySeen", enemies[i])) completed++;
@@ -128,6 +129,14 @@ namespace JuegoDeCartas.UI
                 if (GetCollectionCount(slot, "CardUsed", cards[i]) > 0) completed++;
             for (int i = 0; i < heroes.Count; i++)
                 if (IsHeroUnlockedInSlot(slot, heroes[i])) completed++;
+            for (int i = 0; i < heroes.Count; i++)
+            {
+                CharacterData hero = heroes[i];
+                if (hero == null || hero.subclasses == null)
+                    continue;
+                for (int s = 0; s < hero.subclasses.Count; s++)
+                    if (HasCollectionFlag(slot, "SubclassSeen", hero.subclasses[s])) completed++;
+            }
 
             total += missions.Count * heroes.Count * 3;
             for (int m = 0; m < missions.Count; m++)
@@ -158,7 +167,8 @@ namespace JuegoDeCartas.UI
                 return 1f;
 
             int completed = 0;
-            int total = enemies.Count + items.Count + packs.Count + cards.Count + heroes.Count;
+            int total = enemies.Count + items.Count + packs.Count + cards.Count + heroes.Count +
+                        GetSubclassCount();
 
             for (int i = 0; i < enemies.Count; i++)
                 if (CollectionProgress.IsEnemySeen(enemies[i])) completed++;
@@ -170,6 +180,14 @@ namespace JuegoDeCartas.UI
                 if (CollectionProgress.GetCardUsedCount(cards[i]) > 0) completed++;
             for (int i = 0; i < heroes.Count; i++)
                 if (heroes[i] != null && heroes[i].IsUnlocked) completed++;
+            for (int i = 0; i < heroes.Count; i++)
+            {
+                CharacterData hero = heroes[i];
+                if (hero == null || hero.subclasses == null)
+                    continue;
+                for (int s = 0; s < hero.subclasses.Count; s++)
+                    if (CollectionProgress.IsSubclassSeen(hero.subclasses[s])) completed++;
+            }
 
             int medalTotal = missions.Count * heroes.Count * 3;
             total += medalTotal;
@@ -190,6 +208,18 @@ namespace JuegoDeCartas.UI
             }
 
             return total > 0 ? Mathf.Clamp01((float)completed / total) : 0f;
+        }
+
+        int GetSubclassCount()
+        {
+            int count = 0;
+            for (int i = 0; i < heroes.Count; i++)
+            {
+                CharacterData hero = heroes[i];
+                if (hero != null && hero.subclasses != null)
+                    count += hero.subclasses.Count;
+            }
+            return count;
         }
 
         static bool HasCollectionFlag(int slot, string category, Object asset)

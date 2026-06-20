@@ -9,6 +9,7 @@ using JuegoDeCartas.Articulos;
 using JuegoDeCartas.Cards;
 using JuegoDeCartas.Missions;
 using JuegoDeCartas.Progression;
+using JuegoDeCartas.Characters;
 
 namespace JuegoDeCartas.UI
 {
@@ -24,6 +25,7 @@ namespace JuegoDeCartas.UI
         public CardSelectionUI cardSelectionUI;
 
         public UpgradeSelectionUI upgradeSelectionUI;
+        public SubclassSelectionUI subclassSelectionUI;
 
         public GameObject shopPanel;
         public UITransitionAnimator shopTransition;
@@ -134,12 +136,8 @@ namespace JuegoDeCartas.UI
 
             if (shopPanel != null)
                 shopPanel.SetActive(true);
-            SetShopContentVisible(true);
             if (shopTransition != null)
                 shopTransition.PlayIn();
-
-            ClearSlots();
-            GenerateAndPopulatePacks();
 
             SetActiveAndBlockOthers();
 
@@ -149,6 +147,57 @@ namespace JuegoDeCartas.UI
             if (menusRaycaster != null)
                 menusRaycaster.enabled = true;
 
+            if (!TryOpenSubclassSelection())
+                ShowPackShop();
+        }
+
+        bool TryOpenSubclassSelection()
+        {
+            CharacterData character = CharacterRunState.SelectedCharacter;
+            if (CharacterRunState.HasSubclass ||
+                character == null ||
+                character.subclasses == null ||
+                character.subclasses.Count == 0 ||
+                battle == null ||
+                battle.waveManager == null ||
+                battle.waveManager.CompletedCombatCount != battle.waveManager.SubclassSelectionCombat ||
+                subclassSelectionUI == null)
+            {
+                return false;
+            }
+
+            SetShopContentVisible(false);
+            for (int i = 0; i < character.subclasses.Count; i++)
+                CollectionProgress.MarkSubclassSeen(character.subclasses[i]);
+            ProfilePrefs.Save();
+
+            if (subclassSelectionUI.Open(character, SelectSubclass))
+                return true;
+
+            SetShopContentVisible(true);
+            return false;
+        }
+
+        void SelectSubclass(SubclassData subclass)
+        {
+            if (battle == null || !battle.ActivateSubclass(subclass))
+            {
+                if (!TryOpenSubclassSelection())
+                    ShowPackShop();
+                return;
+            }
+
+            ShowPackShop();
+        }
+
+        void ShowPackShop()
+        {
+            if (subclassSelectionUI != null)
+                subclassSelectionUI.Close();
+
+            SetShopContentVisible(true);
+            ClearSlots();
+            GenerateAndPopulatePacks();
             UpdateDineroUI();
 
             if (shopTitleText != null)
@@ -300,7 +349,7 @@ namespace JuegoDeCartas.UI
                         {
                             ItemEffectApplier.CompleteSelectedUpgrade(item, battle);
                             CompleteClaim(offer);
-                        }))
+                        }, () => packSelectionUI.ShowCurrent()))
                     {
                         return;
                     }
@@ -385,6 +434,8 @@ namespace JuegoDeCartas.UI
 
             if (shopPanel != null)
                 shopPanel.SetActive(false);
+            if (subclassSelectionUI != null)
+                subclassSelectionUI.Close();
             SetShopContentVisible(true);
             if (menusCanvas != null)
                 menusCanvas.enabled = false;

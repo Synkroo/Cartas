@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05a47fab1d20770468c4266131ee4d03, type: 3}
+  m_Name: Duelista
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
+  subclassName: Duelista
+  icon: {fileID: 0}
+  description: Abre cada turno con un golpe preciso.
+  passiveDescription: La primera carta que inflige dano cada turno causa 5 de dano
+    adicional.
+  character: {fileID: 11400000, guid: 8bebb5ff9ba7a1c4f8de39aeef561d4b, type: 2}
+  passiveType: 6
+  amount: 5
+  triggerCount: 1
+  percentage: 0

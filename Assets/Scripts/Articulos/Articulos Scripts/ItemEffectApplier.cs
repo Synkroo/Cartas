@@ -25,8 +25,7 @@ namespace JuegoDeCartas.Articulos
                     break;
 
                 case TipoEfectoArticulo.DarArmadura:
-                    battle.player.stats.armor += item.cantidad;
-                    battle.player.stats.Clamp();
+                    battle.GainPlayerArmor(item.cantidad);
                     break;
 
                 case TipoEfectoArticulo.AumentarRobo:

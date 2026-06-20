@@ -32,6 +32,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c1713dd55b63bc641bb84848649d6154, type: 2}
   - {fileID: 11400000, guid: c1713dd55b63bc641bb84848649d6154, type: 2}
   - {fileID: 11400000, guid: 94df614082522b741b9080c0ee5955f5, type: 2}
+  subclasses:
+  - {fileID: 11400000, guid: 54bd3c2c213c39148bf1971335c82037, type: 2}
+  - {fileID: 11400000, guid: 2939f8cdd3b556047b4273d105690449, type: 2}
+  - {fileID: 11400000, guid: a60a5f38f52172b42ba589a8fd5fcf7d, type: 2}
   unlockedByDefault: 0
   comingSoon: 0
   unlockCondition: {fileID: 11400000, guid: 0f3b1e7c92104c5448eaa616dd16f8f5, type: 2}
