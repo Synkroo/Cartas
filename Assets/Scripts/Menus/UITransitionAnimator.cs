@@ -32,6 +32,11 @@ namespace JuegoDeCartas.UI
             StartTransition(true, delay, null);
         }
 
+        public void CaptureCurrentAsVisible()
+        {
+            Cache(true);
+        }
+
         public void PlayOut(Action completed = null)
         {
             Cache();
@@ -84,9 +89,9 @@ namespace JuegoDeCartas.UI
             completed?.Invoke();
         }
 
-        void Cache()
+        void Cache(bool refresh = false)
         {
-            if (cached)
+            if (cached && !refresh)
                 return;
 
             if (target == null)

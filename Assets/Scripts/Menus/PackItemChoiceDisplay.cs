@@ -53,8 +53,15 @@ namespace JuegoDeCartas.UI
                 background.color = GetRarityColor(item.rareza);
             if (button != null)
                 button.interactable = canSelect;
+        }
+
+        public void PlayEntrance(float entranceDelay = 0f)
+        {
             if (transition != null)
+            {
+                transition.CaptureCurrentAsVisible();
                 transition.PlayIn(entranceDelay);
+            }
         }
 
         void Select()

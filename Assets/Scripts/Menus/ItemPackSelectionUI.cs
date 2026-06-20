@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using JuegoDeCartas.Articulos;
@@ -83,6 +84,8 @@ namespace JuegoDeCartas.UI
 
         void Render()
         {
+            var displays = new List<PackItemChoiceDisplay>();
+
             for (int i = content.childCount - 1; i >= 0; i--)
             {
                 Transform childTransform = content.GetChild(i);
@@ -108,8 +111,19 @@ namespace JuegoDeCartas.UI
                 instance.SetActive(true);
                 PackItemChoiceDisplay display = instance.GetComponent<PackItemChoiceDisplay>();
                 if (display != null)
-                    display.Setup(item, canSelect == null || canSelect(item), Select, i * 0.06f);
+                {
+                    display.Setup(item, canSelect == null || canSelect(item), Select);
+                    displays.Add(display);
+                }
             }
+
+            Canvas.ForceUpdateCanvases();
+            if (content is RectTransform contentRect)
+                LayoutRebuilder.ForceRebuildLayoutImmediate(contentRect);
+            Canvas.ForceUpdateCanvases();
+
+            for (int i = 0; i < displays.Count; i++)
+                displays[i].PlayEntrance(i * 0.06f);
 
             ProfilePrefs.Save();
         }
