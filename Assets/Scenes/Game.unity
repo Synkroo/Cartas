@@ -9168,6 +9168,11 @@ MonoBehaviour:
   upgradeSelectionUI: {fileID: 1060456277}
   shopPanel: {fileID: 1060456272}
   shopTransition: {fileID: 1060456278}
+  shopContentObjects:
+  - {fileID: 1288502820}
+  - {fileID: 814971873}
+  - {fileID: 1784110934}
+  - {fileID: 987814292}
   dineroText: {fileID: 1308803593}
   menusCanvas: {fileID: 331000001}
   pauseTime: 1

@@ -3,6 +3,7 @@ using JuegoDeCartas.Articulos;
 using JuegoDeCartas.Cards;
 using JuegoDeCartas.Managers;
 using JuegoDeCartas.Effects;
+using JuegoDeCartas.UI;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -150,6 +151,37 @@ namespace JuegoDeCartas.Tests
             Object.DestroyImmediate(first);
             Object.DestroyImmediate(second);
             Object.DestroyImmediate(gameObject);
+        }
+
+        [Test]
+        public void HandRenderRemovesOldChildrenBeforeLayingOutNewCards()
+        {
+            GameObject root = new GameObject("HandRenderTest");
+            GameObject handObject = new GameObject("Hand");
+            handObject.transform.SetParent(root.transform);
+            new GameObject("OldCardA").transform.SetParent(handObject.transform);
+            new GameObject("OldCardB").transform.SetParent(handObject.transform);
+
+            GameObject prefab = new GameObject(
+                "CardPrefab",
+                typeof(RectTransform),
+                typeof(CardView));
+            prefab.transform.SetParent(root.transform);
+
+            CardData data = ScriptableObject.CreateInstance<CardData>();
+            HandRenderer renderer = new HandRenderer
+            {
+                handParent = handObject.transform,
+                cardPrefab = prefab
+            };
+
+            renderer.Render(new List<Card> { new Card(data) }, null);
+
+            Assert.AreEqual(1, handObject.transform.childCount);
+            Assert.AreEqual("CardPrefab(Clone)", handObject.transform.GetChild(0).name);
+
+            Object.DestroyImmediate(data);
+            Object.DestroyImmediate(root);
         }
     }
 }

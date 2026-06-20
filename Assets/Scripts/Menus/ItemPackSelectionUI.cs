@@ -44,8 +44,8 @@ namespace JuegoDeCartas.UI
             canSelect = selectionValidator;
             onSelected = selected;
             onCancelled = cancelled;
-            Render();
             panel.SetActive(true);
+            Render();
             if (transition != null)
                 transition.PlayIn();
             return true;
@@ -55,8 +55,8 @@ namespace JuegoDeCartas.UI
         {
             if (currentOffer == null || panel == null)
                 return;
-            Render();
             panel.SetActive(true);
+            Render();
             if (transition != null)
                 transition.PlayIn();
         }
@@ -85,7 +85,9 @@ namespace JuegoDeCartas.UI
         {
             for (int i = content.childCount - 1; i >= 0; i--)
             {
-                GameObject child = content.GetChild(i).gameObject;
+                Transform childTransform = content.GetChild(i);
+                childTransform.SetParent(null, false);
+                GameObject child = childTransform.gameObject;
                 if (Application.isPlaying)
                     Destroy(child);
                 else
@@ -103,6 +105,7 @@ namespace JuegoDeCartas.UI
 
                 CollectionProgress.MarkItemSeen(item);
                 GameObject instance = Instantiate(itemChoicePrefab, content);
+                instance.SetActive(true);
                 PackItemChoiceDisplay display = instance.GetComponent<PackItemChoiceDisplay>();
                 if (display != null)
                     display.Setup(item, canSelect == null || canSelect(item), Select, i * 0.06f);

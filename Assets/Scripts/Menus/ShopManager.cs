@@ -28,6 +28,9 @@ namespace JuegoDeCartas.UI
         public GameObject shopPanel;
         public UITransitionAnimator shopTransition;
 
+        [Header("Shop Content")]
+        public List<GameObject> shopContentObjects = new List<GameObject>();
+
         public TextMeshProUGUI dineroText;
 
         public Canvas menusCanvas;
@@ -131,6 +134,7 @@ namespace JuegoDeCartas.UI
 
             if (shopPanel != null)
                 shopPanel.SetActive(true);
+            SetShopContentVisible(true);
             if (shopTransition != null)
                 shopTransition.PlayIn();
 
@@ -160,7 +164,16 @@ namespace JuegoDeCartas.UI
         void ClearSlots()
         {
             foreach (var go in spawnedItems)
-                if (go != null) Destroy(go);
+            {
+                if (go == null)
+                    continue;
+
+                go.transform.SetParent(null, false);
+                if (Application.isPlaying)
+                    Destroy(go);
+                else
+                    DestroyImmediate(go);
+            }
             spawnedItems.Clear();
         }
 
@@ -224,8 +237,7 @@ namespace JuegoDeCartas.UI
             gameManager.dinero -= price;
             UpdateDineroUI();
 
-            if (shopPanel != null)
-                shopPanel.SetActive(false);
+            SetShopContentVisible(false);
 
             if (!packSelectionUI.Open(
                 offer,
@@ -235,8 +247,7 @@ namespace JuegoDeCartas.UI
             {
                 gameManager.dinero += price;
                 UpdateDineroUI();
-                if (shopPanel != null)
-                    shopPanel.SetActive(true);
+                SetShopContentVisible(true);
                 return false;
             }
 
@@ -285,7 +296,11 @@ namespace JuegoDeCartas.UI
                     if (item.tipoEfecto == TipoEfectoArticulo.MejorarCarta &&
                         upgradeSelectionUI != null &&
                         upgradeSelectionUI.IsConfigured &&
-                        upgradeSelectionUI.Show(selected, () => CompleteClaim(offer)))
+                        upgradeSelectionUI.Show(selected, () =>
+                        {
+                            ItemEffectApplier.CompleteSelectedUpgrade(item, battle);
+                            CompleteClaim(offer);
+                        }))
                     {
                         return;
                     }
@@ -322,6 +337,17 @@ namespace JuegoDeCartas.UI
                 packSelectionUI.Close();
             if (shopPanel != null)
                 shopPanel.SetActive(true);
+            SetShopContentVisible(true);
+        }
+
+        void SetShopContentVisible(bool visible)
+        {
+            for (int i = 0; i < shopContentObjects.Count; i++)
+            {
+                GameObject contentObject = shopContentObjects[i];
+                if (contentObject != null)
+                    contentObject.SetActive(visible);
+            }
         }
 
         void SetActiveAndBlockOthers()
@@ -359,6 +385,7 @@ namespace JuegoDeCartas.UI
 
             if (shopPanel != null)
                 shopPanel.SetActive(false);
+            SetShopContentVisible(true);
             if (menusCanvas != null)
                 menusCanvas.enabled = false;
             if (pauseTime)
@@ -443,6 +470,7 @@ namespace JuegoDeCartas.UI
             deckViewer.onClose -= OnDeckViewerClosed;
             if (shopPanel != null)
                 shopPanel.SetActive(true);
+            SetShopContentVisible(true);
         }
 
         public void OnRestock()

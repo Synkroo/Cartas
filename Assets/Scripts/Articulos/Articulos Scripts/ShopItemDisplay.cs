@@ -239,11 +239,10 @@ namespace JuegoDeCartas.UI
                             var upgradeUI = shopManager.upgradeSelectionUI;
                             if (upgradeUI != null && upgradeUI.IsConfigured && upgradeUI.Show(selected, () =>
                             {
+                                ItemEffectApplier.CompleteSelectedUpgrade(capturedItem, capturedBattle);
                                 if (capturedButton != null)
                                     capturedButton.interactable = false;
                                 capturedGO.SetActive(false);
-                                if (battle != null)
-                                    battle.RenderHand();
                             }))
                             {
                                 return;

@@ -107,8 +107,17 @@ namespace JuegoDeCartas.UI
             int statusCount = 0;
             int currentArmor = Mathf.Max(0, enemy.stats.armor);
 
-            SetEnemyArmorVisible(currentArmor > 0);
-            SetText(enemyArmorText, currentArmor.ToString());
+            SetEnemyArmorVisible(false);
+            if (currentArmor > 0)
+            {
+                SetEnemyStatus(
+                    statusCount++,
+                    enemyArmorStatusSprite,
+                    currentArmor.ToString(),
+                    "Armadura actual",
+                    "Bloquea los proximos " + currentArmor + " puntos de dano."
+                );
+            }
 
             if (enemy.data != null && enemy.data.mechanics != null)
             {

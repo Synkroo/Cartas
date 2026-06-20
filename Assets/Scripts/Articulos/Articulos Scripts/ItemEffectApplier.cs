@@ -215,6 +215,17 @@ namespace JuegoDeCartas.Articulos
             battle.UpdateUI();
         }
 
+        public static void CompleteSelectedUpgrade(ArticuloData item, BattleManager battle)
+        {
+            if (item == null || battle == null || battle.deckManager == null)
+                return;
+
+            CollectionProgress.MarkItemUsed(item);
+            battle.RenderHand();
+            battle.deckManager.OnDeckChanged?.Invoke();
+            battle.UpdateUI();
+        }
+
         static void RemoveSelectedCard(BattleManager battle, Card selected)
         {
             if (battle == null || selected == null)

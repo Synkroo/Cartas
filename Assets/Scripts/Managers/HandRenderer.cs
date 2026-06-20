@@ -16,8 +16,15 @@ namespace JuegoDeCartas.Managers
             if (handParent == null || cardPrefab == null || hand == null)
                 return;
 
-            foreach (Transform child in handParent)
-                Object.Destroy(child.gameObject);
+            for (int i = handParent.childCount - 1; i >= 0; i--)
+            {
+                Transform child = handParent.GetChild(i);
+                child.SetParent(null, false);
+                if (Application.isPlaying)
+                    Object.Destroy(child.gameObject);
+                else
+                    Object.DestroyImmediate(child.gameObject);
+            }
 
             foreach (var card in hand)
             {

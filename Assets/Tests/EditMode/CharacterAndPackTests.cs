@@ -260,15 +260,89 @@ namespace JuegoDeCartas.Tests
             Assert.IsTrue(fixture.shop.TryClaimItem(offer, duplicate));
             Assert.IsFalse(fixture.packPanel.activeSelf);
             Assert.IsTrue(fixture.cardPanel.activeSelf);
+            Assert.IsTrue(fixture.cardPanel.activeInHierarchy);
+            Assert.IsFalse(fixture.shopContent.activeSelf);
 
             fixture.cardSelection.Close();
 
             Assert.IsTrue(fixture.packPanel.activeSelf);
             Assert.IsFalse(fixture.cardPanel.activeSelf);
+            Assert.IsFalse(fixture.shopContent.activeSelf);
             Assert.IsFalse(offer.Claimed);
 
             fixture.Destroy();
             Object.DestroyImmediate(duplicate);
+            Object.DestroyImmediate(offer.Definition);
+            Object.DestroyImmediate(cardData);
+        }
+
+        [Test]
+        public void CardSelectionClosesBeforeInvokingSelectionCallback()
+        {
+            ShopFixture fixture = CreateShopFixture(true);
+            CardData cardData = ScriptableObject.CreateInstance<CardData>();
+            Card card = new Card(cardData);
+            bool callbackSawClosedPanel = false;
+
+            fixture.cardSelection.OpenForSelection(
+                new List<Card> { card },
+                "Seleccion",
+                _ => callbackSawClosedPanel = !fixture.cardPanel.activeInHierarchy,
+                null);
+
+            Button cardButton = fixture.cardSelection.contentParent.GetComponentInChildren<Button>();
+            Assert.NotNull(cardButton);
+            cardButton.onClick.Invoke();
+
+            Assert.IsTrue(callbackSawClosedPanel);
+            Assert.IsFalse(fixture.cardPanel.activeSelf);
+
+            fixture.Destroy();
+            Object.DestroyImmediate(cardData);
+        }
+
+        [Test]
+        public void UpgradePackFlowCompletesWithoutLeavingHiddenSelection()
+        {
+            ShopFixture fixture = CreateShopFixture(true);
+            ConfigureUpgradeSelection(fixture);
+            fixture.gameManager.dinero = 300;
+
+            CardData cardData = ScriptableObject.CreateInstance<CardData>();
+            cardData.cardName = "Carta";
+            cardData.cost = 2;
+            cardData.upgradeOptions = new List<CardUpgradeOption>
+            {
+                new CardUpgradeOption { upgradeName = "Mejora", costReduction = 1 }
+            };
+            Card card = new Card(cardData);
+            fixture.battle.deckManager.hand.Add(card);
+
+            ArticuloData upgrade = CreateItem("Mejorar", Rareza.Raro);
+            upgrade.tipoEfecto = TipoEfectoArticulo.MejorarCarta;
+            ItemPackOffer offer = CreateOffer(upgrade, 200);
+
+            Assert.IsTrue(fixture.shop.TryPurchasePack(offer));
+            Assert.IsTrue(fixture.shop.TryClaimItem(offer, upgrade));
+            Assert.IsTrue(fixture.cardPanel.activeInHierarchy);
+
+            Button cardButton = fixture.cardSelection.contentParent.GetComponentInChildren<Button>();
+            Assert.NotNull(cardButton);
+            cardButton.onClick.Invoke();
+
+            Assert.IsFalse(fixture.cardPanel.activeSelf);
+            Assert.IsTrue(fixture.upgradePanel.activeInHierarchy);
+
+            fixture.upgradeSelection.upgradeButtons[0].onClick.Invoke();
+
+            Assert.IsTrue(card.upgraded);
+            Assert.AreEqual(0, card.selectedUpgradeIndex);
+            Assert.IsTrue(offer.Claimed);
+            Assert.IsFalse(fixture.upgradePanel.activeSelf);
+            Assert.IsTrue(fixture.shopContent.activeSelf);
+
+            fixture.Destroy();
+            Object.DestroyImmediate(upgrade);
             Object.DestroyImmediate(offer.Definition);
             Object.DestroyImmediate(cardData);
         }
@@ -393,6 +467,9 @@ namespace JuegoDeCartas.Tests
             fixture.shopPanel = new GameObject("ShopPanel");
             fixture.shopPanel.transform.SetParent(fixture.root.transform);
             fixture.shop.shopPanel = fixture.shopPanel;
+            fixture.shopContent = new GameObject("ShopContent");
+            fixture.shopContent.transform.SetParent(fixture.shopPanel.transform);
+            fixture.shop.shopContentObjects = new List<GameObject> { fixture.shopContent };
 
             fixture.packPanel = new GameObject("PackPanel");
             fixture.packPanel.transform.SetParent(fixture.root.transform);
@@ -416,7 +493,7 @@ namespace JuegoDeCartas.Tests
             if (withCardSelection)
             {
                 fixture.cardPanel = new GameObject("CardPanel");
-                fixture.cardPanel.transform.SetParent(fixture.root.transform);
+                fixture.cardPanel.transform.SetParent(fixture.shopPanel.transform);
                 fixture.cardPanel.SetActive(false);
                 GameObject cardContent = new GameObject("CardContent");
                 cardContent.transform.SetParent(fixture.cardPanel.transform);
@@ -433,6 +510,28 @@ namespace JuegoDeCartas.Tests
             }
 
             return fixture;
+        }
+
+        static void ConfigureUpgradeSelection(ShopFixture fixture)
+        {
+            fixture.upgradePanel = new GameObject("UpgradePanel");
+            fixture.upgradePanel.transform.SetParent(fixture.root.transform);
+            fixture.upgradePanel.SetActive(false);
+            fixture.upgradeOverlay = new GameObject("UpgradeOverlay");
+            fixture.upgradeOverlay.transform.SetParent(fixture.root.transform);
+            fixture.upgradeOverlay.SetActive(false);
+
+            GameObject buttonObject = new GameObject("UpgradeButton", typeof(RectTransform), typeof(Button));
+            buttonObject.transform.SetParent(fixture.upgradePanel.transform);
+
+            fixture.upgradeSelection = fixture.root.AddComponent<UpgradeSelectionUI>();
+            fixture.upgradeSelection.panel = fixture.upgradePanel;
+            fixture.upgradeSelection.overlay = fixture.upgradeOverlay;
+            fixture.upgradeSelection.upgradeButtons = new List<Button>
+            {
+                buttonObject.GetComponent<Button>()
+            };
+            fixture.shop.upgradeSelectionUI = fixture.upgradeSelection;
         }
 
         static ItemPackOffer CreateOffer(ArticuloData item, int price)
@@ -506,6 +605,7 @@ namespace JuegoDeCartas.Tests
             public GameManager gameManager;
             public BattleManager battle;
             public GameObject shopPanel;
+            public GameObject shopContent;
             public GameObject packPanel;
             public GameObject packContent;
             public GameObject choicePrefab;
@@ -513,6 +613,9 @@ namespace JuegoDeCartas.Tests
             public GameObject cardPanel;
             public CardSelectionUI cardSelection;
             public ItemPackSelectionUI packSelection;
+            public GameObject upgradePanel;
+            public GameObject upgradeOverlay;
+            public UpgradeSelectionUI upgradeSelection;
 
             public void Destroy()
             {

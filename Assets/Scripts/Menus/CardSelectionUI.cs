@@ -71,7 +71,14 @@ namespace JuegoDeCartas.UI
             onCancel = onCancelAction;
 
             for (int i = contentParent.childCount - 1; i >= 0; i--)
-                Destroy(contentParent.GetChild(i).gameObject);
+            {
+                Transform child = contentParent.GetChild(i);
+                child.SetParent(null, false);
+                if (Application.isPlaying)
+                    Destroy(child.gameObject);
+                else
+                    DestroyImmediate(child.gameObject);
+            }
 
             panel.SetActive(true);
 
@@ -143,22 +150,28 @@ namespace JuegoDeCartas.UI
 
         void SelectCard(Card card)
         {
+            Action<Card> selected = onCardSelected;
+            onCardSelected = null;
             onCancel = null;
-            onCardSelected?.Invoke(card);
-            Close();
+            HideAndNotifyClosed();
+            selected?.Invoke(card);
         }
 
         public void Close()
         {
-            if (panel == null)
-                return;
-
-            panel.SetActive(false);
-            onCardSelected = null;
             var cancel = onCancel;
+            onCardSelected = null;
             onCancel = null;
-            onClose?.Invoke();
+            HideAndNotifyClosed();
             cancel?.Invoke();
+        }
+
+        void HideAndNotifyClosed()
+        {
+            if (panel != null)
+                panel.SetActive(false);
+
+            onClose?.Invoke();
         }
     }
 }
