@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using JuegoDeCartas.Challenges;
 
 namespace JuegoDeCartas.Missions
 {
@@ -167,6 +168,7 @@ namespace JuegoDeCartas.Missions
                 return;
 
             MissionRunState.SelectMission(selectedMission, selectedDifficulty);
+            ChallengeRunState.PrepareRun();
             onClosed = null;
             SceneManager.LoadScene(gameSceneName);
         }

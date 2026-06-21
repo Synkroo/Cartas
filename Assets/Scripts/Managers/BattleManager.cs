@@ -6,6 +6,7 @@ using JuegoDeCartas.Missions;
 using JuegoDeCartas.UI;
 using JuegoDeCartas.Characters;
 using JuegoDeCartas.Progression;
+using JuegoDeCartas.Challenges;
 
 namespace JuegoDeCartas.Managers
 {
@@ -57,6 +58,7 @@ namespace JuegoDeCartas.Managers
 
         void Start()
         {
+            Time.timeScale = 1f;
             ApplySelectedCharacter();
             CollectionProgress.RegisterRunStarted(CharacterRunState.SelectedCharacter);
 
@@ -163,7 +165,12 @@ namespace JuegoDeCartas.Managers
             }
 
             waveManager.finalBoss = mission.boss;
-            waveManager.totalCombats = Mathf.Max(1, mission.combatCount);
+            waveManager.totalCombats = Mathf.Max(
+                1,
+                ChallengeRunState.CombatCountOverride > 0
+                    ? ChallengeRunState.CombatCountOverride
+                    : mission.combatCount
+            );
             waveManager.miniBossFrequency = Mathf.Max(1, mission.miniBossFrequency);
         }
 
@@ -196,11 +203,17 @@ namespace JuegoDeCartas.Managers
                 statsTracker.PopulateStatsText();
 
             MissionData mission = MissionRunState.SelectedMission;
-            if (mission != null)
+            if (ChallengeRunState.IsActive)
+            {
+                ChallengeRunState.MarkCompleted();
+            }
+            else if (mission != null)
+            {
                 mission.MarkCompleted(
                     MissionRunState.SelectedDifficulty,
                     CharacterRunState.SelectedCharacter
                 );
+            }
 
             RecordRun(true);
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using JuegoDeCartas.Managers;
 using JuegoDeCartas.Missions;
+using JuegoDeCartas.Challenges;
 using UnityEngine;
 
 namespace JuegoDeCartas.Enemies
@@ -105,7 +106,7 @@ namespace JuegoDeCartas.Enemies
             int projectedModifier = GetProjectedDamageModifierForNextTurn();
             int minDamage = Mathf.Max(0, currentMinDamage + projectedModifier);
             int maxDamage = Mathf.Max(minDamage, currentMaxDamage + projectedModifier);
-            return UnityEngine.Random.Range(minDamage, maxDamage + 1);
+            return RunRandom.Range(minDamage, maxDamage + 1);
         }
 
         public int GetProjectedNextTurnArmorGain()

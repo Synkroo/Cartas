@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using JuegoDeCartas.Challenges;
 
 namespace JuegoDeCartas.Articulos
 {
@@ -28,7 +29,7 @@ namespace JuegoDeCartas.Articulos
 
             var random = seed.HasValue
                 ? new System.Random(seed.Value)
-                : new System.Random(UnityEngine.Random.Range(0, int.MaxValue));
+                : new System.Random(RunRandom.NextSeed());
             double roll = random.NextDouble() * totalWeight;
             float cumulative = 0f;
 
@@ -57,7 +58,7 @@ namespace JuegoDeCartas.Articulos
 
             var random = seed.HasValue
                 ? new System.Random(seed.Value)
-                : new System.Random(UnityEngine.Random.Range(0, int.MaxValue));
+                : new System.Random(RunRandom.NextSeed());
             int count = Mathf.Min(definition.choiceCount, available.Count);
 
             for (int i = 0; i < count; i++)

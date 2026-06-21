@@ -5,6 +5,7 @@ using JuegoDeCartas.Enemies;
 using JuegoDeCartas.Stats;
 using JuegoDeCartas.UI;
 using JuegoDeCartas.Progression;
+using JuegoDeCartas.Challenges;
 
 namespace JuegoDeCartas.Managers
 {
@@ -76,6 +77,12 @@ namespace JuegoDeCartas.Managers
 
             for (int combatNumber = 1; combatNumber <= lastCombatIndex; combatNumber++)
             {
+                if (ChallengeRunState.IsBossRush)
+                {
+                    runtimeWave.Add(finalBoss);
+                    continue;
+                }
+
                 if (combatNumber == lastCombatIndex)
                 {
                     runtimeWave.Add(finalBoss);
@@ -198,6 +205,20 @@ namespace JuegoDeCartas.Managers
             if (battleManager != null)
                 battleManager.ResetTemporaryCombatEffects();
 
+            if (ChallengeRunState.IsShopDisabled)
+            {
+                bool needsSubclassSelection =
+                    battleManager != null &&
+                    !JuegoDeCartas.Characters.CharacterRunState.HasSubclass &&
+                    CompletedCombatCount == SubclassSelectionCombat;
+
+                if (needsSubclassSelection && gameManager != null)
+                    gameManager.OpenShop();
+                else if (battleManager != null)
+                    battleManager.ContinueAfterShop();
+                return;
+            }
+
             if (gameManager != null)
                 gameManager.OpenShop();
         }
@@ -232,7 +253,7 @@ namespace JuegoDeCartas.Managers
             if (candidates.Count == 0)
                 return null;
 
-            int randomIndex = UnityEngine.Random.Range(0, candidates.Count);
+            int randomIndex = RunRandom.Range(0, candidates.Count);
             return candidates[randomIndex];
         }
 
@@ -241,7 +262,7 @@ namespace JuegoDeCartas.Managers
             for (int i = 0; i < wave.Count; i++)
             {
                 EnemyData temp = wave[i];
-                int randomIndex = UnityEngine.Random.Range(i, wave.Count);
+                int randomIndex = RunRandom.Range(i, wave.Count);
                 wave[i] = wave[randomIndex];
                 wave[randomIndex] = temp;
             }

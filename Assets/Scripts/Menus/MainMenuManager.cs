@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using JuegoDeCartas.Challenges;
 using JuegoDeCartas.Missions;
 using JuegoDeCartas.Progression;
 using TMPro;
@@ -10,8 +11,10 @@ namespace JuegoDeCartas.UI
     {
         [SerializeField] MissionSelectionMenu missionMenu;
         [SerializeField] CharacterSelectionMenu characterMenu;
+        [SerializeField] ChallengeModeMenu challengeMenu;
         [SerializeField] CollectionMenu collectionMenu;
         [SerializeField] ProfileMenu profileMenu;
+        [SerializeField] Button challengeButton;
         [SerializeField] GameObject mainMenuRoot;
         [SerializeField] Button[] mainMenuButtons;
         [SerializeField] TextMeshProUGUI activeProfileText;
@@ -22,6 +25,15 @@ namespace JuegoDeCartas.UI
             RefreshProfileText();
         }
 
+        void Awake()
+        {
+            if (challengeButton != null)
+            {
+                challengeButton.onClick.RemoveListener(OpenChallenges);
+                challengeButton.onClick.AddListener(OpenChallenges);
+            }
+        }
+
         void OnDisable()
         {
             ProfileManager.ProfileChanged -= RefreshProfileText;
@@ -29,6 +41,7 @@ namespace JuegoDeCartas.UI
 
         public void PlayGame()
         {
+            ChallengeRunState.Clear();
             SetButtonsInteractable(false);
 
             if (characterMenu == null)
@@ -52,6 +65,34 @@ namespace JuegoDeCartas.UI
             }
 
             Debug.LogWarning("No hay MissionSelectionMenu asignado en MainMenuManager.");
+        }
+
+        public void OpenChallenges()
+        {
+            SetButtonsInteractable(false);
+            if (mainMenuRoot != null)
+                mainMenuRoot.SetActive(false);
+
+            if (challengeMenu == null)
+                challengeMenu = FindAnyObjectByType<ChallengeModeMenu>(
+                    FindObjectsInactive.Include
+                );
+
+            if (challengeMenu != null)
+                challengeMenu.Open();
+            else
+                ShowMainMenu();
+        }
+
+        public void ReturnFromCharacterSelection()
+        {
+            if (ChallengeRunState.IsActive && challengeMenu != null)
+            {
+                challengeMenu.Open();
+                return;
+            }
+
+            ShowMainMenu();
         }
 
         public void ShowMainMenu()

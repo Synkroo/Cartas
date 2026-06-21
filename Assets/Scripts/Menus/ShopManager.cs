@@ -10,6 +10,7 @@ using JuegoDeCartas.Cards;
 using JuegoDeCartas.Missions;
 using JuegoDeCartas.Progression;
 using JuegoDeCartas.Characters;
+using JuegoDeCartas.Challenges;
 
 namespace JuegoDeCartas.UI
 {
@@ -132,7 +133,10 @@ namespace JuegoDeCartas.UI
             if (pauseTime)
                 Time.timeScale = 0f;
 
-            ApplyInterest();
+            if (ChallengeRunState.IsShopDisabled)
+                lastInterestEarned = 0;
+            else
+                ApplyInterest();
 
             if (shopPanel != null)
                 shopPanel.SetActive(true);
@@ -148,7 +152,12 @@ namespace JuegoDeCartas.UI
                 menusRaycaster.enabled = true;
 
             if (!TryOpenSubclassSelection())
-                ShowPackShop();
+            {
+                if (ChallengeRunState.IsShopDisabled)
+                    Close();
+                else
+                    ShowPackShop();
+            }
         }
 
         bool TryOpenSubclassSelection()
@@ -183,7 +192,10 @@ namespace JuegoDeCartas.UI
                 return;
             }
 
-            ShowPackShop();
+            if (ChallengeRunState.IsShopDisabled)
+                Close();
+            else
+                ShowPackShop();
         }
 
         void ShowPackShop()

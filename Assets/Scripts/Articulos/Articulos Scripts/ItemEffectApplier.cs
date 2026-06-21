@@ -3,6 +3,7 @@ using UnityEngine;
 using JuegoDeCartas.Managers;
 using JuegoDeCartas.Cards;
 using JuegoDeCartas.Progression;
+using JuegoDeCartas.Challenges;
 
 namespace JuegoDeCartas.Articulos
 {
@@ -65,7 +66,7 @@ namespace JuegoDeCartas.Articulos
 
                     for (int i = 0; i < item.cantidad; i++)
                     {
-                        var rand = pool[Random.Range(0, pool.Count)];
+                        var rand = pool[RunRandom.Range(0, pool.Count)];
                         battle.deckManager.hand.Add(new Card(rand));
                     }
                     battle.RenderHand();
@@ -79,7 +80,7 @@ namespace JuegoDeCartas.Articulos
                     int count = Mathf.Min(item.cantidad, candidates.Count);
                     for (int i = 0; i < count; i++)
                     {
-                        var card = candidates[Random.Range(0, candidates.Count)];
+                        var card = candidates[RunRandom.Range(0, candidates.Count)];
                         candidates.Remove(card);
                         card.ReduceCost();
                     }
@@ -95,7 +96,7 @@ namespace JuegoDeCartas.Articulos
                     int count = Mathf.Min(item.cantidad, candidates.Count);
                     for (int i = 0; i < count; i++)
                     {
-                        var source = candidates[Random.Range(0, candidates.Count)];
+                        var source = candidates[RunRandom.Range(0, candidates.Count)];
                         battle.deckManager.hand.Add(new Card(
                             source,
                             item.tipoEfecto == TipoEfectoArticulo.DuplicarCartaMejoras
@@ -112,7 +113,7 @@ namespace JuegoDeCartas.Articulos
                     int count = Mathf.Min(item.cantidad, cards.Count);
                     for (int i = 0; i < count; i++)
                     {
-                        Card card = cards[Random.Range(0, cards.Count)];
+                        Card card = cards[RunRandom.Range(0, cards.Count)];
                         cards.Remove(card);
                         card.ReduceCost();
                     }

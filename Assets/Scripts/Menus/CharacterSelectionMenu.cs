@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using JuegoDeCartas.Challenges;
 using JuegoDeCartas.Cards;
 using JuegoDeCartas.Characters;
 using JuegoDeCartas.Missions;
@@ -104,26 +105,29 @@ namespace JuegoDeCartas.UI
 
         public void ShowPrevious()
         {
-            if (characters.Count == 0)
+            if (GetAvailableCharacterCount() <= 1)
                 return;
 
-            selectedIndex = (selectedIndex - 1 + characters.Count) % characters.Count;
+            selectedIndex = FindNextAvailableIndex(-1);
             Refresh();
         }
 
         public void ShowNext()
         {
-            if (characters.Count == 0)
+            if (GetAvailableCharacterCount() <= 1)
                 return;
 
-            selectedIndex = (selectedIndex + 1) % characters.Count;
+            selectedIndex = FindNextAvailableIndex(1);
             Refresh();
         }
 
         public void Continue()
         {
             CharacterData selected = SelectedCharacter;
-            if (selected == null || !selected.IsSelectable || missionMenu == null)
+            if (selected == null ||
+                !selected.IsSelectable ||
+                !ChallengeRunState.AllowsCharacter(selected) ||
+                missionMenu == null)
                 return;
 
             CharacterRunState.Select(selected);
@@ -136,7 +140,7 @@ namespace JuegoDeCartas.UI
             Close(() =>
             {
                 if (mainMenuManager != null)
-                    mainMenuManager.ShowMainMenu();
+                    mainMenuManager.ReturnFromCharacterSelection();
             });
         }
 
@@ -169,13 +173,27 @@ namespace JuegoDeCartas.UI
                 portraitImage.enabled = hasCharacter && selected.portrait != null;
             }
 
-            bool selectable = hasCharacter && selected.IsSelectable;
+            bool allowedByChallenge =
+                hasCharacter && ChallengeRunState.AllowsCharacter(selected);
+            bool selectable = hasCharacter && selected.IsSelectable && allowedByChallenge;
             if (continueButton != null)
                 continueButton.interactable = selectable;
             if (lockText != null)
             {
                 lockText.gameObject.SetActive(hasCharacter && !selectable);
-                lockText.text = hasCharacter && !selectable ? selected.GetLockedMessage() : "";
+                if (hasCharacter && !allowedByChallenge)
+                {
+                    CharacterData required = ChallengeRunState.RequiredCharacter;
+                    lockText.text = required != null
+                        ? "Este reto se juega con " + required.characterName
+                        : "Clase no permitida en este reto";
+                }
+                else
+                {
+                    lockText.text = hasCharacter && !selectable
+                        ? selected.GetLockedMessage()
+                        : "";
+                }
             }
             if (subclassesButton != null)
             {
@@ -185,6 +203,11 @@ namespace JuegoDeCartas.UI
                     selected.subclasses.Count > 0
                 );
             }
+            int availableCount = GetAvailableCharacterCount();
+            if (previousButton != null)
+                previousButton.interactable = availableCount > 1;
+            if (nextButton != null)
+                nextButton.interactable = availableCount > 1;
 
             RenderDeck(selected);
         }
@@ -230,6 +253,14 @@ namespace JuegoDeCartas.UI
             if (characters.Count == 0)
                 return 0;
 
+            CharacterData required = ChallengeRunState.RequiredCharacter;
+            if (required != null)
+            {
+                int requiredIndex = characters.IndexOf(required);
+                if (requiredIndex >= 0)
+                    return requiredIndex;
+            }
+
             CharacterData previous = CharacterRunState.SelectedCharacter;
             if (previous != null)
             {
@@ -238,7 +269,47 @@ namespace JuegoDeCartas.UI
                     return index;
             }
 
+            for (int i = 0; i < characters.Count; i++)
+            {
+                if (IsCharacterAvailable(characters[i]))
+                    return i;
+            }
+
             return 0;
+        }
+
+        int FindNextAvailableIndex(int direction)
+        {
+            if (characters.Count == 0)
+                return 0;
+
+            int index = selectedIndex;
+            for (int i = 0; i < characters.Count; i++)
+            {
+                index = (index + direction + characters.Count) % characters.Count;
+                if (IsCharacterAvailable(characters[index]))
+                    return index;
+            }
+
+            return selectedIndex;
+        }
+
+        int GetAvailableCharacterCount()
+        {
+            int count = 0;
+            for (int i = 0; i < characters.Count; i++)
+            {
+                if (IsCharacterAvailable(characters[i]))
+                    count++;
+            }
+            return count;
+        }
+
+        static bool IsCharacterAvailable(CharacterData character)
+        {
+            return character != null &&
+                   character.IsSelectable &&
+                   ChallengeRunState.AllowsCharacter(character);
         }
 
         public void ShowSubclasses()
