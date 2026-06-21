@@ -152,10 +152,10 @@ RectTransform:
   m_Father: {fileID: 220219032}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &10196196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,7 +163,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 10196194}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
@@ -179,23 +179,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 10196194}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GridLayoutGroup
   m_Padding:
     m_Left: 12
     m_Right: 12
-    m_Top: 6
-    m_Bottom: 6
-  m_ChildAlignment: 0
-  m_Spacing: 12
-  m_ChildForceExpandWidth: 0
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
+    m_Top: 12
+    m_Bottom: 12
+  m_ChildAlignment: 4
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 150, y: 220}
+  m_Spacing: {x: 14, y: 14}
+  m_Constraint: 1
+  m_ConstraintCount: 5
 --- !u!1 &13681596
 GameObject:
   m_ObjectHideFlags: 0
@@ -1861,13 +1859,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 220219031}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ScrollRect
   m_Content: {fileID: 10196195}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 0
   m_MovementType: 1
   m_Elasticity: 0.1
@@ -6506,6 +6504,10 @@ MonoBehaviour:
   deckToggleLabel: {fileID: 1255759227}
   showDeckLabel: Mazo inicial
   hideDeckLabel: Cerrar mazo
+  deckButtonInfoAnchorMin: {x: 0.17, y: 0.49}
+  deckButtonInfoAnchorMax: {x: 0.3, y: 0.55}
+  deckButtonOpenAnchorMin: {x: 0.78, y: 0.86}
+  deckButtonOpenAnchorMax: {x: 0.96, y: 0.95}
   deckSection: {fileID: 1471288848}
   deckContent: {fileID: 10196195}
   cardPrefab: {fileID: 1789213473885756244, guid: ff0b6d3ebbb706940b327030982fb88d, type: 3}
@@ -11900,7 +11902,7 @@ RectTransform:
   m_Father: {fileID: 22396498}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.04, y: 0.04}
-  m_AnchorMax: {x: 0.96, y: 0.83}
+  m_AnchorMax: {x: 0.96, y: 0.78}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -17242,7 +17244,7 @@ RectTransform:
   m_Father: {fileID: 1552311992}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.06, y: 0.08}
-  m_AnchorMax: {x: 0.94, y: 0.3}
+  m_AnchorMax: {x: 0.94, y: 0.36}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
