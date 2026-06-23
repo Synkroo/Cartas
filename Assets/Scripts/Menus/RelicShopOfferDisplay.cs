@@ -22,6 +22,7 @@ namespace JuegoDeCartas.UI
         RelicData relic;
         ShopManager shop;
         MenuButtonMotion motion;
+        bool preparedForRefresh;
 
         void Awake()
         {
@@ -74,8 +75,19 @@ namespace JuegoDeCartas.UI
             if (transition == null || !gameObject.activeSelf)
                 return;
 
-            transition.CaptureCurrentAsVisible();
+            if (!preparedForRefresh)
+                transition.CaptureCurrentAsVisible();
+            preparedForRefresh = false;
             transition.PlayIn(delay);
+        }
+
+        public void PrepareForRefresh()
+        {
+            if (transition != null)
+            {
+                transition.PrepareForEntrance();
+                preparedForRefresh = true;
+            }
         }
 
         public void SetPurchased()

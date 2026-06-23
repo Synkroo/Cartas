@@ -316,6 +316,8 @@ namespace JuegoDeCartas.UI
                 ItemPackDisplay display = itemGO.GetComponent<ItemPackDisplay>();
                 if (display != null)
                 {
+                    if (!preserveReserved)
+                        display.PrepareForRefresh();
                     display.Setup(
                         offer,
                         OpenPack,
@@ -363,6 +365,8 @@ namespace JuegoDeCartas.UI
                 RelicData relic = i < relicOffers.Count
                     ? relicOffers[i]
                     : null;
+                if (avoidCurrent)
+                    display.PrepareForRefresh();
                 display.Setup(
                     relic,
                     this,

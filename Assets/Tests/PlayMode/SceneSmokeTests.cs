@@ -34,6 +34,7 @@ namespace JuegoDeCartas.Tests
             Assert.NotNull(FindIncludingInactive<ChallengeModeMenu>());
             Assert.NotNull(FindIncludingInactive<CollectionMenu>());
             Assert.NotNull(FindIncludingInactive<ProfileMenu>());
+            AssertConfiguredOptionsMenu();
 
             CanvasScaler[] screenScalers = Object
                 .FindObjectsByType<CanvasScaler>(FindObjectsInactive.Include)
@@ -67,6 +68,7 @@ namespace JuegoDeCartas.Tests
             Assert.NotNull(shop);
             Assert.NotNull(endGame);
             Assert.NotNull(cardSelection);
+            AssertConfiguredOptionsMenu();
             Assert.NotNull(shop.menusCanvas);
             Assert.NotNull(shop.menusCanvas.GetComponent<GraphicRaycaster>());
             Assert.NotNull(shop.closeButton);
@@ -91,6 +93,47 @@ namespace JuegoDeCartas.Tests
         static T FindIncludingInactive<T>() where T : Object
         {
             return Object.FindAnyObjectByType<T>(FindObjectsInactive.Include);
+        }
+
+        static void AssertConfiguredOptionsMenu()
+        {
+            SettingsMenuUI[] settingsMenus =
+                Object.FindObjectsByType<SettingsMenuUI>(
+                    FindObjectsInactive.Include,
+                    FindObjectsSortMode.None
+                );
+            Assert.IsNotEmpty(settingsMenus);
+
+            SettingsMenuUI settings = settingsMenus
+                .OrderByDescending(menu => menu.gameObject.name == "OptionsMenu")
+                .FirstOrDefault(menu =>
+                    menu != null &&
+                    menu.previousResolutionButton != null &&
+                    menu.nextResolutionButton != null &&
+                    menu.resolutionValueText != null &&
+                    menu.fullscreenToggle != null &&
+                    menu.resetButton != null &&
+                    menu.closeButton != null
+                );
+            Assert.NotNull(settings);
+            Assert.NotNull(settings.previousResolutionButton);
+            Assert.NotNull(settings.nextResolutionButton);
+            Assert.NotNull(settings.resolutionValueText);
+            Assert.NotNull(settings.fullscreenToggle);
+            Assert.NotNull(settings.resetButton);
+            Assert.NotNull(settings.closeButton);
+
+            PauseMenu[] pauseMenus =
+                Object.FindObjectsByType<PauseMenu>(
+                    FindObjectsInactive.Include,
+                    FindObjectsSortMode.None
+                );
+            Assert.IsTrue(pauseMenus.Any(menu =>
+                menu != null &&
+                menu.optionsMenu != null &&
+                menu.optionsMenu.GetComponentInChildren<SettingsMenuUI>(true)
+                    == settings
+            ));
         }
     }
 }

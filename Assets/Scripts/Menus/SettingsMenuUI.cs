@@ -15,6 +15,8 @@ namespace JuegoDeCartas.UI
         const string VSyncKey = Prefix + "VSync";
         const string FrameRateKey = Prefix + "FrameRate";
         const string VolumeKey = Prefix + "MasterVolume";
+        public const int MinWidth = 640;
+        public const int MinHeight = 360;
 
         static int DefaultWidth =>
             Screen.currentResolution.width > 0
@@ -51,8 +53,14 @@ namespace JuegoDeCartas.UI
 
         public static void SaveResolution(int width, int height)
         {
-            PlayerPrefs.SetInt(WidthKey, width);
-            PlayerPrefs.SetInt(HeightKey, height);
+            SaveDisplay(width, height, Fullscreen);
+        }
+
+        public static void SaveDisplay(int width, int height, bool fullscreen)
+        {
+            PlayerPrefs.SetInt(WidthKey, Mathf.Max(MinWidth, width));
+            PlayerPrefs.SetInt(HeightKey, Mathf.Max(MinHeight, height));
+            PlayerPrefs.SetInt(FullscreenKey, fullscreen ? 1 : 0);
             PlayerPrefs.Save();
             ApplyResolution();
         }
@@ -115,12 +123,20 @@ namespace JuegoDeCartas.UI
 
         static void ApplyResolution()
         {
-            FullScreenMode mode = Fullscreen
+            ApplyResolution(Width, Height, Fullscreen);
+        }
+
+        public static void ApplyResolution(
+            int width,
+            int height,
+            bool fullscreen)
+        {
+            FullScreenMode mode = fullscreen
                 ? FullScreenMode.FullScreenWindow
                 : FullScreenMode.Windowed;
             Screen.SetResolution(
-                Mathf.Max(640, Width),
-                Mathf.Max(360, Height),
+                Mathf.Max(MinWidth, width),
+                Mathf.Max(MinHeight, height),
                 mode
             );
         }
@@ -162,6 +178,9 @@ namespace JuegoDeCartas.UI
         public TextMeshProUGUI masterVolumeValueText;
 
         [Header("Commands")]
+        public Button applyDisplayButton;
+        public Button revertDisplayButton;
+        public TextMeshProUGUI displayStatusText;
         public Button resetButton;
         public Button closeButton;
         public Button mainMenuButton;
@@ -177,12 +196,22 @@ namespace JuegoDeCartas.UI
             0
         };
         public string unlimitedFrameRateLabel = "Sin limite";
+        public string savedDisplayStatus = "Pantalla guardada";
+        public string pendingDisplayStatus = "Cambios de pantalla sin aplicar";
 
         readonly List<Vector2Int> resolutions = new List<Vector2Int>();
         int resolutionIndex;
         int qualityIndex;
         int frameRateIndex;
+        bool pendingFullscreen;
+        bool displayDirty;
         bool listenersBound;
+
+        public bool HasPendingDisplayChanges => displayDirty;
+        bool UsesDeferredDisplayApply =>
+            applyDisplayButton != null ||
+            revertDisplayButton != null ||
+            displayStatusText != null;
 
         void Awake()
         {
@@ -210,9 +239,11 @@ namespace JuegoDeCartas.UI
             );
             qualityIndex = GameSettings.Quality;
             frameRateIndex = FindFrameRateIndex(GameSettings.FrameRate);
+            pendingFullscreen = GameSettings.Fullscreen;
+            displayDirty = false;
 
             if (fullscreenToggle != null)
-                fullscreenToggle.SetIsOnWithoutNotify(GameSettings.Fullscreen);
+                fullscreenToggle.SetIsOnWithoutNotify(pendingFullscreen);
             if (vSyncToggle != null)
                 vSyncToggle.SetIsOnWithoutNotify(GameSettings.VSync);
             if (masterVolumeSlider != null)
@@ -237,9 +268,7 @@ namespace JuegoDeCartas.UI
             nextResolutionButton?.onClick.AddListener(
                 () => ChangeResolution(1)
             );
-            fullscreenToggle?.onValueChanged.AddListener(
-                GameSettings.SaveFullscreen
-            );
+            fullscreenToggle?.onValueChanged.AddListener(ChangeFullscreen);
             previousQualityButton?.onClick.AddListener(
                 () => ChangeQuality(-1)
             );
@@ -254,6 +283,8 @@ namespace JuegoDeCartas.UI
                 () => ChangeFrameRate(1)
             );
             masterVolumeSlider?.onValueChanged.AddListener(ChangeVolume);
+            applyDisplayButton?.onClick.AddListener(ApplyDisplayChanges);
+            revertDisplayButton?.onClick.AddListener(RevertDisplayChanges);
             resetButton?.onClick.AddListener(ResetDefaults);
             closeButton?.onClick.AddListener(Close);
             mainMenuButton?.onClick.AddListener(ReturnToMainMenu);
@@ -275,16 +306,27 @@ namespace JuegoDeCartas.UI
             }
 
             Vector2Int current = new Vector2Int(
-                Mathf.Max(640, GameSettings.Width),
-                Mathf.Max(360, GameSettings.Height)
+                Mathf.Max(GameSettings.MinWidth, GameSettings.Width),
+                Mathf.Max(GameSettings.MinHeight, GameSettings.Height)
             );
             if (!resolutions.Contains(current))
                 resolutions.Add(current);
+            AddFallbackResolution(1280, 720);
+            AddFallbackResolution(1600, 900);
+            AddFallbackResolution(1920, 1080);
+            AddFallbackResolution(2560, 1440);
             resolutions.Sort((left, right) =>
             {
                 int width = left.x.CompareTo(right.x);
                 return width != 0 ? width : left.y.CompareTo(right.y);
             });
+        }
+
+        void AddFallbackResolution(int width, int height)
+        {
+            Vector2Int resolution = new Vector2Int(width, height);
+            if (!resolutions.Contains(resolution))
+                resolutions.Add(resolution);
         }
 
         int FindResolutionIndex(int width, int height)
@@ -310,9 +352,92 @@ namespace JuegoDeCartas.UI
                 resolutionIndex + direction,
                 resolutions.Count
             );
-            Vector2Int resolution = resolutions[resolutionIndex];
-            GameSettings.SaveResolution(resolution.x, resolution.y);
+            if (UsesDeferredDisplayApply)
+                MarkDisplayDirty();
+            else
+                ApplyDisplayChanges();
             RefreshLabels();
+        }
+
+        public void SelectPreviousResolution()
+        {
+            ChangeResolution(-1);
+        }
+
+        public void SelectNextResolution()
+        {
+            ChangeResolution(1);
+        }
+
+        void ChangeFullscreen(bool enabled)
+        {
+            pendingFullscreen = enabled;
+            if (UsesDeferredDisplayApply)
+                MarkDisplayDirty();
+            else
+                GameSettings.SaveDisplay(
+                    GameSettings.Width,
+                    GameSettings.Height,
+                    pendingFullscreen
+                );
+            RefreshLabels();
+        }
+
+        public void SetPendingFullscreen(bool enabled)
+        {
+            ChangeFullscreen(enabled);
+            if (fullscreenToggle != null)
+                fullscreenToggle.SetIsOnWithoutNotify(enabled);
+        }
+
+        public void ApplyDisplayChanges()
+        {
+            if (resolutions.Count == 0)
+                BuildResolutions();
+            if (resolutions.Count == 0)
+                return;
+
+            Vector2Int resolution = resolutions[
+                Mathf.Clamp(resolutionIndex, 0, resolutions.Count - 1)
+            ];
+            GameSettings.SaveDisplay(
+                resolution.x,
+                resolution.y,
+                pendingFullscreen
+            );
+            displayDirty = false;
+            RefreshLabels();
+        }
+
+        public void RevertDisplayChanges()
+        {
+            BuildResolutions();
+            resolutionIndex = FindResolutionIndex(
+                GameSettings.Width,
+                GameSettings.Height
+            );
+            pendingFullscreen = GameSettings.Fullscreen;
+            displayDirty = false;
+            if (fullscreenToggle != null)
+                fullscreenToggle.SetIsOnWithoutNotify(pendingFullscreen);
+            RefreshLabels();
+        }
+
+        void MarkDisplayDirty()
+        {
+            if (resolutions.Count == 0)
+            {
+                displayDirty = false;
+                return;
+            }
+
+            Vector2Int resolution = resolutions[
+                Mathf.Clamp(resolutionIndex, 0, resolutions.Count - 1)
+            ];
+            displayDirty =
+                resolution.x != GameSettings.Width ||
+                resolution.y != GameSettings.Height ||
+                pendingFullscreen != GameSettings.Fullscreen;
         }
 
         void ChangeQuality(int direction)
@@ -361,7 +486,12 @@ namespace JuegoDeCartas.UI
 
         void Close()
         {
-            pauseMenu?.ResumeGame();
+            if (displayDirty)
+                RevertDisplayChanges();
+            if (pauseMenu != null)
+                pauseMenu.ResumeGame();
+            else
+                gameObject.SetActive(false);
         }
 
         void ReturnToMainMenu()
@@ -419,6 +549,17 @@ namespace JuegoDeCartas.UI
                 nextFrameRateButton.interactable = frameRateEnabled;
             if (frameRateValueText != null)
                 frameRateValueText.alpha = frameRateEnabled ? 1f : 0.45f;
+
+            if (applyDisplayButton != null)
+                applyDisplayButton.interactable = displayDirty;
+            if (revertDisplayButton != null)
+                revertDisplayButton.interactable = displayDirty;
+            if (displayStatusText != null)
+            {
+                displayStatusText.text = displayDirty
+                    ? pendingDisplayStatus
+                    : savedDisplayStatus;
+            }
         }
 
         static int Wrap(int value, int count)

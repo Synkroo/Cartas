@@ -12584,7 +12584,7 @@ MonoBehaviour:
   - {fileID: 1073070974}
   - {fileID: 990072871}
   relicReplacementUI: {fileID: 1652049976}
-  restockCost: 100
+  restockCost: 75
   slotContainers:
   - {fileID: 1141461236}
   - {fileID: 1786291739}

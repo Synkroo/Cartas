@@ -863,6 +863,64 @@ namespace JuegoDeCartas.Tests
         }
 
         [Test]
+        public void RestockPreparesReplacedPackEntranceBeforeShowingNewContent()
+        {
+            ShopFixture fixture = CreateShopFixture();
+            CanvasGroup prefabCanvasGroup =
+                fixture.packPrefab.AddComponent<CanvasGroup>();
+            UITransitionAnimator transition =
+                fixture.packPrefab.AddComponent<UITransitionAnimator>();
+            transition.canvasGroup = prefabCanvasGroup;
+            transition.target = fixture.packPrefab.GetComponent<RectTransform>();
+            fixture.packPrefab.GetComponent<ItemPackDisplay>().transition =
+                transition;
+
+            fixture.shop.packPrefab = fixture.packPrefab;
+            fixture.shop.packDefinitions = new List<ItemPackData>
+            {
+                CreatePackDefinition("Comun", 1)
+            };
+            fixture.shop.itemPool = new List<ArticuloData>
+            {
+                CreateItem("A", Rareza.Comun),
+                CreateItem("B", Rareza.Comun),
+                CreateItem("C", Rareza.Comun)
+            };
+            fixture.shop.slotContainers = new[]
+            {
+                new GameObject("Slot1").transform,
+                new GameObject("Slot2").transform
+            };
+            for (int i = 0; i < fixture.shop.slotContainers.Length; i++)
+                fixture.shop.slotContainers[i].SetParent(fixture.root.transform);
+
+            fixture.shop.restockCost = 50;
+            fixture.gameManager.dinero = 500;
+            Assert.IsTrue(fixture.shop.TryRestock());
+            for (int i = 0; i < fixture.shop.slotContainers.Length; i++)
+            {
+                CanvasGroup group = fixture.shop.slotContainers[i]
+                    .GetChild(0)
+                    .GetComponent<CanvasGroup>();
+                group.alpha = 1f;
+            }
+
+            Assert.IsTrue(fixture.shop.TryRestock());
+
+            for (int i = 0; i < fixture.shop.slotContainers.Length; i++)
+            {
+                CanvasGroup group = fixture.shop.slotContainers[i]
+                    .GetChild(0)
+                    .GetComponent<CanvasGroup>();
+                Assert.AreEqual(0f, group.alpha);
+            }
+
+            Object.DestroyImmediate(fixture.shop.packDefinitions[0]);
+            DestroyItems(fixture.shop.itemPool);
+            fixture.Destroy();
+        }
+
+        [Test]
         public void ReservedPackPersistsWhenShopClosesAndReopens()
         {
             ShopFixture fixture = CreateShopFixture();

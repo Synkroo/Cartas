@@ -98,6 +98,12 @@ namespace JuegoDeCartas.UI
                 reserveText.text = reserved ? reservedLabel : reserveLabel;
         }
 
+        public void PrepareForRefresh()
+        {
+            if (transition != null)
+                transition.PrepareForEntrance();
+        }
+
         public void PlayEntrance(float delay)
         {
             if (transition != null)

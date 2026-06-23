@@ -2,7 +2,8 @@
     "name": "JuegoDeCartas.EditModeTests",
     "rootNamespace": "",
     "references": [
-        "JuegoDeCartas"
+        "JuegoDeCartas",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [
         "Editor"

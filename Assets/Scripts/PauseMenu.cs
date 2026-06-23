@@ -8,6 +8,7 @@ namespace JuegoDeCartas.UI
     {
         [Header("Menu")]
         public GameObject optionsMenu;
+        public SettingsMenuUI settingsMenu;
 
         [Header("Key")]
         public KeyCode toggleKey = KeyCode.Escape;
@@ -25,6 +26,8 @@ namespace JuegoDeCartas.UI
 
         void Start()
         {
+            CacheSettingsMenu();
+
             if (menuTransform != null)
                 menuTransform.localScale = closedScale;
 
@@ -45,6 +48,7 @@ namespace JuegoDeCartas.UI
 
         public void OpenMenu()
         {
+            CacheSettingsMenu();
             if (optionsMenu == null)
                 return;
 
@@ -52,6 +56,8 @@ namespace JuegoDeCartas.UI
             Time.timeScale = 0f;
 
             optionsMenu.SetActive(true);
+            if (settingsMenu != null)
+                settingsMenu.Bind(this);
 
             if (currentRoutine != null)
                 StopCoroutine(currentRoutine);
@@ -77,6 +83,46 @@ namespace JuegoDeCartas.UI
             optionsMenu.SetActive(false);
 
             Time.timeScale = previousTimeScale;
+        }
+
+        void CacheSettingsMenu()
+        {
+            if (settingsMenu == null && optionsMenu != null)
+                settingsMenu = optionsMenu.GetComponentInChildren<SettingsMenuUI>(true);
+
+            if (settingsMenu == null)
+                settingsMenu = FindBestSettingsMenu();
+
+            if (settingsMenu == null)
+                return;
+
+            optionsMenu = settingsMenu.gameObject;
+            if (menuTransform == null)
+            {
+                Transform panel = optionsMenu.transform.Find("Panel");
+                menuTransform = panel as RectTransform;
+            }
+        }
+
+        static SettingsMenuUI FindBestSettingsMenu()
+        {
+            SettingsMenuUI[] menus = FindObjectsByType<SettingsMenuUI>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None
+            );
+            SettingsMenuUI fallback = null;
+            for (int i = 0; i < menus.Length; i++)
+            {
+                if (menus[i] == null)
+                    continue;
+
+                if (menus[i].gameObject.name == "OptionsMenu")
+                    return menus[i];
+
+                if (fallback == null)
+                    fallback = menus[i];
+            }
+            return fallback;
         }
 
         IEnumerator ScaleMenu(Vector3 targetScale)

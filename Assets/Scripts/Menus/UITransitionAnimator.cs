@@ -85,6 +85,8 @@ namespace JuegoDeCartas.UI
                 canvasGroup.blocksRaycasts = showing;
             }
 
+            yield return null;
+
             float elapsed = 0f;
             while (elapsed < duration)
             {
