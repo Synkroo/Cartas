@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using JuegoDeCartas.UI;
+using JuegoDeCartas.Characters;
 
 namespace JuegoDeCartas.Managers
 {
@@ -13,6 +14,9 @@ namespace JuegoDeCartas.Managers
         public TextMeshProUGUI playerHpText;
         public TextMeshProUGUI playerManaText;
         public TextMeshProUGUI playerArmorText;
+        public TextMeshProUGUI classOrSubclassText;
+        public TextMeshProUGUI goldText;
+        public string goldFormat = "{0}";
 
         [Header("Enemy UI")]
         public TextMeshProUGUI enemyHpText;
@@ -40,6 +44,8 @@ namespace JuegoDeCartas.Managers
         Coroutine manaPulse;
         Coroutine armorPulse;
         Coroutine enemyHpPulse;
+        string lastClassOrSubclassName;
+        int lastGold = int.MinValue;
         readonly Dictionary<Transform, Vector3> baseScales = new Dictionary<Transform, Vector3>();
         readonly Dictionary<TextMeshProUGUI, Color> baseColors = new Dictionary<TextMeshProUGUI, Color>();
 
@@ -49,6 +55,13 @@ namespace JuegoDeCartas.Managers
 
             if (combatInfoPanel != null)
                 combatInfoPanel.Init(battle);
+
+            RefreshIdentityAndGold();
+        }
+
+        void Update()
+        {
+            RefreshIdentityAndGold();
         }
 
         public void Refresh()
@@ -108,6 +121,44 @@ namespace JuegoDeCartas.Managers
 
             if (combatInfoPanel != null)
                 combatInfoPanel.Refresh();
+
+            RefreshIdentityAndGold();
+        }
+
+        void RefreshIdentityAndGold()
+        {
+            string displayName = ResolveClassOrSubclassName(
+                CharacterRunState.SelectedCharacter,
+                CharacterRunState.SelectedSubclass
+            );
+            if (classOrSubclassText != null &&
+                displayName != lastClassOrSubclassName)
+            {
+                classOrSubclassText.text = displayName;
+                lastClassOrSubclassName = displayName;
+            }
+
+            int gold = battle != null && battle.gameManager != null
+                ? battle.gameManager.dinero
+                : 0;
+            if (goldText != null && gold != lastGold)
+            {
+                goldText.text = string.Format(goldFormat, gold);
+                lastGold = gold;
+            }
+        }
+
+        public static string ResolveClassOrSubclassName(
+            CharacterData character,
+            SubclassData subclass)
+        {
+            if (subclass != null &&
+                !string.IsNullOrWhiteSpace(subclass.subclassName))
+            {
+                return subclass.subclassName;
+            }
+
+            return character != null ? character.characterName : "";
         }
 
         void RestartPulse(TextMeshProUGUI text, int delta, ref Coroutine routine)

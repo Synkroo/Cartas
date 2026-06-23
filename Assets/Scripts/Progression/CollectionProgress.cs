@@ -4,6 +4,7 @@ using JuegoDeCartas.Characters;
 using JuegoDeCartas.Enemies;
 using JuegoDeCartas.Stats;
 using JuegoDeCartas.Cards;
+using JuegoDeCartas.Relics;
 
 namespace JuegoDeCartas.Progression
 {
@@ -56,6 +57,27 @@ namespace JuegoDeCartas.Progression
 
         public static bool IsPackSeen(ItemPackData pack) => GetFlag("PackSeen", pack);
 
+        public static void MarkRelicSeen(RelicData relic)
+        {
+            SetFlag("RelicSeen", relic);
+        }
+
+        public static void MarkRelicAcquired(RelicData relic)
+        {
+            if (relic == null)
+                return;
+
+            MarkRelicSeen(relic);
+            Add("RelicAcquired", relic, 1);
+            ProfilePrefs.Save();
+        }
+
+        public static bool IsRelicSeen(RelicData relic) =>
+            GetFlag("RelicSeen", relic);
+
+        public static int GetRelicAcquiredCount(RelicData relic) =>
+            ProfileManager.IsTemporary ? 25 : GetInt("RelicAcquired", relic);
+
         public static void MarkSubclassSeen(SubclassData subclass)
         {
             SetFlag("SubclassSeen", subclass);
@@ -74,6 +96,32 @@ namespace JuegoDeCartas.Progression
 
         public static int GetCardUsedCount(CardData card) =>
             ProfileManager.IsTemporary ? 999 : GetInt("CardUsed", card);
+
+        public static void MarkEpiphanySeen(CardData card, int optionIndex)
+        {
+            if (card == null || optionIndex < 0 ||
+                optionIndex >= card.GetEpiphanyOptions().Count)
+            {
+                return;
+            }
+
+            ProfilePrefs.SetInt(EpiphanyKey(card, optionIndex), 1);
+            ProfilePrefs.Save();
+        }
+
+        public static bool IsEpiphanySeen(CardData card, int optionIndex)
+        {
+            return card != null &&
+                   optionIndex >= 0 &&
+                   optionIndex < card.GetEpiphanyOptions().Count &&
+                   (ProfileManager.IsTemporary ||
+                    ProfilePrefs.GetInt(EpiphanyKey(card, optionIndex), 0) == 1);
+        }
+
+        public static string GetEpiphanyCollectionId(CardData card, int optionIndex)
+        {
+            return card != null ? card.name + "_" + optionIndex : "";
+        }
 
         public static void RegisterRunStarted(CharacterData character)
         {
@@ -144,6 +192,12 @@ namespace JuegoDeCartas.Progression
         static string Key(string category, Object asset)
         {
             return Prefix + category + "_" + asset.name;
+        }
+
+        static string EpiphanyKey(CardData card, int optionIndex)
+        {
+            return Prefix + "EpiphanySeen_" +
+                   GetEpiphanyCollectionId(card, optionIndex);
         }
     }
 }

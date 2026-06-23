@@ -24,14 +24,16 @@ namespace JuegoDeCartas.UI
 
         void Start()
         {
-            menuTransform.localScale = closedScale;
+            if (menuTransform != null)
+                menuTransform.localScale = closedScale;
 
-            optionsMenu.SetActive(false);
+            if (optionsMenu != null)
+                optionsMenu.SetActive(false);
         }
 
         void Update()
         {
-            if (Input.GetKeyDown(toggleKey))
+            if (optionsMenu != null && Input.GetKeyDown(toggleKey))
             {
                 if (optionsMenu.activeSelf)
                     ResumeGame();
@@ -42,6 +44,9 @@ namespace JuegoDeCartas.UI
 
         public void OpenMenu()
         {
+            if (optionsMenu == null)
+                return;
+
             previousTimeScale = Time.timeScale;
             Time.timeScale = 0f;
 
@@ -55,6 +60,9 @@ namespace JuegoDeCartas.UI
 
         public void ResumeGame()
         {
+            if (optionsMenu == null)
+                return;
+
             if (currentRoutine != null)
                 StopCoroutine(currentRoutine);
 
@@ -72,6 +80,9 @@ namespace JuegoDeCartas.UI
 
         IEnumerator ScaleMenu(Vector3 targetScale)
         {
+            if (menuTransform == null)
+                yield break;
+
             Vector3 startScale = menuTransform.localScale;
 
             float time = 0f;
@@ -92,6 +103,7 @@ namespace JuegoDeCartas.UI
         }
         public void BackToMenu()
         {
+            Time.timeScale = 1f;
             UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
         }
 

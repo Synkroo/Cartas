@@ -11,6 +11,7 @@ using JuegoDeCartas.Missions;
 using JuegoDeCartas.Progression;
 using JuegoDeCartas.Characters;
 using JuegoDeCartas.Challenges;
+using JuegoDeCartas.Relics;
 
 namespace JuegoDeCartas.UI
 {
@@ -60,6 +61,13 @@ namespace JuegoDeCartas.UI
         public GameObject packPrefab;
         public ItemPackSelectionUI packSelectionUI;
 
+        [Header("Relics")]
+        public RelicInventory relicInventory;
+        public List<RelicData> relicPool = new List<RelicData>();
+        public List<RelicShopOfferDisplay> relicOfferDisplays =
+            new List<RelicShopOfferDisplay>();
+        public RelicReplacementUI relicReplacementUI;
+
         [Header("Restock")]
         public int restockCost = 100;
 
@@ -69,6 +77,7 @@ namespace JuegoDeCartas.UI
         List<GameObject> spawnedItems = new List<GameObject>();
         readonly List<ItemPackOffer> offers = new List<ItemPackOffer>();
         readonly Dictionary<ItemPackOffer, ItemPackDisplay> displays = new Dictionary<ItemPackOffer, ItemPackDisplay>();
+        readonly List<RelicData> relicOffers = new List<RelicData>();
         GraphicRaycaster menusRaycaster;
         List<GraphicRaycaster> disabledRaycasters = new List<GraphicRaycaster>();
         List<GraphicRaycaster> allRaycasters = new List<GraphicRaycaster>();
@@ -76,8 +85,13 @@ namespace JuegoDeCartas.UI
         float previousTimeScale = 1f;
         bool opened;
         int lastInterestEarned;
+        Coroutine goldPulse;
+        RelicData pendingRelicPurchase;
+        int pendingRelicPrice;
 
         public IReadOnlyList<ItemPackOffer> CurrentOffers => new ReadOnlyCollection<ItemPackOffer>(offers);
+        public IReadOnlyList<RelicData> CurrentRelicOffers =>
+            new ReadOnlyCollection<RelicData>(relicOffers);
         public int LastInterestEarned => lastInterestEarned;
 
         void Awake()
@@ -204,8 +218,8 @@ namespace JuegoDeCartas.UI
                 subclassSelectionUI.Close();
 
             SetShopContentVisible(true);
-            ClearSlots();
-            GenerateAndPopulatePacks();
+            GenerateAndPopulatePacks(offers.Count > 0);
+            GenerateAndPopulateRelics(relicOffers.Count > 0);
             UpdateDineroUI();
 
             if (shopTitleText != null)
@@ -221,23 +235,34 @@ namespace JuegoDeCartas.UI
         void ClearSlots()
         {
             foreach (var go in spawnedItems)
-            {
-                if (go == null)
-                    continue;
-
-                go.transform.SetParent(null, false);
-                if (Application.isPlaying)
-                    Destroy(go);
-                else
-                    DestroyImmediate(go);
-            }
+                DestroySpawnedItem(go);
             spawnedItems.Clear();
         }
 
-        void GenerateAndPopulatePacks()
+        void DestroySpawnedItem(GameObject item)
         {
+            if (item == null)
+                return;
+
+            item.SetActive(false);
+            item.transform.SetParent(null, false);
+            if (Application.isPlaying)
+                Destroy(item);
+            else
+                DestroyImmediate(item);
+        }
+
+        void GenerateAndPopulatePacks(bool keepReserved)
+        {
+            var previousOffers = keepReserved
+                ? new List<ItemPackOffer>(offers)
+                : null;
+            var previousItems = keepReserved
+                ? new List<GameObject>(spawnedItems)
+                : null;
             offers.Clear();
             displays.Clear();
+            spawnedItems.Clear();
 
             if (packPrefab == null)
                 return;
@@ -250,32 +275,264 @@ namespace JuegoDeCartas.UI
             {
                 if (slotContainers[i] == null) continue;
 
-                ItemPackData definition = ItemPackGenerator.RollDefinition(packDefinitions);
-                if (definition == null) continue;
+                bool preserveReserved =
+                    previousOffers != null &&
+                    i < previousOffers.Count &&
+                    previousOffers[i] != null &&
+                    previousOffers[i].Reserved &&
+                    !previousOffers[i].Claimed &&
+                    previousItems != null &&
+                    i < previousItems.Count &&
+                    previousItems[i] != null;
 
-                CollectionProgress.MarkPackSeen(definition);
-                ItemPackOffer offer = ItemPackGenerator.Generate(definition, itemPool);
+                ItemPackOffer offer = preserveReserved
+                    ? previousOffers[i]
+                    : null;
+                GameObject itemGO = preserveReserved
+                    ? previousItems[i]
+                    : null;
+
+                if (offer == null)
+                {
+                    if (previousItems != null && i < previousItems.Count)
+                        DestroySpawnedItem(previousItems[i]);
+
+                    ItemPackData definition = ItemPackGenerator.RollDefinition(packDefinitions);
+                    if (definition == null)
+                        continue;
+
+                    CollectionProgress.MarkPackSeen(definition);
+                    offer = ItemPackGenerator.Generate(definition, itemPool);
+                    itemGO = Instantiate(packPrefab, slotContainers[i]);
+                }
+
                 offers.Add(offer);
 
-                GameObject itemGO = Instantiate(packPrefab, slotContainers[i]);
+                itemGO.transform.SetParent(slotContainers[i], false);
                 itemGO.transform.localPosition = Vector3.zero;
+                itemGO.SetActive(true);
                 ItemPackDisplay display = itemGO.GetComponent<ItemPackDisplay>();
                 if (display != null)
                 {
-                    display.Setup(offer, OpenPack);
-                    display.PlayEntrance(i * 0.08f);
+                    display.Setup(
+                        offer,
+                        OpenPack,
+                        reservedOffer => ToggleReservation(reservedOffer)
+                    );
+                    if (!preserveReserved)
+                        display.PlayEntrance(i * 0.08f);
                     displays[offer] = display;
                 }
 
                 spawnedItems.Add(itemGO);
             }
 
+            if (previousItems != null)
+            {
+                for (int i = count; i < previousItems.Count; i++)
+                    DestroySpawnedItem(previousItems[i]);
+            }
+
             ProfilePrefs.Save();
+        }
+
+        void GenerateAndPopulateRelics(bool avoidCurrent)
+        {
+            if (relicInventory == null && battle != null)
+                relicInventory = battle.relicInventory;
+
+            List<RelicData> previous = avoidCurrent
+                ? new List<RelicData>(relicOffers)
+                : null;
+            relicOffers.Clear();
+            relicOffers.AddRange(RelicOfferGenerator.Roll(
+                relicPool,
+                relicInventory != null ? relicInventory.OwnedRelics : null,
+                relicOfferDisplays.Count,
+                previous
+            ));
+
+            for (int i = 0; i < relicOfferDisplays.Count; i++)
+            {
+                RelicShopOfferDisplay display = relicOfferDisplays[i];
+                if (display == null)
+                    continue;
+
+                RelicData relic = i < relicOffers.Count
+                    ? relicOffers[i]
+                    : null;
+                display.Setup(
+                    relic,
+                    this,
+                    CanAcquireRelic(relic)
+                );
+                display.PlayEntrance(i * 0.08f);
+            }
+        }
+
+        public void RefreshRelicOffers(bool avoidCurrent = false)
+        {
+            GenerateAndPopulateRelics(avoidCurrent);
+        }
+
+        public bool TryPurchaseRelic(RelicData relic)
+        {
+            if (relic == null ||
+                gameManager == null ||
+                relicInventory == null ||
+                !relicOffers.Contains(relic) ||
+                relicInventory.Contains(relic))
+            {
+                return false;
+            }
+
+            int price = Mathf.RoundToInt(
+                relic.price * MissionRunState.ShopCostMultiplier
+            );
+            if (gameManager.dinero < price)
+                return false;
+
+            if (relicInventory.IsFull)
+            {
+                if (relicReplacementUI == null ||
+                    !relicReplacementUI.IsConfigured)
+                {
+                    return false;
+                }
+
+                pendingRelicPurchase = relic;
+                pendingRelicPrice = price;
+                SetShopContentVisible(false);
+                if (!relicReplacementUI.Open(
+                    relic,
+                    relicInventory.OwnedRelics,
+                    relicToRemove =>
+                        ConfirmRelicReplacement(relicToRemove),
+                    CancelRelicReplacement
+                ))
+                {
+                    ClearPendingRelicPurchase();
+                    SetShopContentVisible(true);
+                    return false;
+                }
+
+                return true;
+            }
+
+            return CompleteRelicPurchase(relic, price, null);
+        }
+
+        public bool ConfirmRelicReplacement(RelicData relicToRemove)
+        {
+            if (pendingRelicPurchase == null ||
+                relicToRemove == null ||
+                relicInventory == null ||
+                !relicInventory.Contains(relicToRemove))
+            {
+                return false;
+            }
+
+            RelicData relic = pendingRelicPurchase;
+            int price = pendingRelicPrice;
+            bool completed = CompleteRelicPurchase(
+                relic,
+                price,
+                relicToRemove
+            );
+            if (!completed)
+                return false;
+
+            if (relicReplacementUI != null)
+                relicReplacementUI.Close();
+            ClearPendingRelicPurchase();
+            SetShopContentVisible(true);
+            return true;
+        }
+
+        public void CancelRelicReplacement()
+        {
+            if (relicReplacementUI != null)
+                relicReplacementUI.Close();
+            ClearPendingRelicPurchase();
+            SetShopContentVisible(true);
+        }
+
+        bool CanAcquireRelic(RelicData relic)
+        {
+            if (relicInventory == null ||
+                relic == null ||
+                relicInventory.Contains(relic))
+            {
+                return false;
+            }
+
+            return !relicInventory.IsFull ||
+                   (relicReplacementUI != null &&
+                    relicReplacementUI.IsConfigured);
+        }
+
+        bool CompleteRelicPurchase(
+            RelicData relic,
+            int price,
+            RelicData relicToRemove)
+        {
+            if (relic == null ||
+                gameManager == null ||
+                relicInventory == null ||
+                !relicOffers.Contains(relic) ||
+                relicInventory.Contains(relic) ||
+                gameManager.dinero < price)
+            {
+                return false;
+            }
+
+            gameManager.dinero -= price;
+            bool acquired = relicToRemove == null
+                ? relicInventory.TryAdd(relic)
+                : relicInventory.TryReplace(relicToRemove, relic);
+            if (!acquired)
+            {
+                gameManager.dinero += price;
+                return false;
+            }
+
+            int index = relicOffers.IndexOf(relic);
+            relicOffers[index] = null;
+            if (index >= 0 &&
+                index < relicOfferDisplays.Count &&
+                relicOfferDisplays[index] != null)
+            {
+                relicOfferDisplays[index].SetPurchased();
+            }
+
+            CollectionProgress.MarkRelicAcquired(relic);
+            UpdateDineroUI();
+            return true;
+        }
+
+        void ClearPendingRelicPurchase()
+        {
+            pendingRelicPurchase = null;
+            pendingRelicPrice = 0;
         }
 
         void OpenPack(ItemPackOffer offer)
         {
             TryPurchasePack(offer);
+        }
+
+        public bool ToggleReservation(ItemPackOffer offer)
+        {
+            if (offer == null || offer.Claimed || !offers.Contains(offer))
+                return false;
+
+            offer.Reserved = !offer.Reserved;
+            if (displays.TryGetValue(offer, out ItemPackDisplay display) &&
+                display != null)
+            {
+                display.RefreshReservation();
+            }
+            return true;
         }
 
         public bool TryPurchasePack(ItemPackOffer offer)
@@ -319,7 +576,16 @@ namespace JuegoDeCartas.UI
                 return true;
 
             List<Card> source = ItemEffectApplier.GetSelectionSource(item, battle);
-            return source != null && source.Count > 0 && cardSelectionUI != null && cardSelectionUI.IsConfigured;
+            bool hasCardSelection = source != null &&
+                                    source.Count > 0 &&
+                                    cardSelectionUI != null &&
+                                    cardSelectionUI.IsConfigured;
+            if (item.tipoEfecto != TipoEfectoArticulo.DespertarEpifania)
+                return hasCardSelection;
+
+            return hasCardSelection &&
+                   upgradeSelectionUI != null &&
+                   upgradeSelectionUI.IsConfigured;
         }
 
         public bool TryClaimItem(ItemPackOffer offer, ArticuloData item)
@@ -334,6 +600,11 @@ namespace JuegoDeCartas.UI
                 return true;
             }
 
+            return OpenCardSelectionForClaim(offer, item);
+        }
+
+        bool OpenCardSelectionForClaim(ItemPackOffer offer, ArticuloData item)
+        {
             List<Card> source = ItemEffectApplier.GetSelectionSource(item, battle);
             if (source == null || source.Count == 0 || cardSelectionUI == null)
                 return false;
@@ -362,6 +633,23 @@ namespace JuegoDeCartas.UI
                         return;
                     }
 
+                    if (item.tipoEfecto == TipoEfectoArticulo.DespertarEpifania)
+                    {
+                        if (upgradeSelectionUI != null &&
+                            upgradeSelectionUI.IsConfigured &&
+                            upgradeSelectionUI.ShowEpiphanies(selected, () =>
+                            {
+                                ItemEffectApplier.CompleteSelectedUpgrade(item, battle);
+                                CompleteClaim(offer);
+                            }, () => packSelectionUI.ShowCurrent()))
+                        {
+                            return;
+                        }
+
+                        packSelectionUI.ShowCurrent();
+                        return;
+                    }
+
                     ItemEffectApplier.ApplyToSelected(item, battle, selected);
                     CompleteClaim(offer);
                 },
@@ -386,6 +674,7 @@ namespace JuegoDeCartas.UI
 
         void CompleteOffer(ItemPackOffer offer)
         {
+            offer.Reserved = false;
             offer.Claimed = true;
             if (displays.TryGetValue(offer, out ItemPackDisplay display) && display != null)
                 display.SetClaimed(true);
@@ -444,6 +733,9 @@ namespace JuegoDeCartas.UI
                 shopPanel.SetActive(false);
             if (subclassSelectionUI != null)
                 subclassSelectionUI.Close();
+            if (relicReplacementUI != null)
+                relicReplacementUI.CloseImmediate();
+            ClearPendingRelicPurchase();
             SetShopContentVisible(true);
             if (menusCanvas != null)
                 menusCanvas.enabled = false;
@@ -455,11 +747,15 @@ namespace JuegoDeCartas.UI
 
         public int CalculateInterest(int gold)
         {
+            int relicBonus = relicInventory != null
+                ? relicInventory.GetInterestBonus()
+                : 0;
             if (gold <= 0 || goldPerInterestStep <= 0 || interestPerStep <= 0)
-                return 0;
+                return relicBonus;
 
             int steps = gold / goldPerInterestStep;
-            return Mathf.Min(maxInterest, steps * interestPerStep);
+            return Mathf.Min(maxInterest, steps * interestPerStep) +
+                   relicBonus;
         }
 
         void ApplyInterest()
@@ -486,8 +782,9 @@ namespace JuegoDeCartas.UI
                 if (gameManager.dinero != lastDinero)
                 {
                     lastDinero = gameManager.dinero;
-                    StopCoroutine(PulseGold());
-                    StartCoroutine(PulseGold());
+                    if (goldPulse != null)
+                        StopCoroutine(goldPulse);
+                    goldPulse = StartCoroutine(PulseGold());
                 }
             }
         }
@@ -505,6 +802,7 @@ namespace JuegoDeCartas.UI
                 yield return null;
             }
             dineroText.transform.localScale = Vector3.one;
+            goldPulse = null;
         }
 
         public void OnSalir()
@@ -547,8 +845,8 @@ namespace JuegoDeCartas.UI
             gameManager.dinero -= restockCost;
             UpdateDineroUI();
 
-            ClearSlots();
-            GenerateAndPopulatePacks();
+            GenerateAndPopulatePacks(true);
+            GenerateAndPopulateRelics(true);
             return true;
         }
     }

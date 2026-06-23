@@ -23,25 +23,46 @@ MonoBehaviour:
   upgradeOptions:
   - upgradeName: Desaparicion
     description: Reduce su coste en 1.
+    cardDescription: Coste -1.
     costReduction: 1
     reactivations: 0
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Paso largo
     description: Repite armadura y robo.
+    cardDescription: Efecto x2.
     costReduction: 0
     reactivations: 1
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Sombra persistente
     description: Reduce su coste en 1 y se reactiva una vez.
+    cardDescription: Coste -1; 2 usos.
     costReduction: 1
     reactivations: 1
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Omnipresencia
     description: Se reactiva dos veces adicionales.
+    cardDescription: Se usa 3 veces.
     costReduction: 0
     reactivations: 2
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  epiphanyOptions:
+  - epiphanyName: Desaparicion
+    description: Gana 9 de armadura adicional y recupera 2 de vida.
+    cardDescription: 'Epifania: +9 armadura y cura 2.'
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects:
+    - {fileID: 11400000, guid: 03afc65c7e5a362408eb792b97606ae0, type: 2}
+  epiphany:
+    epiphanyName: 
+    description: 
+    cardDescription: 
+    costReduction: 0
+    reactivations: 0
     preventDestroyOnUse: 0
     bonusEffects: []

@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using JuegoDeCartas.Cards;
+using JuegoDeCartas.Progression;
 
 namespace JuegoDeCartas.UI
 {
@@ -23,10 +24,18 @@ namespace JuegoDeCartas.UI
 
         [Header("Text")]
         public string cardTitleFormat = "Mejorar: {0}";
+        public string epiphanyTitleFormat = "Epifania: {0}";
+
+        [Header("Single Epiphany Layout")]
+        public Vector2 singleOptionAnchorMin = new Vector2(0.25f, 0.28f);
+        public Vector2 singleOptionAnchorMax = new Vector2(0.75f, 0.72f);
 
         Card currentCard;
         Action onComplete;
         Action onCancel;
+        bool selectingEpiphany;
+        readonly Dictionary<Button, ButtonLayout> originalLayouts =
+            new Dictionary<Button, ButtonLayout>();
 
         public bool IsConfigured => panel != null && GetButtons().Count > 0;
 
@@ -35,33 +44,63 @@ namespace JuegoDeCartas.UI
             if (panel != null)
                 panel.SetActive(false);
 
-            if (cancelButton != null)
-            {
-                cancelButton.onClick.RemoveAllListeners();
-                cancelButton.onClick.AddListener(Cancel);
-            }
+            ConfigureCancelButton(false);
         }
 
         public bool Show(Card card, Action onUpgradeComplete, Action onUpgradeCancel = null)
         {
-            if (card == null)
+            return ShowOptions(card, false, onUpgradeComplete, onUpgradeCancel);
+        }
+
+        public bool ShowEpiphanies(
+            Card card,
+            Action onEpiphanyComplete,
+            Action onEpiphanyCancel = null)
+        {
+            return ShowOptions(
+                card,
+                true,
+                onEpiphanyComplete,
+                onEpiphanyCancel
+            );
+        }
+
+        bool ShowOptions(
+            Card card,
+            bool epiphanyMode,
+            Action onSelectionComplete,
+            Action onSelectionCancel)
+        {
+            if (card == null || !HasRequiredReferences())
                 return false;
 
             currentCard = card;
-            onComplete = onUpgradeComplete;
-            onCancel = onUpgradeCancel;
-
-            if (!HasRequiredReferences())
-                return false;
+            onComplete = onSelectionComplete;
+            onCancel = onSelectionCancel;
+            selectingEpiphany = epiphanyMode;
+            ConfigureCancelButton(onSelectionCancel != null);
 
             if (overlay != null)
                 overlay.SetActive(true);
 
             if (titleText != null && card.data != null)
-                titleText.text = string.Format(cardTitleFormat, card.data.cardName);
+            {
+                titleText.text = string.Format(
+                    selectingEpiphany
+                        ? epiphanyTitleFormat
+                        : cardTitleFormat,
+                    card.data.cardName
+                );
+            }
 
             List<Button> buttons = GetButtons();
             List<TextMeshProUGUI> labels = GetLabels();
+            CacheAndRestoreButtonLayouts(buttons);
+            int availableOptionCount = CountAvailableOptions(
+                card,
+                buttons.Count,
+                selectingEpiphany
+            );
             for (int i = 0; i < buttons.Count; i++)
             {
                 int optionIndex = i;
@@ -69,11 +108,21 @@ namespace JuegoDeCartas.UI
                 if (button == null)
                     continue;
                 button.onClick.RemoveAllListeners();
-                button.onClick.AddListener(() => ApplyUpgrade(optionIndex));
-                button.interactable = HasOption(card, optionIndex);
+                button.onClick.AddListener(() => ApplyOption(optionIndex));
+                bool hasOption = selectingEpiphany
+                    ? HasEpiphany(card, optionIndex)
+                    : HasUpgrade(card, optionIndex);
+                button.gameObject.SetActive(!selectingEpiphany || hasOption);
+                button.interactable = hasOption;
                 if (i < labels.Count)
-                    SetOptionText(labels[i], card, optionIndex);
+                    SetOptionText(labels[i], card, optionIndex, selectingEpiphany);
+
+                if (selectingEpiphany && hasOption)
+                    CollectionProgress.MarkEpiphanySeen(card.data, optionIndex);
             }
+
+            if (selectingEpiphany && availableOptionCount == 1)
+                CenterSingleAvailableOption(card, buttons);
 
             if (panel != null)
                 panel.SetActive(true);
@@ -116,7 +165,7 @@ namespace JuegoDeCartas.UI
             return false;
         }
 
-        static bool HasOption(Card card, int index)
+        static bool HasUpgrade(Card card, int index)
         {
             return card?.data != null &&
                    card.selectedUpgradeIndex < 0 &&
@@ -125,29 +174,63 @@ namespace JuegoDeCartas.UI
                    card.data.upgradeOptions[index] != null;
         }
 
-        static void SetOptionText(TextMeshProUGUI label, Card card, int index)
+        static bool HasEpiphany(Card card, int index)
+        {
+            if (card?.data == null || card.epiphanyUnlocked)
+                return false;
+
+            List<CardEpiphany> options = card.data.GetEpiphanyOptions();
+            return index >= 0 &&
+                   index < options.Count &&
+                   options[index] != null &&
+                   !string.IsNullOrWhiteSpace(options[index].epiphanyName);
+        }
+
+        static void SetOptionText(
+            TextMeshProUGUI label,
+            Card card,
+            int index,
+            bool epiphanyMode)
         {
             if (label == null)
                 return;
 
-            if (!HasOption(card, index))
+            bool hasOption = epiphanyMode
+                ? HasEpiphany(card, index)
+                : HasUpgrade(card, index);
+            if (!hasOption)
             {
                 label.text = "No disponible";
                 return;
             }
 
-            CardUpgradeOption option = card.data.upgradeOptions[index];
-            label.text = string.IsNullOrWhiteSpace(option.description)
-                ? option.upgradeName
-                : option.upgradeName + "\n" + option.description;
+            if (epiphanyMode)
+            {
+                CardEpiphany option = card.data.GetEpiphanyOptions()[index];
+                string finalDescription =
+                    CardDescriptionBuilder.BuildFinalDescription(card, option);
+                label.text = string.IsNullOrWhiteSpace(finalDescription)
+                    ? option.epiphanyName
+                    : option.epiphanyName + "\n" + finalDescription;
+            }
+            else
+            {
+                CardUpgradeOption option = card.data.upgradeOptions[index];
+                label.text = string.IsNullOrWhiteSpace(option.description)
+                    ? option.upgradeName
+                    : option.upgradeName + "\n" + option.description;
+            }
         }
 
-        void ApplyUpgrade(int optionIndex)
+        void ApplyOption(int optionIndex)
         {
             if (currentCard == null)
                 return;
 
-            if (currentCard.ApplyUpgrade(optionIndex))
+            bool applied = selectingEpiphany
+                ? currentCard.ApplyEpiphany(optionIndex)
+                : currentCard.ApplyUpgrade(optionIndex);
+            if (applied)
                 Close(true);
         }
 
@@ -158,6 +241,8 @@ namespace JuegoDeCartas.UI
 
         void Close(bool completed)
         {
+            CacheAndRestoreButtonLayouts(GetButtons());
+
             if (panel != null)
                 panel.SetActive(false);
 
@@ -168,7 +253,101 @@ namespace JuegoDeCartas.UI
             currentCard = null;
             onComplete = null;
             onCancel = null;
+            selectingEpiphany = false;
             callback?.Invoke();
+        }
+
+        void ConfigureCancelButton(bool visible)
+        {
+            if (cancelButton == null)
+                return;
+
+            cancelButton.onClick.RemoveListener(Cancel);
+            cancelButton.onClick.AddListener(Cancel);
+            cancelButton.interactable = visible;
+            cancelButton.gameObject.SetActive(visible);
+        }
+
+        void CacheAndRestoreButtonLayouts(List<Button> buttons)
+        {
+            foreach (Button button in buttons)
+            {
+                if (button == null ||
+                    !(button.transform is RectTransform rectTransform))
+                {
+                    continue;
+                }
+
+                if (!originalLayouts.TryGetValue(button, out ButtonLayout layout))
+                {
+                    layout = new ButtonLayout(rectTransform);
+                    originalLayouts.Add(button, layout);
+                }
+
+                layout.Apply(rectTransform);
+            }
+        }
+
+        static int CountAvailableOptions(
+            Card card,
+            int buttonCount,
+            bool epiphanyMode)
+        {
+            int count = 0;
+            for (int i = 0; i < buttonCount; i++)
+            {
+                if (epiphanyMode
+                    ? HasEpiphany(card, i)
+                    : HasUpgrade(card, i))
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        void CenterSingleAvailableOption(Card card, List<Button> buttons)
+        {
+            for (int i = 0; i < buttons.Count; i++)
+            {
+                if (!HasEpiphany(card, i) ||
+                    buttons[i] == null ||
+                    !(buttons[i].transform is RectTransform rectTransform))
+                {
+                    continue;
+                }
+
+                rectTransform.anchorMin = singleOptionAnchorMin;
+                rectTransform.anchorMax = singleOptionAnchorMax;
+                rectTransform.anchoredPosition = Vector2.zero;
+                rectTransform.sizeDelta = Vector2.zero;
+                return;
+            }
+        }
+
+        readonly struct ButtonLayout
+        {
+            readonly Vector2 anchorMin;
+            readonly Vector2 anchorMax;
+            readonly Vector2 anchoredPosition;
+            readonly Vector2 sizeDelta;
+
+            public ButtonLayout(RectTransform rectTransform)
+            {
+                anchorMin = rectTransform.anchorMin;
+                anchorMax = rectTransform.anchorMax;
+                anchoredPosition = rectTransform.anchoredPosition;
+                sizeDelta = rectTransform.sizeDelta;
+            }
+
+            public void Apply(RectTransform rectTransform)
+            {
+                rectTransform.anchorMin = anchorMin;
+                rectTransform.anchorMax = anchorMax;
+                rectTransform.anchoredPosition = anchoredPosition;
+                rectTransform.sizeDelta = sizeDelta;
+            }
         }
     }
 }

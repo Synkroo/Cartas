@@ -71,6 +71,8 @@ namespace JuegoDeCartas.Managers
 
             if (battle.armorPerTurn > 0)
                 battle.GainPlayerArmor(battle.armorPerTurn);
+            if (battle.relicInventory != null)
+                battle.relicInventory.OnPlayerTurnStarted();
 
             battle.deckManager.DrawStartingHand();
             battle.RenderHand();

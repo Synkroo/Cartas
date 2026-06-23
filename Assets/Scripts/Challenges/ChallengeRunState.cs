@@ -1,4 +1,5 @@
 using JuegoDeCartas.Characters;
+using JuegoDeCartas.Missions;
 
 namespace JuegoDeCartas.Challenges
 {
@@ -6,8 +7,11 @@ namespace JuegoDeCartas.Challenges
     {
         public static ChallengeData SelectedChallenge { get; private set; }
         public static string SeedCode { get; private set; } = "";
+        public static bool IsSeededRun { get; private set; }
 
         public static bool IsActive => SelectedChallenge != null;
+        public static bool IsChallengeRun => SelectedChallenge != null;
+        public static bool HasConfiguredRun => IsChallengeRun || IsSeededRun;
         public static bool IsBossRush =>
             SelectedChallenge != null &&
             SelectedChallenge.modifier == ChallengeModifier.BossRush;
@@ -21,16 +25,26 @@ namespace JuegoDeCartas.Challenges
             SelectedChallenge.modifier == ChallengeModifier.SingleClass
                 ? SelectedChallenge.requiredCharacter
                 : null;
+        public static MissionData EncounterMission =>
+            SelectedChallenge != null ? SelectedChallenge.encounterMission : null;
 
-        public static void Configure(ChallengeData challenge, string seedCode)
+        public static void ConfigureChallenge(ChallengeData challenge)
         {
             SelectedChallenge = challenge;
+            SeedCode = "";
+            IsSeededRun = false;
+        }
+
+        public static void ConfigureSeededRun(string seedCode)
+        {
+            SelectedChallenge = null;
             SeedCode = RunRandom.NormalizeSeedCode(seedCode);
+            IsSeededRun = true;
         }
 
         public static void PrepareRun()
         {
-            if (IsActive)
+            if (IsSeededRun)
                 RunRandom.Initialize(SeedCode);
             else
                 RunRandom.InitializeUnseeded();
@@ -41,16 +55,17 @@ namespace JuegoDeCartas.Challenges
             return !IsActive || SelectedChallenge.AllowsCharacter(character);
         }
 
-        public static void MarkCompleted()
+        public static void MarkCompleted(CharacterData character)
         {
             if (SelectedChallenge != null)
-                SelectedChallenge.MarkCompleted();
+                SelectedChallenge.MarkCompleted(character);
         }
 
         public static void Clear()
         {
             SelectedChallenge = null;
             SeedCode = "";
+            IsSeededRun = false;
         }
     }
 }

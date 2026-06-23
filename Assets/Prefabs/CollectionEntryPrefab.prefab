@@ -225,6 +225,7 @@ GameObject:
   - component: {fileID: 8627661262792540076}
   - component: {fileID: 2144791751974658472}
   - component: {fileID: 3950303510866447796}
+  - component: {fileID: 5364526377180166160}
   m_Layer: 5
   m_Name: CollectionEntryPrefab
   m_TagString: Untagged
@@ -355,6 +356,22 @@ MonoBehaviour:
   lockedOverlay: {fileID: 4997320664195773980}
   discoveredColor: {r: 0.13, g: 0.17, b: 0.23, a: 1}
   undiscoveredColor: {r: 0.16, g: 0.18, b: 0.22, a: 1}
+--- !u!114 &5364526377180166160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3071664858353441948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a980af44a63b65a419c11da2c48b578b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.UI.MenuButtonMotion
+  target: {fileID: 5229440206102058801}
+  hoverScale: 1.025
+  pressedScale: 0.97
+  duration: 0.08
 --- !u!1 &4997320664195773980
 GameObject:
   m_ObjectHideFlags: 0

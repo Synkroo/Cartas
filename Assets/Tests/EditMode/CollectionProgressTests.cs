@@ -7,6 +7,7 @@ using JuegoDeCartas.Missions;
 using JuegoDeCartas.Progression;
 using JuegoDeCartas.Stats;
 using JuegoDeCartas.Cards;
+using JuegoDeCartas.Relics;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -38,27 +39,36 @@ namespace JuegoDeCartas.Tests
             enemy.name = "CollectionEnemyTest";
             ArticuloData item = ScriptableObject.CreateInstance<ArticuloData>();
             item.name = "CollectionItemTest";
+            RelicData relic = ScriptableObject.CreateInstance<RelicData>();
+            relic.name = "CollectionRelicTest";
 
             Track("Collection_EnemySeen_" + enemy.name);
             Track("Collection_EnemyDefeated_" + enemy.name);
             Track("Collection_ItemSeen_" + item.name);
             Track("Collection_ItemUsed_" + item.name);
+            Track("Collection_RelicSeen_" + relic.name);
+            Track("Collection_RelicAcquired_" + relic.name);
 
             Assert.IsFalse(CollectionProgress.IsEnemySeen(enemy));
             Assert.IsFalse(CollectionProgress.IsItemSeen(item));
+            Assert.IsFalse(CollectionProgress.IsRelicSeen(relic));
 
             CollectionProgress.MarkEnemySeen(enemy);
             CollectionProgress.MarkEnemyDefeated(enemy);
             CollectionProgress.MarkItemSeen(item);
             CollectionProgress.MarkItemUsed(item);
+            CollectionProgress.MarkRelicAcquired(relic);
 
             Assert.IsTrue(CollectionProgress.IsEnemySeen(enemy));
             Assert.AreEqual(1, CollectionProgress.GetEnemyDefeatedCount(enemy));
             Assert.IsTrue(CollectionProgress.IsItemSeen(item));
             Assert.AreEqual(1, CollectionProgress.GetItemUsedCount(item));
+            Assert.IsTrue(CollectionProgress.IsRelicSeen(relic));
+            Assert.AreEqual(1, CollectionProgress.GetRelicAcquiredCount(relic));
 
             Object.DestroyImmediate(enemy);
             Object.DestroyImmediate(item);
+            Object.DestroyImmediate(relic);
         }
 
         [Test]
@@ -74,6 +84,35 @@ namespace JuegoDeCartas.Tests
             CollectionProgress.MarkCardUsed(card);
 
             Assert.AreEqual(2, CollectionProgress.GetCardUsedCount(card));
+            Object.DestroyImmediate(card);
+        }
+
+        [Test]
+        public void EpiphanyDiscoveryIsPersistedPerCardAndOption()
+        {
+            CardData card = ScriptableObject.CreateInstance<CardData>();
+            card.name = "CollectionEpiphanyTest";
+            card.epiphanyOptions = new List<CardEpiphany>
+            {
+                new CardEpiphany { epiphanyName = "Primera" },
+                new CardEpiphany { epiphanyName = "Segunda" }
+            };
+            Track(
+                "Collection_EpiphanySeen_" +
+                CollectionProgress.GetEpiphanyCollectionId(card, 0)
+            );
+            Track(
+                "Collection_EpiphanySeen_" +
+                CollectionProgress.GetEpiphanyCollectionId(card, 1)
+            );
+
+            Assert.IsFalse(CollectionProgress.IsEpiphanySeen(card, 0));
+            Assert.IsFalse(CollectionProgress.IsEpiphanySeen(card, 1));
+
+            CollectionProgress.MarkEpiphanySeen(card, 1);
+
+            Assert.IsFalse(CollectionProgress.IsEpiphanySeen(card, 0));
+            Assert.IsTrue(CollectionProgress.IsEpiphanySeen(card, 1));
             Object.DestroyImmediate(card);
         }
 
@@ -212,7 +251,7 @@ namespace JuegoDeCartas.Tests
         }
 
         [Test]
-        public void AllSevenPackDefinitionsExist()
+        public void AllNinePackDefinitionsExist()
         {
             string[] guids = AssetDatabase.FindAssets("t:ItemPackData", new[] { "Assets/GameData/Packs" });
             List<ItemPackData> packs = guids
@@ -221,11 +260,13 @@ namespace JuegoDeCartas.Tests
                 .Where(pack => pack != null)
                 .ToList();
 
-            Assert.AreEqual(7, packs.Count);
+            Assert.AreEqual(9, packs.Count);
             Assert.IsTrue(packs.Any(pack => pack.packName == "Sobre de vitalidad"));
             Assert.IsTrue(packs.Any(pack => pack.packName == "Sobre arcano"));
             Assert.IsTrue(packs.Any(pack => pack.packName == "Sobre de forja"));
             Assert.IsTrue(packs.Any(pack => pack.packName == "Sobre del caos"));
+            Assert.IsTrue(packs.Any(pack => pack.packName == "Sobre de epifania"));
+            Assert.IsTrue(packs.Any(pack => pack.packName == "Sobre de arquetipos"));
         }
 
         static ArticuloData CreateItem(string name, TipoEfectoArticulo effect)

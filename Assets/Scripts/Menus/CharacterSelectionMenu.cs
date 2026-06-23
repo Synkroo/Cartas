@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using JuegoDeCartas.Challenges;
 using JuegoDeCartas.Cards;
@@ -40,6 +41,7 @@ namespace JuegoDeCartas.UI
         public Button backButton;
         public MissionSelectionMenu missionMenu;
         public MainMenuManager mainMenuManager;
+        public string gameSceneName = "Game";
 
         [Header("Animation")]
         [Min(0.01f)] public float fadeDuration = 0.2f;
@@ -126,11 +128,24 @@ namespace JuegoDeCartas.UI
             CharacterData selected = SelectedCharacter;
             if (selected == null ||
                 !selected.IsSelectable ||
-                !ChallengeRunState.AllowsCharacter(selected) ||
-                missionMenu == null)
+                !ChallengeRunState.AllowsCharacter(selected))
                 return;
 
             CharacterRunState.Select(selected);
+            if (ChallengeRunState.IsChallengeRun)
+            {
+                if (ChallengeRunState.EncounterMission == null)
+                    return;
+
+                MissionRunState.Clear();
+                ChallengeRunState.PrepareRun();
+                Close(() => SceneManager.LoadScene(gameSceneName));
+                return;
+            }
+
+            if (missionMenu == null)
+                return;
+
             missionMenu.onClosed = ReturnFromMissionMenu;
             Close(() => missionMenu.Open());
         }

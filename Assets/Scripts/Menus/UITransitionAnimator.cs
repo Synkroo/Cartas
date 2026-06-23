@@ -29,7 +29,21 @@ namespace JuegoDeCartas.UI
         {
             Cache();
             gameObject.SetActive(true);
+            PrepareForEntrance();
             StartTransition(true, delay, null);
+        }
+
+        public void PrepareForEntrance()
+        {
+            Cache();
+            Vector2 hiddenPosition = visiblePosition + hiddenOffset;
+            Vector3 hiddenScaleVector = visibleScale * hiddenScale;
+            SetVisual(0f, hiddenPosition, hiddenScaleVector);
+            if (canvasGroup != null)
+            {
+                canvasGroup.interactable = false;
+                canvasGroup.blocksRaycasts = false;
+            }
         }
 
         public void CaptureCurrentAsVisible()

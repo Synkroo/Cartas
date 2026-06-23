@@ -1,10 +1,13 @@
 using System.Collections.Generic;
+using System.Linq;
 using JuegoDeCartas.Articulos;
 using JuegoDeCartas.Cards;
 using JuegoDeCartas.Managers;
 using JuegoDeCartas.Effects;
+using JuegoDeCartas.Stats;
 using JuegoDeCartas.UI;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
 
 namespace JuegoDeCartas.Tests
@@ -80,6 +83,255 @@ namespace JuegoDeCartas.Tests
         }
 
         [Test]
+        public void CardAppliesEpiphanyOnlyOnceAndCopiesItWithUpgrades()
+        {
+            CardData data = ScriptableObject.CreateInstance<CardData>();
+            data.cost = 2;
+            data.destroyOnUse = true;
+            data.epiphanyOptions = new List<CardEpiphany>
+            {
+                new CardEpiphany
+                {
+                    epiphanyName = "Revelacion",
+                    costReduction = 1,
+                    reactivations = 1,
+                    preventDestroyOnUse = true
+                }
+            };
+
+            Card card = new Card(data);
+
+            Assert.IsTrue(card.ApplyEpiphany());
+            Assert.IsFalse(card.ApplyEpiphany());
+            Assert.IsTrue(card.epiphanyUnlocked);
+            Assert.AreEqual(1, card.effectiveCost);
+            Assert.AreEqual(1, card.reactivationCount);
+            Assert.IsFalse(card.effectiveDestroyOnUse);
+
+            Card preserved = new Card(card, true);
+            Card clean = new Card(card, false);
+            Assert.IsTrue(preserved.epiphanyUnlocked);
+            Assert.IsFalse(clean.epiphanyUnlocked);
+
+            Object.DestroyImmediate(data);
+        }
+
+        [Test]
+        public void EpiphanyDoesNotBlockTheCardsRegularUpgrade()
+        {
+            CardData data = ScriptableObject.CreateInstance<CardData>();
+            data.epiphanyOptions = new List<CardEpiphany>
+            {
+                new CardEpiphany { epiphanyName = "Revelacion" }
+            };
+            data.upgradeOptions = new List<CardUpgradeOption>
+            {
+                new CardUpgradeOption { upgradeName = "Mejora normal" }
+            };
+
+            GameObject gameObject = new GameObject("IndependentEnhancements");
+            BattleManager battle = gameObject.AddComponent<BattleManager>();
+            battle.deckManager = gameObject.AddComponent<DeckManager>();
+            Card card = new Card(data);
+            card.ApplyEpiphany();
+            battle.deckManager.hand.Add(card);
+
+            ArticuloData item = ScriptableObject.CreateInstance<ArticuloData>();
+            item.tipoEfecto = TipoEfectoArticulo.MejorarCarta;
+
+            Assert.Contains(card, ItemEffectApplier.GetSelectionSource(item, battle));
+            Assert.IsTrue(card.ApplyUpgrade(0));
+            Assert.IsTrue(card.epiphanyUnlocked);
+            Assert.AreEqual(0, card.selectedUpgradeIndex);
+
+            Object.DestroyImmediate(item);
+            Object.DestroyImmediate(data);
+            Object.DestroyImmediate(gameObject);
+        }
+
+        [Test]
+        public void EveryPlayableCardHasOneConfiguredUniqueEpiphany()
+        {
+            CardData[] cards = AssetDatabase
+                .FindAssets(
+                    "t:CardData",
+                    new[] { "Assets/Scripts/Cartas/Cartas S.O" }
+                )
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Select(AssetDatabase.LoadAssetAtPath<CardData>)
+                .Where(card => card != null)
+                .ToArray();
+
+            Assert.AreEqual(16, cards.Length);
+            Assert.IsTrue(cards.All(card =>
+                card.GetEpiphanyOptions().Count == 1 &&
+                !string.IsNullOrWhiteSpace(
+                    card.GetEpiphanyOptions()[0].epiphanyName) &&
+                !string.IsNullOrWhiteSpace(
+                    card.GetEpiphanyOptions()[0].description) &&
+                !string.IsNullOrWhiteSpace(
+                    card.GetEpiphanyOptions()[0].cardDescription) &&
+                card.GetEpiphanyOptions()[0].bonusEffects.Count == 1 &&
+                card.GetEpiphanyOptions()[0].bonusEffects[0] != null
+            ));
+            Assert.AreEqual(
+                cards.Length,
+                cards.Select(card =>
+                    card.GetEpiphanyOptions()[0].epiphanyName
+                ).Distinct().Count()
+            );
+        }
+
+        [Test]
+        public void UpgradeCardDescriptionUsesShortTextWhenConfigured()
+        {
+            CardUpgradeOption option = new CardUpgradeOption
+            {
+                description = "Descripcion extensa para el selector.",
+                cardDescription = "Coste -1."
+            };
+
+            Assert.AreEqual("Coste -1.", option.GetCardDescription());
+
+            option.cardDescription = "";
+            Assert.AreEqual(
+                "Descripcion extensa para el selector.",
+                option.GetCardDescription()
+            );
+        }
+
+        [Test]
+        public void CardPrefabShowsFramesAndShortDescriptionWithoutStatusLabel()
+        {
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(
+                "Assets/Prefabs/CardPrefab.prefab"
+            );
+            Assert.NotNull(prefab);
+
+            GameObject instance = Object.Instantiate(prefab);
+            CardView view = instance.GetComponent<CardView>();
+            CardData data = ScriptableObject.CreateInstance<CardData>();
+            data.cardName = "Prueba";
+            data.description = "Descripcion base.";
+            data.upgradeOptions = new List<CardUpgradeOption>
+            {
+                new CardUpgradeOption
+                {
+                    upgradeName = "Ligera",
+                    description = "Reduce su coste en 1.",
+                    cardDescription = "Coste -1.",
+                    costReduction = 1
+                }
+            };
+            data.cost = 2;
+            Card card = new Card(data);
+
+            view.Setup(card, null);
+            Assert.AreSame(view.normalFrameSprite, view.frameImage.sprite);
+            object statusText = typeof(CardView)
+                .GetField("upgradeStatusText")
+                .GetValue(view);
+            Assert.IsFalse(((Component)statusText).gameObject.activeSelf);
+
+            card.ApplyUpgrade(0);
+            view.Setup(card, null);
+            Assert.AreSame(view.upgradedFrameSprite, view.frameImage.sprite);
+            Assert.IsFalse(((Component)statusText).gameObject.activeSelf);
+            object descriptionText = typeof(CardView)
+                .GetField("descriptionText")
+                .GetValue(view);
+            StringAssert.Contains(
+                "Coste -1.",
+                (string)descriptionText
+                    .GetType()
+                    .GetProperty("text")
+                    .GetValue(descriptionText)
+            );
+
+            data.epiphanyOptions = new List<CardEpiphany>
+            {
+                new CardEpiphany
+                {
+                    epiphanyName = "Nombre revelado",
+                    description = "Descripcion larga.",
+                    cardDescription = "Efecto unico."
+                }
+            };
+            Assert.IsTrue(card.ApplyEpiphany(0));
+            view.Setup(card, null);
+            Assert.AreSame(view.epiphanyFrameSprite, view.frameImage.sprite);
+            object nameText = typeof(CardView)
+                .GetField("nameText")
+                .GetValue(view);
+            string epiphanyName = (string)nameText
+                .GetType()
+                .GetProperty("text")
+                .GetValue(nameText);
+            string epiphanyDescription = (string)descriptionText
+                .GetType()
+                .GetProperty("text")
+                .GetValue(descriptionText);
+            Assert.AreEqual("Nombre revelado", epiphanyName);
+            Assert.AreEqual("Efecto unico.", epiphanyDescription);
+            Assert.IsFalse(epiphanyDescription.Contains("Descripcion base."));
+            Assert.IsFalse(((Component)statusText).gameObject.activeSelf);
+
+            Object.DestroyImmediate(data);
+            Object.DestroyImmediate(instance);
+        }
+
+        [Test]
+        public void EpiphanyDescriptionShowsTheCardsFinalCombinedValues()
+        {
+            ModifyStatsEffect baseDamage =
+                ScriptableObject.CreateInstance<ModifyStatsEffect>();
+            baseDamage.modifiers.Add(new StatModifier
+            {
+                target = StatModifier.Target.Enemy,
+                stat = StatType.Health,
+                operation = StatModifier.Operation.Remove,
+                amount = 10
+            });
+            EpiphanyEffect epiphanyBonus =
+                ScriptableObject.CreateInstance<EpiphanyEffect>();
+            epiphanyBonus.damage = 5;
+            epiphanyBonus.armor = 3;
+
+            CardData data = ScriptableObject.CreateInstance<CardData>();
+            data.description = "Inflige 10 de dano.";
+            data.effects.Add(baseDamage);
+            data.epiphanyOptions = new List<CardEpiphany>
+            {
+                new CardEpiphany
+                {
+                    epiphanyName = "Filo revelado",
+                    description = "Inflige 5 de dano adicional.",
+                    bonusEffects = new List<CardEffect> { epiphanyBonus }
+                }
+            };
+            Card card = new Card(data);
+
+            string preview = CardDescriptionBuilder.BuildFinalDescription(
+                card,
+                data.epiphanyOptions[0]
+            );
+            Assert.AreEqual(
+                "Inflige 15 de daño. Obtiene 3 de armadura.",
+                preview
+            );
+
+            Assert.IsTrue(card.ApplyEpiphany(0));
+            Assert.AreEqual(
+                preview,
+                CardDescriptionBuilder.BuildFinalDescription(card)
+            );
+
+            Object.DestroyImmediate(epiphanyBonus);
+            Object.DestroyImmediate(baseDamage);
+            Object.DestroyImmediate(data);
+        }
+
+        [Test]
         public void EntityDamageConsumesArmorBeforeHealth()
         {
             Entity entity = new Entity();
@@ -150,6 +402,84 @@ namespace JuegoDeCartas.Tests
             Object.DestroyImmediate(item);
             Object.DestroyImmediate(first);
             Object.DestroyImmediate(second);
+            Object.DestroyImmediate(gameObject);
+        }
+
+        [Test]
+        public void CrossClassItemOffersOnlyCardsOutsideStartingClass()
+        {
+            CardData own = ScriptableObject.CreateInstance<CardData>();
+            own.cardName = "Propia";
+            CardData externalA = ScriptableObject.CreateInstance<CardData>();
+            externalA.cardName = "Externa A";
+            CardData externalB = ScriptableObject.CreateInstance<CardData>();
+            externalB.cardName = "Externa B";
+
+            GameObject gameObject = new GameObject("CrossClassBattle");
+            BattleManager battle = gameObject.AddComponent<BattleManager>();
+            battle.deckManager = gameObject.AddComponent<DeckManager>();
+            battle.deckManager.startingDeck = new List<CardData> { own, own };
+
+            ArticuloData item = ScriptableObject.CreateInstance<ArticuloData>();
+            item.tipoEfecto = TipoEfectoArticulo.AgregarCartaOtraClase;
+            item.cardPool = new List<CardData>
+            {
+                own,
+                externalA,
+                externalA,
+                externalB
+            };
+
+            List<Card> choices = ItemEffectApplier.GetSelectionSource(item, battle);
+
+            Assert.AreEqual(2, choices.Count);
+            Assert.IsFalse(choices.Any(card => card.data == own));
+            Assert.IsTrue(choices.Any(card => card.data == externalA));
+            Assert.IsTrue(choices.Any(card => card.data == externalB));
+
+            Object.DestroyImmediate(item);
+            Object.DestroyImmediate(own);
+            Object.DestroyImmediate(externalA);
+            Object.DestroyImmediate(externalB);
+            Object.DestroyImmediate(gameObject);
+        }
+
+        [Test]
+        public void EpiphanyItemOnlyOffersCardsThatCanStillAwaken()
+        {
+            CardData availableData = ScriptableObject.CreateInstance<CardData>();
+            availableData.epiphanyOptions = new List<CardEpiphany>
+            {
+                new CardEpiphany { epiphanyName = "Disponible" }
+            };
+            CardData missingData = ScriptableObject.CreateInstance<CardData>();
+            CardData awakenedData = ScriptableObject.CreateInstance<CardData>();
+            awakenedData.epiphanyOptions = new List<CardEpiphany>
+            {
+                new CardEpiphany { epiphanyName = "Ya usada" }
+            };
+
+            GameObject gameObject = new GameObject("EpiphanyBattle");
+            BattleManager battle = gameObject.AddComponent<BattleManager>();
+            battle.deckManager = gameObject.AddComponent<DeckManager>();
+            Card available = new Card(availableData);
+            Card missing = new Card(missingData);
+            Card awakened = new Card(awakenedData);
+            awakened.ApplyEpiphany();
+            battle.deckManager.hand.AddRange(new[] { available, missing, awakened });
+
+            ArticuloData item = ScriptableObject.CreateInstance<ArticuloData>();
+            item.tipoEfecto = TipoEfectoArticulo.DespertarEpifania;
+
+            List<Card> choices = ItemEffectApplier.GetSelectionSource(item, battle);
+
+            Assert.AreEqual(1, choices.Count);
+            Assert.AreSame(available, choices[0]);
+
+            Object.DestroyImmediate(item);
+            Object.DestroyImmediate(availableData);
+            Object.DestroyImmediate(missingData);
+            Object.DestroyImmediate(awakenedData);
             Object.DestroyImmediate(gameObject);
         }
 

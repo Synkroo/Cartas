@@ -5,9 +5,11 @@ using UnityEngine.UI;
 using JuegoDeCartas.Articulos;
 using JuegoDeCartas.Characters;
 using JuegoDeCartas.Cards;
+using JuegoDeCartas.Challenges;
 using JuegoDeCartas.Enemies;
 using JuegoDeCartas.Missions;
 using JuegoDeCartas.Progression;
+using JuegoDeCartas.Relics;
 
 namespace JuegoDeCartas.UI
 {
@@ -26,7 +28,9 @@ namespace JuegoDeCartas.UI
         public List<ArticuloData> items = new List<ArticuloData>();
         public List<ItemPackData> packs = new List<ItemPackData>();
         public List<CardData> cards = new List<CardData>();
+        public List<RelicData> relics = new List<RelicData>();
         public List<MissionData> missions = new List<MissionData>();
+        public List<ChallengeData> challenges = new List<ChallengeData>();
 
         void Awake()
         {
@@ -77,7 +81,7 @@ namespace JuegoDeCartas.UI
                 ProfileInfo info = ProfileManager.GetInfo(i);
                 float completion = info.Exists ? CalculateCompletionForSlot(i) : 0f;
                 slots[i].slotIndex = i;
-                slots[i].Setup(info, completion, Load, Save, Delete, Rename);
+                slots[i].Setup(info, completion, Load, Delete, Rename);
             }
         }
 
@@ -86,12 +90,7 @@ namespace JuegoDeCartas.UI
             ProfileManager.Load(slot);
             CharacterRunState.Clear();
             MissionRunState.Clear();
-        }
-
-        void Save(int slot)
-        {
-            if (!ProfileManager.IsTemporary && ProfileManager.ActiveSlot == slot)
-                ProfileManager.SaveActive();
+            ChallengeRunState.Clear();
         }
 
         void Delete(int slot)
@@ -99,6 +98,7 @@ namespace JuegoDeCartas.UI
             ProfileManager.Delete(slot);
             CharacterRunState.Clear();
             MissionRunState.Clear();
+            ChallengeRunState.Clear();
         }
 
         void Rename(int slot, string value)
@@ -111,13 +111,15 @@ namespace JuegoDeCartas.UI
             ProfileManager.LoadTemporary();
             CharacterRunState.Clear();
             MissionRunState.Clear();
+            ChallengeRunState.Clear();
         }
 
         float CalculateCompletionForSlot(int slot)
         {
             int completed = 0;
-            int total = enemies.Count + items.Count + packs.Count + cards.Count + heroes.Count +
-                        GetSubclassCount();
+            int total = enemies.Count + items.Count + packs.Count + cards.Count +
+                        relics.Count + heroes.Count +
+                        GetSubclassCount() + GetEpiphanyCount();
 
             for (int i = 0; i < enemies.Count; i++)
                 if (HasCollectionFlag(slot, "EnemySeen", enemies[i])) completed++;
@@ -127,6 +129,8 @@ namespace JuegoDeCartas.UI
                 if (HasCollectionFlag(slot, "PackSeen", packs[i])) completed++;
             for (int i = 0; i < cards.Count; i++)
                 if (GetCollectionCount(slot, "CardUsed", cards[i]) > 0) completed++;
+            for (int i = 0; i < relics.Count; i++)
+                if (HasCollectionFlag(slot, "RelicSeen", relics[i])) completed++;
             for (int i = 0; i < heroes.Count; i++)
                 if (IsHeroUnlockedInSlot(slot, heroes[i])) completed++;
             for (int i = 0; i < heroes.Count; i++)
@@ -136,6 +140,19 @@ namespace JuegoDeCartas.UI
                     continue;
                 for (int s = 0; s < hero.subclasses.Count; s++)
                     if (HasCollectionFlag(slot, "SubclassSeen", hero.subclasses[s])) completed++;
+            }
+            for (int i = 0; i < cards.Count; i++)
+            {
+                CardData card = cards[i];
+                if (card == null)
+                    continue;
+                for (int e = 0; e < card.GetEpiphanyOptions().Count; e++)
+                {
+                    string key = "Collection_EpiphanySeen_" +
+                                 CollectionProgress.GetEpiphanyCollectionId(card, e);
+                    if (ProfilePrefs.GetIntForSlot(slot, key, 0) == 1)
+                        completed++;
+                }
             }
 
             total += missions.Count * heroes.Count * 3;
@@ -158,6 +175,25 @@ namespace JuegoDeCartas.UI
                 }
             }
 
+            total += challenges.Count * heroes.Count;
+            for (int c = 0; c < challenges.Count; c++)
+            {
+                ChallengeData challenge = challenges[c];
+                if (challenge == null || !challenge.CountsForCompletion)
+                    continue;
+
+                for (int h = 0; h < heroes.Count; h++)
+                {
+                    CharacterData hero = heroes[h];
+                    if (hero == null)
+                        continue;
+
+                    string key = $"ChallengeCompleted_{challenge.name}_{hero.name}";
+                    if (ProfilePrefs.GetIntForSlot(slot, key, 0) == 1)
+                        completed++;
+                }
+            }
+
             return total > 0 ? Mathf.Clamp01((float)completed / total) : 0f;
         }
 
@@ -167,8 +203,9 @@ namespace JuegoDeCartas.UI
                 return 1f;
 
             int completed = 0;
-            int total = enemies.Count + items.Count + packs.Count + cards.Count + heroes.Count +
-                        GetSubclassCount();
+            int total = enemies.Count + items.Count + packs.Count + cards.Count +
+                        relics.Count + heroes.Count +
+                        GetSubclassCount() + GetEpiphanyCount();
 
             for (int i = 0; i < enemies.Count; i++)
                 if (CollectionProgress.IsEnemySeen(enemies[i])) completed++;
@@ -178,6 +215,8 @@ namespace JuegoDeCartas.UI
                 if (CollectionProgress.IsPackSeen(packs[i])) completed++;
             for (int i = 0; i < cards.Count; i++)
                 if (CollectionProgress.GetCardUsedCount(cards[i]) > 0) completed++;
+            for (int i = 0; i < relics.Count; i++)
+                if (CollectionProgress.IsRelicSeen(relics[i])) completed++;
             for (int i = 0; i < heroes.Count; i++)
                 if (heroes[i] != null && heroes[i].IsUnlocked) completed++;
             for (int i = 0; i < heroes.Count; i++)
@@ -187,6 +226,14 @@ namespace JuegoDeCartas.UI
                     continue;
                 for (int s = 0; s < hero.subclasses.Count; s++)
                     if (CollectionProgress.IsSubclassSeen(hero.subclasses[s])) completed++;
+            }
+            for (int i = 0; i < cards.Count; i++)
+            {
+                CardData card = cards[i];
+                if (card == null)
+                    continue;
+                for (int e = 0; e < card.GetEpiphanyOptions().Count; e++)
+                    if (CollectionProgress.IsEpiphanySeen(card, e)) completed++;
             }
 
             int medalTotal = missions.Count * heroes.Count * 3;
@@ -207,6 +254,21 @@ namespace JuegoDeCartas.UI
                 }
             }
 
+            total += challenges.Count * heroes.Count;
+            for (int c = 0; c < challenges.Count; c++)
+            {
+                ChallengeData challenge = challenges[c];
+                if (challenge == null || !challenge.CountsForCompletion)
+                    continue;
+
+                for (int h = 0; h < heroes.Count; h++)
+                {
+                    CharacterData hero = heroes[h];
+                    if (hero != null && challenge.IsCompletedByCharacter(hero))
+                        completed++;
+                }
+            }
+
             return total > 0 ? Mathf.Clamp01((float)completed / total) : 0f;
         }
 
@@ -218,6 +280,17 @@ namespace JuegoDeCartas.UI
                 CharacterData hero = heroes[i];
                 if (hero != null && hero.subclasses != null)
                     count += hero.subclasses.Count;
+            }
+            return count;
+        }
+
+        int GetEpiphanyCount()
+        {
+            int count = 0;
+            for (int i = 0; i < cards.Count; i++)
+            {
+                if (cards[i] != null)
+                    count += cards[i].GetEpiphanyOptions().Count;
             }
             return count;
         }

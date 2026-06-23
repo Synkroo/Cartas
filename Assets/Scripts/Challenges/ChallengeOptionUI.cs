@@ -10,6 +10,7 @@ namespace JuegoDeCartas.Challenges
         public Button button;
         public Image image;
         public TextMeshProUGUI nameText;
+        public TextMeshProUGUI difficultyText;
         public TextMeshProUGUI statusText;
         public GameObject selectedState;
 
@@ -33,8 +34,16 @@ namespace JuegoDeCartas.Challenges
 
             if (nameText != null)
                 nameText.text = data != null ? data.challengeName : "";
+            if (difficultyText != null)
+                difficultyText.text = data != null ? data.GetDifficultyLabel() : "";
             if (statusText != null)
-                statusText.text = data != null && data.IsCompleted ? "COMPLETADO" : "";
+            {
+                statusText.text = data == null
+                    ? ""
+                    : !data.implemented
+                        ? "CONCEPTO"
+                        : data.IsCompleted ? "COMPLETADO" : "";
+            }
             if (image != null)
             {
                 image.sprite = data != null ? data.image : null;

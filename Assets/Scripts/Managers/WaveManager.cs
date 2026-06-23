@@ -182,6 +182,12 @@ namespace JuegoDeCartas.Managers
                     gold = 150;
             }
 
+            if (battleManager != null &&
+                battleManager.relicInventory != null)
+            {
+                gold += battleManager.relicInventory.OnEnemyDefeated();
+            }
+
             if (gold > 0 && gameManager != null)
                 gameManager.dinero += gold;
 

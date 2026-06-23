@@ -22,25 +22,46 @@ MonoBehaviour:
   upgradeOptions:
   - upgradeName: Empunadura ligera
     description: Reduce su coste en 1.
+    cardDescription: Coste -1.
     costReduction: 1
     reactivations: 0
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Doble corte
     description: Ataca una segunda vez.
+    cardDescription: Ataque x2.
     costReduction: 0
     reactivations: 1
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Danza de acero
     description: Reduce su coste en 1 y se reactiva una vez.
+    cardDescription: Coste -1; 2 usos.
     costReduction: 1
     reactivations: 1
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Tormenta de filos
     description: Se reactiva dos veces adicionales.
+    cardDescription: Se usa 3 veces.
     costReduction: 0
     reactivations: 2
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  epiphanyOptions:
+  - epiphanyName: Filo eterno
+    description: Tras el ataque, inflige 5 de dano y gana 3 de armadura.
+    cardDescription: 'Epifania: +5 dano y +3 armadura.'
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects:
+    - {fileID: 11400000, guid: 7d0753f1e8c99ab49a497374e36bc6fa, type: 2}
+  epiphany:
+    epiphanyName: 
+    description: 
+    cardDescription: 
+    costReduction: 0
+    reactivations: 0
     preventDestroyOnUse: 0
     bonusEffects: []

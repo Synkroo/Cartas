@@ -127,6 +127,61 @@ namespace JuegoDeCartas.Tests
         }
 
         [Test]
+        public void PlayerFramePrefersSubclassNameOverClassName()
+        {
+            CharacterData character = ScriptableObject.CreateInstance<CharacterData>();
+            character.characterName = "Caballero";
+            SubclassData subclass = ScriptableObject.CreateInstance<SubclassData>();
+            subclass.subclassName = "Caballero pesado";
+
+            Assert.AreEqual(
+                "Caballero",
+                UIManager.ResolveClassOrSubclassName(character, null)
+            );
+            Assert.AreEqual(
+                "Caballero pesado",
+                UIManager.ResolveClassOrSubclassName(character, subclass)
+            );
+
+            Object.DestroyImmediate(subclass);
+            Object.DestroyImmediate(character);
+        }
+
+        [Test]
+        public void PlayerFrameTooltipUsesSubclassPassiveOrCharacterMechanic()
+        {
+            CharacterData character = ScriptableObject.CreateInstance<CharacterData>();
+            character.characterName = "Caballero";
+            character.description = "Descripcion general.";
+            character.mechanicDescription = "Equilibra ataque y defensa.";
+            SubclassData subclass = ScriptableObject.CreateInstance<SubclassData>();
+            subclass.subclassName = "Lider";
+            subclass.description = "Descripcion de subclase.";
+            subclass.passiveDescription = "Los aumentos de dano se acumulan.";
+
+            PlayerFrameHoverTooltip.ResolveIdentityTooltip(
+                character,
+                null,
+                out string classTitle,
+                out string classDescription
+            );
+            PlayerFrameHoverTooltip.ResolveIdentityTooltip(
+                character,
+                subclass,
+                out string subclassTitle,
+                out string subclassDescription
+            );
+
+            Assert.AreEqual("Caballero", classTitle);
+            Assert.AreEqual("Equilibra ataque y defensa.", classDescription);
+            Assert.AreEqual("Lider", subclassTitle);
+            Assert.AreEqual("Los aumentos de dano se acumulan.", subclassDescription);
+
+            Object.DestroyImmediate(subclass);
+            Object.DestroyImmediate(character);
+        }
+
+        [Test]
         public void EveryCharacterHasThreeOwnedSubclasses()
         {
             CharacterData[] characters =
@@ -302,6 +357,8 @@ namespace JuegoDeCartas.Tests
             ItemPackData arcane = LoadPack("SobreArcano");
             ItemPackData forge = LoadPack("SobreForja");
             ItemPackData chaos = LoadPack("SobreCaos");
+            ItemPackData epiphany = LoadPack("SobreEpifania");
+            ItemPackData archetypes = LoadPack("SobreArquetipos");
 
             AssertPack(common, 200, 3, 24f, 85f, 15f, 0f);
             AssertPack(rare, 400, 4, 12f, 15f, 75f, 10f);
@@ -310,6 +367,26 @@ namespace JuegoDeCartas.Tests
             AssertPack(arcane, 350, 3, 16f, 45f, 45f, 10f);
             AssertPack(forge, 450, 3, 14f, 10f, 65f, 25f);
             AssertPack(chaos, 550, 5, 10f, 20f, 45f, 35f);
+            AssertPack(epiphany, 600, 1, 18f, 0f, 0f, 100f);
+            AssertPack(archetypes, 500, 1, 18f, 0f, 0f, 100f);
+        }
+
+        [Test]
+        public void ThematicPacksAllowEpiphanyAndCrossClassItems()
+        {
+            ItemPackData arcane = LoadPack("SobreArcano");
+            ItemPackData forge = LoadPack("SobreForja");
+            ArticuloData epiphany = AssetDatabase.LoadAssetAtPath<ArticuloData>(
+                "Assets/Scripts/Articulos/Articulos S.O/DespertarEpifania.asset"
+            );
+            ArticuloData crossClass = AssetDatabase.LoadAssetAtPath<ArticuloData>(
+                "Assets/Scripts/Articulos/Articulos S.O/PortalDeArquetipos.asset"
+            );
+
+            Assert.NotNull(epiphany);
+            Assert.NotNull(crossClass);
+            Assert.IsTrue(forge.Allows(epiphany));
+            Assert.IsTrue(arcane.Allows(crossClass));
         }
 
         [Test]
@@ -508,7 +585,10 @@ namespace JuegoDeCartas.Tests
             fixture.cardSelection.contentParent.GetComponentInChildren<Button>().onClick.Invoke();
             Assert.IsTrue(fixture.upgradePanel.activeSelf);
 
-            fixture.upgradeSelection.Cancel();
+            Assert.IsTrue(
+                fixture.upgradeSelection.cancelButton.gameObject.activeSelf
+            );
+            fixture.upgradeSelection.cancelButton.onClick.Invoke();
 
             Assert.IsFalse(fixture.upgradePanel.activeSelf);
             Assert.IsTrue(fixture.packPanel.activeSelf);
@@ -520,6 +600,124 @@ namespace JuegoDeCartas.Tests
             Object.DestroyImmediate(upgrade);
             Object.DestroyImmediate(offer.Definition);
             Object.DestroyImmediate(cardData);
+        }
+
+        [Test]
+        public void EpiphanyChoiceCanGoBackAndSelectAConfiguredOptionWithoutRefund()
+        {
+            ShopFixture fixture = CreateShopFixture(true);
+            ConfigureUpgradeSelection(fixture, 2);
+            fixture.gameManager.dinero = 300;
+
+            CardData cardData = ScriptableObject.CreateInstance<CardData>();
+            cardData.cardName = "Carta";
+            cardData.epiphanyOptions = new List<CardEpiphany>
+            {
+                new CardEpiphany
+                {
+                    epiphanyName = "Primera",
+                    description = "Efecto uno."
+                },
+                new CardEpiphany
+                {
+                    epiphanyName = "Segunda",
+                    description = "Efecto dos."
+                }
+            };
+            Card card = new Card(cardData);
+            fixture.battle.deckManager.hand.Add(card);
+
+            ArticuloData epiphany = CreateItem("Epifania", Rareza.Epico);
+            epiphany.tipoEfecto = TipoEfectoArticulo.DespertarEpifania;
+            ItemPackOffer offer = CreateOffer(epiphany, 200);
+
+            Assert.IsTrue(fixture.shop.TryPurchasePack(offer));
+            Assert.AreEqual(100, fixture.gameManager.dinero);
+            Assert.IsTrue(fixture.shop.TryClaimItem(offer, epiphany));
+            fixture.cardSelection.contentParent
+                .GetComponentInChildren<Button>()
+                .onClick.Invoke();
+
+            Assert.IsTrue(fixture.upgradePanel.activeSelf);
+            Assert.IsTrue(
+                fixture.upgradeSelection.upgradeButtons[1].gameObject.activeSelf
+            );
+            Assert.IsTrue(
+                fixture.upgradeSelection.cancelButton.gameObject.activeSelf
+            );
+
+            fixture.upgradeSelection.cancelButton.onClick.Invoke();
+
+            Assert.IsTrue(fixture.packPanel.activeSelf);
+            Assert.IsFalse(fixture.cardPanel.activeSelf);
+            Assert.AreEqual(100, fixture.gameManager.dinero);
+            Assert.IsFalse(offer.Claimed);
+            Assert.IsFalse(card.epiphanyUnlocked);
+
+            Assert.IsTrue(fixture.shop.TryClaimItem(offer, epiphany));
+            fixture.cardSelection.contentParent
+                .GetComponentInChildren<Button>()
+                .onClick.Invoke();
+            fixture.upgradeSelection.upgradeButtons[1].onClick.Invoke();
+
+            Assert.IsTrue(card.epiphanyUnlocked);
+            Assert.AreEqual(1, card.selectedEpiphanyIndex);
+            Assert.AreEqual("Segunda", card.Epiphany.epiphanyName);
+            Assert.IsTrue(offer.Claimed);
+            Assert.AreEqual(100, fixture.gameManager.dinero);
+
+            fixture.Destroy();
+            Object.DestroyImmediate(epiphany);
+            Object.DestroyImmediate(offer.Definition);
+            Object.DestroyImmediate(cardData);
+        }
+
+        [Test]
+        public void SingleEpiphanyIsCenteredAndRestoresTheRegularGrid()
+        {
+            ShopFixture fixture = CreateShopFixture(true);
+            ConfigureUpgradeSelection(fixture, 2);
+            RectTransform first = (RectTransform)fixture
+                .upgradeSelection.upgradeButtons[0].transform;
+            RectTransform second = (RectTransform)fixture
+                .upgradeSelection.upgradeButtons[1].transform;
+            first.anchorMin = new Vector2(0.08f, 0.48f);
+            first.anchorMax = new Vector2(0.47f, 0.82f);
+            second.anchorMin = new Vector2(0.53f, 0.48f);
+            second.anchorMax = new Vector2(0.92f, 0.82f);
+
+            CardData data = ScriptableObject.CreateInstance<CardData>();
+            data.epiphanyOptions = new List<CardEpiphany>
+            {
+                new CardEpiphany { epiphanyName = "Unica" }
+            };
+            Card card = new Card(data);
+
+            Assert.IsTrue(
+                fixture.upgradeSelection.ShowEpiphanies(card, () => { })
+            );
+            Assert.AreEqual(
+                fixture.upgradeSelection.singleOptionAnchorMin,
+                first.anchorMin
+            );
+            Assert.AreEqual(
+                fixture.upgradeSelection.singleOptionAnchorMax,
+                first.anchorMax
+            );
+            Assert.IsFalse(
+                fixture.upgradeSelection.upgradeButtons[1].gameObject.activeSelf
+            );
+            Assert.IsFalse(
+                fixture.upgradeSelection.cancelButton.gameObject.activeSelf
+            );
+
+            fixture.upgradeSelection.Cancel();
+
+            Assert.AreEqual(new Vector2(0.08f, 0.48f), first.anchorMin);
+            Assert.AreEqual(new Vector2(0.47f, 0.82f), first.anchorMax);
+
+            fixture.Destroy();
+            Object.DestroyImmediate(data);
         }
 
         [Test]
@@ -570,6 +768,183 @@ namespace JuegoDeCartas.Tests
                 Object.DestroyImmediate(definition);
             DestroyItems(fixture.shop.itemPool);
             fixture.Destroy();
+        }
+
+        [Test]
+        public void RestockKeepsReservedPackAndReplacesOtherOffers()
+        {
+            ShopFixture fixture = CreateShopFixture();
+            fixture.shop.packPrefab = fixture.packPrefab;
+            fixture.shop.packDefinitions = new List<ItemPackData>
+            {
+                CreatePackDefinition("Comun", 1)
+            };
+            fixture.shop.itemPool = new List<ArticuloData>
+            {
+                CreateItem("A", Rareza.Comun),
+                CreateItem("B", Rareza.Comun),
+                CreateItem("C", Rareza.Comun)
+            };
+            fixture.shop.slotContainers = new[]
+            {
+                new GameObject("Slot1").transform,
+                new GameObject("Slot2").transform,
+                new GameObject("Slot3").transform
+            };
+            for (int i = 0; i < fixture.shop.slotContainers.Length; i++)
+                fixture.shop.slotContainers[i].SetParent(fixture.root.transform);
+
+            fixture.shop.restockCost = 50;
+            fixture.gameManager.dinero = 500;
+            Assert.IsTrue(fixture.shop.TryRestock());
+
+            ItemPackOffer reserved = fixture.shop.CurrentOffers[0];
+            ItemPackOffer replaced = fixture.shop.CurrentOffers[1];
+            Assert.IsTrue(fixture.shop.ToggleReservation(reserved));
+            Assert.IsTrue(reserved.Reserved);
+
+            Assert.IsTrue(fixture.shop.TryRestock());
+
+            Assert.AreSame(reserved, fixture.shop.CurrentOffers[0]);
+            Assert.IsTrue(fixture.shop.CurrentOffers[0].Reserved);
+            Assert.AreNotSame(replaced, fixture.shop.CurrentOffers[1]);
+            Assert.AreEqual(400, fixture.gameManager.dinero);
+
+            Object.DestroyImmediate(fixture.shop.packDefinitions[0]);
+            DestroyItems(fixture.shop.itemPool);
+            fixture.Destroy();
+        }
+
+        [Test]
+        public void RestockKeepsReservedPackGameObjectWithoutReplayingEntrance()
+        {
+            ShopFixture fixture = CreateShopFixture();
+            fixture.shop.packPrefab = fixture.packPrefab;
+            fixture.shop.packDefinitions = new List<ItemPackData>
+            {
+                CreatePackDefinition("Comun", 1)
+            };
+            fixture.shop.itemPool = new List<ArticuloData>
+            {
+                CreateItem("A", Rareza.Comun),
+                CreateItem("B", Rareza.Comun),
+                CreateItem("C", Rareza.Comun)
+            };
+            fixture.shop.slotContainers = new[]
+            {
+                new GameObject("Slot1").transform,
+                new GameObject("Slot2").transform
+            };
+            for (int i = 0; i < fixture.shop.slotContainers.Length; i++)
+                fixture.shop.slotContainers[i].SetParent(fixture.root.transform);
+
+            fixture.shop.restockCost = 50;
+            fixture.gameManager.dinero = 500;
+            Assert.IsTrue(fixture.shop.TryRestock());
+
+            ItemPackOffer reserved = fixture.shop.CurrentOffers[0];
+            GameObject reservedObject = fixture.shop.slotContainers[0]
+                .GetChild(0)
+                .gameObject;
+            Assert.IsTrue(fixture.shop.ToggleReservation(reserved));
+
+            Assert.IsTrue(fixture.shop.TryRestock());
+
+            Assert.AreSame(
+                reservedObject,
+                fixture.shop.slotContainers[0].GetChild(0).gameObject
+            );
+            Assert.AreEqual(1, fixture.shop.slotContainers[0].childCount);
+            Assert.AreEqual(1, fixture.shop.slotContainers[1].childCount);
+
+            Object.DestroyImmediate(fixture.shop.packDefinitions[0]);
+            DestroyItems(fixture.shop.itemPool);
+            fixture.Destroy();
+        }
+
+        [Test]
+        public void ReservedPackPersistsWhenShopClosesAndReopens()
+        {
+            ShopFixture fixture = CreateShopFixture();
+            fixture.shop.pauseTime = false;
+            fixture.shop.packPrefab = fixture.packPrefab;
+            fixture.shop.packDefinitions = new List<ItemPackData>
+            {
+                CreatePackDefinition("Comun", 1)
+            };
+            fixture.shop.itemPool = new List<ArticuloData>
+            {
+                CreateItem("A", Rareza.Comun),
+                CreateItem("B", Rareza.Comun),
+                CreateItem("C", Rareza.Comun)
+            };
+            fixture.shop.slotContainers = new[]
+            {
+                new GameObject("Slot1").transform,
+                new GameObject("Slot2").transform
+            };
+            for (int i = 0; i < fixture.shop.slotContainers.Length; i++)
+                fixture.shop.slotContainers[i].SetParent(fixture.root.transform);
+
+            fixture.shop.Open();
+            ItemPackOffer reserved = fixture.shop.CurrentOffers[0];
+            ItemPackOffer oldUnreserved = fixture.shop.CurrentOffers[1];
+            GameObject reservedObject = fixture.shop.slotContainers[0]
+                .GetChild(0)
+                .gameObject;
+            Assert.IsTrue(fixture.shop.ToggleReservation(reserved));
+
+            fixture.shop.Close();
+
+            Assert.AreSame(reserved, fixture.shop.CurrentOffers[0]);
+            Assert.IsTrue(reserved.Reserved);
+            Assert.AreSame(
+                reservedObject,
+                fixture.shop.slotContainers[0].GetChild(0).gameObject
+            );
+
+            fixture.shop.Open();
+
+            Assert.AreSame(reserved, fixture.shop.CurrentOffers[0]);
+            Assert.IsTrue(fixture.shop.CurrentOffers[0].Reserved);
+            Assert.AreSame(
+                reservedObject,
+                fixture.shop.slotContainers[0].GetChild(0).gameObject
+            );
+            Assert.AreNotSame(oldUnreserved, fixture.shop.CurrentOffers[1]);
+
+            Object.DestroyImmediate(fixture.shop.packDefinitions[0]);
+            DestroyItems(fixture.shop.itemPool);
+            fixture.Destroy();
+        }
+
+        [Test]
+        public void TransitionPreparesHiddenStateBeforeFirstAnimationFrame()
+        {
+            GameObject root = new GameObject(
+                "Transition",
+                typeof(RectTransform),
+                typeof(CanvasGroup),
+                typeof(UITransitionAnimator)
+            );
+            RectTransform target = root.GetComponent<RectTransform>();
+            target.anchoredPosition = new Vector2(10f, 20f);
+            target.localScale = Vector3.one;
+            UITransitionAnimator transition = root.GetComponent<UITransitionAnimator>();
+            transition.target = target;
+            transition.canvasGroup = root.GetComponent<CanvasGroup>();
+            transition.hiddenOffset = new Vector2(0f, -45f);
+            transition.hiddenScale = 0.92f;
+
+            transition.PrepareForEntrance();
+
+            Assert.AreEqual(0f, transition.canvasGroup.alpha);
+            Assert.IsFalse(transition.canvasGroup.interactable);
+            Assert.IsFalse(transition.canvasGroup.blocksRaycasts);
+            Assert.AreEqual(new Vector2(10f, -25f), target.anchoredPosition);
+            Assert.AreEqual(Vector3.one * 0.92f, target.localScale);
+
+            Object.DestroyImmediate(root);
         }
 
         [Test]
@@ -687,7 +1062,9 @@ namespace JuegoDeCartas.Tests
             return fixture;
         }
 
-        static void ConfigureUpgradeSelection(ShopFixture fixture)
+        static void ConfigureUpgradeSelection(
+            ShopFixture fixture,
+            int buttonCount = 1)
         {
             fixture.upgradePanel = new GameObject("UpgradePanel");
             fixture.upgradePanel.transform.SetParent(fixture.root.transform);
@@ -696,16 +1073,31 @@ namespace JuegoDeCartas.Tests
             fixture.upgradeOverlay.transform.SetParent(fixture.root.transform);
             fixture.upgradeOverlay.SetActive(false);
 
-            GameObject buttonObject = new GameObject("UpgradeButton", typeof(RectTransform), typeof(Button));
-            buttonObject.transform.SetParent(fixture.upgradePanel.transform);
+            GameObject cancelObject = new GameObject(
+                "CancelUpgradeButton",
+                typeof(RectTransform),
+                typeof(Button)
+            );
+            cancelObject.transform.SetParent(fixture.upgradePanel.transform);
 
             fixture.upgradeSelection = fixture.root.AddComponent<UpgradeSelectionUI>();
             fixture.upgradeSelection.panel = fixture.upgradePanel;
             fixture.upgradeSelection.overlay = fixture.upgradeOverlay;
-            fixture.upgradeSelection.upgradeButtons = new List<Button>
+            fixture.upgradeSelection.cancelButton =
+                cancelObject.GetComponent<Button>();
+            fixture.upgradeSelection.upgradeButtons = new List<Button>();
+            for (int i = 0; i < buttonCount; i++)
             {
-                buttonObject.GetComponent<Button>()
-            };
+                GameObject buttonObject = new GameObject(
+                    "UpgradeButton" + i,
+                    typeof(RectTransform),
+                    typeof(Button)
+                );
+                buttonObject.transform.SetParent(fixture.upgradePanel.transform);
+                fixture.upgradeSelection.upgradeButtons.Add(
+                    buttonObject.GetComponent<Button>()
+                );
+            }
             fixture.shop.upgradeSelectionUI = fixture.upgradeSelection;
         }
 

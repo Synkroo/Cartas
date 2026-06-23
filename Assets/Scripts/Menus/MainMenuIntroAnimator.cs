@@ -13,8 +13,14 @@ namespace JuegoDeCartas.UI
         public AnimationCurve movementCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
         Vector2[] targetPositions;
+        Coroutine routine;
 
         void Awake()
+        {
+            CacheTargets();
+        }
+
+        void CacheTargets()
         {
             targetPositions = new Vector2[targets != null ? targets.Length : 0];
             for (int i = 0; i < targetPositions.Length; i++)
@@ -26,7 +32,25 @@ namespace JuegoDeCartas.UI
 
         void OnEnable()
         {
-            StartCoroutine(Play());
+            CacheTargets();
+            if (routine != null)
+                StopCoroutine(routine);
+            routine = StartCoroutine(Play());
+        }
+
+        void OnDisable()
+        {
+            if (routine != null)
+                StopCoroutine(routine);
+            routine = null;
+
+            for (int i = 0; i < targetPositions.Length; i++)
+            {
+                if (targets[i] != null)
+                    targets[i].anchoredPosition = targetPositions[i];
+                if (canvasGroups != null && i < canvasGroups.Length && canvasGroups[i] != null)
+                    canvasGroups[i].alpha = 1f;
+            }
         }
 
         IEnumerator Play()
@@ -55,6 +79,8 @@ namespace JuegoDeCartas.UI
                 }
                 yield return null;
             }
+
+            routine = null;
         }
     }
 }

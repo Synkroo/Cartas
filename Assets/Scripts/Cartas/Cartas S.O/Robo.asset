@@ -22,25 +22,46 @@ MonoBehaviour:
   upgradeOptions:
   - upgradeName: Manos rapidas
     description: Reduce su coste en 1.
+    cardDescription: Coste -1.
     costReduction: 1
     reactivations: 0
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Inspiracion
     description: Roba una carta adicional.
+    cardDescription: Roba +1 carta.
     costReduction: 0
     reactivations: 1
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Plan calculado
     description: Reduce su coste en 1 y se reactiva una vez.
+    cardDescription: Coste -1; 2 usos.
     costReduction: 1
     reactivations: 1
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Mente desatada
     description: Se reactiva dos veces adicionales.
+    cardDescription: Se usa 3 veces.
     costReduction: 0
     reactivations: 2
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  epiphanyOptions:
+  - epiphanyName: Claridad tactica
+    description: Roba una carta adicional y recupera 1 de mana.
+    cardDescription: 'Epifania: roba 1 y recupera 1 mana.'
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects:
+    - {fileID: 11400000, guid: c3f9b87f16550804ba442bdeafbf440d, type: 2}
+  epiphany:
+    epiphanyName: 
+    description: 
+    cardDescription: 
+    costReduction: 0
+    reactivations: 0
     preventDestroyOnUse: 0
     bonusEffects: []

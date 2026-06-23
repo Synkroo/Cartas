@@ -5,10 +5,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using JuegoDeCartas.Articulos;
 using JuegoDeCartas.Cards;
+using JuegoDeCartas.Challenges;
 using JuegoDeCartas.Characters;
 using JuegoDeCartas.Enemies;
 using JuegoDeCartas.Missions;
 using JuegoDeCartas.Progression;
+using JuegoDeCartas.Relics;
 
 namespace JuegoDeCartas.UI
 {
@@ -20,7 +22,8 @@ namespace JuegoDeCartas.UI
             Heroes,
             Items,
             Packs,
-            Cards
+            Cards,
+            Relics
         }
 
         [Header("Panel")]
@@ -33,6 +36,7 @@ namespace JuegoDeCartas.UI
         public Button itemsButton;
         public Button packsButton;
         public Button cardsButton;
+        public Button relicsButton;
         public Button backButton;
 
         [Header("Entries")]
@@ -43,6 +47,8 @@ namespace JuegoDeCartas.UI
         public List<ArticuloData> items = new List<ArticuloData>();
         public List<ItemPackData> packs = new List<ItemPackData>();
         public List<CardData> cards = new List<CardData>();
+        public List<RelicData> relics = new List<RelicData>();
+        public List<ChallengeData> challenges = new List<ChallengeData>();
 
         [Header("Detail")]
         public Image detailImage;
@@ -86,6 +92,8 @@ namespace JuegoDeCartas.UI
                 packsButton.onClick.AddListener(ShowPacks);
             if (cardsButton != null)
                 cardsButton.onClick.AddListener(ShowCards);
+            if (relicsButton != null)
+                relicsButton.onClick.AddListener(ShowRelics);
             if (backButton != null)
                 backButton.onClick.AddListener(Close);
             if (subclassesButton != null)
@@ -212,6 +220,32 @@ namespace JuegoDeCartas.UI
 
             if (cards.Count > 0)
                 ShowCard(cards[0]);
+            else
+                ClearDetail();
+        }
+
+        public void ShowRelics()
+        {
+            SetHeroControlsVisible(false);
+            ClearEntries();
+
+            for (int i = 0; i < relics.Count; i++)
+            {
+                RelicData relic = relics[i];
+                if (relic == null)
+                    continue;
+
+                bool discovered = CollectionProgress.IsRelicSeen(relic);
+                CreateEntry(
+                    relic.relicName,
+                    relic.icon,
+                    discovered,
+                    () => ShowRelic(relic)
+                );
+            }
+
+            if (relics.Count > 0)
+                ShowRelic(relics[0]);
             else
                 ClearDetail();
         }
@@ -377,12 +411,69 @@ namespace JuegoDeCartas.UI
                 }
             }
 
+            List<CardEpiphany> epiphanies = card.GetEpiphanyOptions();
+            if (epiphanies.Count > 0)
+            {
+                upgrades.AppendLine();
+                upgrades.AppendLine("Epifanias:");
+                for (int i = 0; i < epiphanies.Count; i++)
+                {
+                    CardEpiphany epiphany = epiphanies[i];
+                    if (epiphany == null)
+                        continue;
+
+                    upgrades.Append("- ");
+                    if (!CollectionProgress.IsEpiphanySeen(card, i))
+                    {
+                        upgrades.AppendLine("Epifania desconocida");
+                        continue;
+                    }
+
+                    upgrades.Append(epiphany.epiphanyName);
+                    if (!string.IsNullOrWhiteSpace(epiphany.description))
+                    {
+                        upgrades.Append(": ");
+                        upgrades.Append(epiphany.description);
+                    }
+                    upgrades.AppendLine();
+                }
+            }
+
             SetDetail(
                 card.cardName,
                 card.sprite,
                 card.description,
                 $"Coste: {card.cost}\nSe destruye al usar: {(card.destroyOnUse ? "Si" : "No")}\nEfectos: {(card.effects != null ? card.effects.Count : 0)}",
                 upgrades.ToString().TrimEnd()
+            );
+        }
+
+        void ShowRelic(RelicData relic)
+        {
+            ClearDeck();
+            SetDeckVisible(false);
+            bool discovered = relic != null &&
+                              CollectionProgress.IsRelicSeen(relic);
+            SetDiscovered(discovered);
+
+            if (!discovered || relic == null)
+            {
+                SetDetail(
+                    "Reliquia desconocida",
+                    null,
+                    "Consiguela en una tienda para revelar su informacion.",
+                    "",
+                    ""
+                );
+                return;
+            }
+
+            SetDetail(
+                relic.relicName,
+                relic.icon,
+                relic.description,
+                $"Rareza: {GetRarityLabel(relic.rarity)}\nPrecio base: {relic.price}",
+                $"Conseguida: {CollectionProgress.GetRelicAcquiredCount(relic)} veces"
             );
         }
 
@@ -409,6 +500,24 @@ namespace JuegoDeCartas.UI
                 builder.Append(GetDifficultyLabel(difficulty));
                 builder.Append(completed ? " OK" : " -");
             }
+
+            builder.AppendLine();
+            builder.Append("Retos especiales: ");
+            int challengeCount = 0;
+            int completedChallenges = 0;
+            for (int i = 0; i < challenges.Count; i++)
+            {
+                ChallengeData challenge = challenges[i];
+                if (challenge == null || !challenge.CountsForCompletion)
+                    continue;
+
+                challengeCount++;
+                if (challenge.IsCompletedByCharacter(hero))
+                    completedChallenges++;
+            }
+            builder.Append(completedChallenges);
+            builder.Append("/");
+            builder.Append(challengeCount);
 
             return builder.ToString();
         }
@@ -592,6 +701,16 @@ namespace JuegoDeCartas.UI
         static string GetEffectLabel(TipoEfectoArticulo effect)
         {
             return effect.ToString();
+        }
+
+        static string GetRarityLabel(RelicRarity rarity)
+        {
+            return rarity switch
+            {
+                RelicRarity.Rara => "Rara",
+                RelicRarity.Epica => "Epica",
+                _ => "Comun"
+            };
         }
 
         static string GetDifficultyLabel(MissionDifficulty difficulty)

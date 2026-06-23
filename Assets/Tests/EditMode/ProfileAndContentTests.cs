@@ -6,6 +6,11 @@ using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 using JuegoDeCartas.UI;
+using UnityEngine.UI;
+using System.Reflection;
+using JuegoDeCartas.Relics;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 namespace JuegoDeCartas.Tests
 {
@@ -74,16 +79,19 @@ namespace JuegoDeCartas.Tests
             ProfileManager.LoadTemporary();
             var pack = ScriptableObject.CreateInstance<JuegoDeCartas.Articulos.ItemPackData>();
             var subclass = ScriptableObject.CreateInstance<SubclassData>();
+            var relic = ScriptableObject.CreateInstance<RelicData>();
 
             ProfilePrefs.SetInt(TestKey, 42);
 
             Assert.IsTrue(ProfileManager.IsTemporary);
             Assert.IsTrue(CollectionProgress.IsPackSeen(pack));
             Assert.IsTrue(CollectionProgress.IsSubclassSeen(subclass));
+            Assert.IsTrue(CollectionProgress.IsRelicSeen(relic));
             Assert.IsFalse(PlayerPrefs.HasKey(ProfileManager.ScopedKey(TestKey)));
 
             Object.DestroyImmediate(pack);
             Object.DestroyImmediate(subclass);
+            Object.DestroyImmediate(relic);
         }
 
         [Test]
@@ -160,6 +168,88 @@ namespace JuegoDeCartas.Tests
 
             Assert.IsTrue(root.activeSelf);
             Object.DestroyImmediate(root);
+        }
+
+        [Test]
+        public void ProfileRenameRequiresEnteringEditModeBeforeSaving()
+        {
+            GameObject root = new GameObject("ProfileSlotTest");
+            ProfileSlotUI slot = root.AddComponent<ProfileSlotUI>();
+            GameObject buttonObject = new GameObject(
+                "RenameButton",
+                typeof(RectTransform),
+                typeof(Button)
+            );
+            buttonObject.transform.SetParent(root.transform);
+            slot.renameButton = buttonObject.GetComponent<Button>();
+
+            typeof(ProfileSlotUI)
+                .GetMethod(
+                    "Awake",
+                    BindingFlags.Instance | BindingFlags.NonPublic
+                )
+                .Invoke(slot, null);
+
+            int renameCount = 0;
+            slot.Setup(
+                new ProfileInfo(0, "Perfil", true, "", true),
+                0.5f,
+                _ => { },
+                _ => { },
+                (_, __) => renameCount++
+            );
+
+            slot.renameButton.onClick.Invoke();
+            Assert.AreEqual(0, renameCount);
+
+            slot.renameButton.onClick.Invoke();
+            Assert.AreEqual(1, renameCount);
+
+            Object.DestroyImmediate(root);
+        }
+
+        [Test]
+        public void MainMenuWikiHasItsOwnConfiguredRelicSection()
+        {
+            const string scenePath = "Assets/Scenes/MainMenu.unity";
+            Scene scene = SceneManager.GetSceneByPath(scenePath);
+            bool openedForTest = !scene.IsValid() || !scene.isLoaded;
+            if (openedForTest)
+            {
+                scene = EditorSceneManager.OpenScene(
+                    scenePath,
+                    OpenSceneMode.Additive
+                );
+            }
+
+            try
+            {
+                CollectionMenu collection = scene
+                    .GetRootGameObjects()
+                    .SelectMany(root =>
+                        root.GetComponentsInChildren<CollectionMenu>(true))
+                    .Single();
+                ProfileMenu profile = scene
+                    .GetRootGameObjects()
+                    .SelectMany(root =>
+                        root.GetComponentsInChildren<ProfileMenu>(true))
+                    .Single();
+
+                Assert.NotNull(collection.relicsButton);
+                Assert.AreEqual("RelicsTab", collection.relicsButton.name);
+                Assert.AreEqual(12, collection.relics.Count);
+                Assert.IsTrue(collection.relics.All(relic => relic != null));
+                Assert.AreEqual(12, profile.relics.Count);
+                CollectionAssert.AreEquivalent(
+                    collection.relics,
+                    profile.relics
+                );
+            }
+            finally
+            {
+                if (openedForTest)
+                    EditorSceneManager.CloseScene(scene, true);
+            }
         }
     }
 }

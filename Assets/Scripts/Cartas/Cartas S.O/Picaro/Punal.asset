@@ -22,12 +22,14 @@ MonoBehaviour:
   upgradeOptions:
   - upgradeName: Filo oculto
     description: Se reactiva una vez y golpea de nuevo.
+    cardDescription: Golpea 2 veces.
     costReduction: 0
     reactivations: 1
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Guardia improvisada
     description: Obtiene 3 de armadura al usarla.
+    cardDescription: +3 armadura.
     costReduction: 0
     reactivations: 0
     preventDestroyOnUse: 0
@@ -35,13 +37,32 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 0f8cdcb571c9da24aacf410a1f6552cc, type: 2}
   - upgradeName: Filo envenenado
     description: Se reactiva una vez adicional.
+    cardDescription: Se usa 2 veces.
     costReduction: 0
     reactivations: 1
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Lluvia de acero
     description: Se reactiva dos veces adicionales.
+    cardDescription: Se usa 3 veces.
     costReduction: 0
     reactivations: 2
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  epiphanyOptions:
+  - epiphanyName: Filo oculto
+    description: Inflige 7 de dano adicional y roba una carta.
+    cardDescription: 'Epifania: +7 dano y roba 1.'
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects:
+    - {fileID: 11400000, guid: 424a5ef0a62457344b38b67a698f5aa1, type: 2}
+  epiphany:
+    epiphanyName: 
+    description: 
+    cardDescription: 
+    costReduction: 0
+    reactivations: 0
     preventDestroyOnUse: 0
     bonusEffects: []

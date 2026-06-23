@@ -22,25 +22,46 @@ MonoBehaviour:
   upgradeOptions:
   - upgradeName: Descarga gratuita
     description: Reduce su coste en 1.
+    cardDescription: Coste -1.
     costReduction: 1
     reactivations: 0
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Arco electrico
     description: Golpea una segunda vez.
+    cardDescription: Golpea 2 veces.
     costReduction: 0
     reactivations: 1
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Sobrecarga
     description: Reduce su coste en 1 y se reactiva una vez.
+    cardDescription: Coste -1; 2 usos.
     costReduction: 1
     reactivations: 1
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Cadena electrica
     description: Se reactiva dos veces adicionales.
+    cardDescription: Se usa 3 veces.
     costReduction: 0
     reactivations: 2
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  epiphanyOptions:
+  - epiphanyName: Sobrecarga
+    description: Inflige 4 de dano adicional y recupera 1 de mana.
+    cardDescription: 'Epifania: +4 dano y recupera 1 mana.'
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects:
+    - {fileID: 11400000, guid: 87433185eb763a848b0c98d141a04aaf, type: 2}
+  epiphany:
+    epiphanyName: 
+    description: 
+    cardDescription: 
+    costReduction: 0
+    reactivations: 0
     preventDestroyOnUse: 0
     bonusEffects: []

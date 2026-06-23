@@ -129,11 +129,13 @@ namespace JuegoDeCartas.Articulos
         public static bool NeedsSelection(TipoEfectoArticulo tipo)
         {
             return tipo == TipoEfectoArticulo.AgregarCartaEleccion
+                || tipo == TipoEfectoArticulo.AgregarCartaOtraClase
                 || tipo == TipoEfectoArticulo.MejorarCarta
                 || tipo == TipoEfectoArticulo.DuplicarCarta
                 || tipo == TipoEfectoArticulo.DuplicarCartaMejoras
                 || tipo == TipoEfectoArticulo.ReducirCoste
-                || tipo == TipoEfectoArticulo.DescartarCarta;
+                || tipo == TipoEfectoArticulo.DescartarCarta
+                || tipo == TipoEfectoArticulo.DespertarEpifania;
         }
 
         public static List<Card> GetSelectionSource(ArticuloData item, BattleManager battle)
@@ -143,6 +145,9 @@ namespace JuegoDeCartas.Articulos
 
             if (item.tipoEfecto == TipoEfectoArticulo.AgregarCartaEleccion)
                 return BuildUniqueCardChoices(GetValidCardDataPool(battle));
+
+            if (item.tipoEfecto == TipoEfectoArticulo.AgregarCartaOtraClase)
+                return BuildUniqueCardChoices(GetExternalCardDataPool(item, battle));
 
             var dm = battle.deckManager;
             var all = new List<Card>(dm.deck.Count + dm.hand.Count + dm.discard.Count);
@@ -154,7 +159,15 @@ namespace JuegoDeCartas.Articulos
             var tipo = item.tipoEfecto;
 
             if (tipo == TipoEfectoArticulo.MejorarCarta)
-                all.RemoveAll(c => c.upgraded);
+                all.RemoveAll(c => c.selectedUpgradeIndex >= 0);
+
+            if (tipo == TipoEfectoArticulo.DespertarEpifania)
+            {
+                all.RemoveAll(c =>
+                    c.epiphanyUnlocked ||
+                    c.data.GetEpiphanyOptions().Count == 0
+                );
+            }
 
             if (tipo == TipoEfectoArticulo.ReducirCoste)
                 all.RemoveAll(c => c.effectiveCost <= 0);
@@ -172,9 +185,18 @@ namespace JuegoDeCartas.Articulos
             switch (item.tipoEfecto)
             {
                 case TipoEfectoArticulo.AgregarCartaEleccion:
+                case TipoEfectoArticulo.AgregarCartaOtraClase:
                     battle.deckManager.hand.Add(new Card(selected.data));
                     battle.RenderHand();
                     battle.deckManager.OnDeckChanged?.Invoke();
+                    break;
+
+                case TipoEfectoArticulo.DespertarEpifania:
+                    if (selected.ApplyEpiphany())
+                    {
+                        battle.RenderHand();
+                        battle.deckManager.OnDeckChanged?.Invoke();
+                    }
                     break;
 
                 case TipoEfectoArticulo.MejorarCarta:
@@ -253,6 +275,41 @@ namespace JuegoDeCartas.Articulos
                 CardData cardData = battle.deckManager.startingDeck[i];
                 if (cardData != null)
                     pool.Add(cardData);
+            }
+
+            return pool;
+        }
+
+        static List<CardData> GetExternalCardDataPool(
+            ArticuloData item,
+            BattleManager battle)
+        {
+            var pool = new List<CardData>();
+            if (item == null || item.cardPool == null)
+                return pool;
+
+            var ownCards = new HashSet<CardData>();
+            if (battle != null &&
+                battle.deckManager != null &&
+                battle.deckManager.startingDeck != null)
+            {
+                for (int i = 0; i < battle.deckManager.startingDeck.Count; i++)
+                {
+                    CardData ownCard = battle.deckManager.startingDeck[i];
+                    if (ownCard != null)
+                        ownCards.Add(ownCard);
+                }
+            }
+
+            for (int i = 0; i < item.cardPool.Count; i++)
+            {
+                CardData candidate = item.cardPool[i];
+                if (candidate != null &&
+                    !ownCards.Contains(candidate) &&
+                    !pool.Contains(candidate))
+                {
+                    pool.Add(candidate);
+                }
             }
 
             return pool;

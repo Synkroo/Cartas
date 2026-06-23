@@ -10,12 +10,18 @@ namespace JuegoDeCartas.Cards
         public TextMeshProUGUI nameText;
         public TextMeshProUGUI descriptionText;
         public TextMeshProUGUI costText;
+        public TextMeshProUGUI upgradeStatusText;
         public Image artworkImage;
-        public Image backgroundImage;
+        public Image frameImage;
 
-        [Header("State Colors")]
-        public Color normalColor = new Color(0.3301887f, 0.3301887f, 0.3301887f, 1f);
-        public Color upgradedColor = Color.red;
+        [Header("Upgrade Presentation")]
+        public Sprite normalFrameSprite;
+        public Sprite upgradedFrameSprite;
+        public Sprite epiphanyFrameSprite;
+        public string upgradedDescriptionFormat = "{0}\n{1}";
+        public string combinedUpgradeDescriptionFormat = "{0} {1}";
+        public string reducedCostDescriptionFormat = "Coste -{0}.";
+        public string reactivationDescriptionFormat = "{0} usos.";
 
         public bool interactable = true;
 
@@ -43,20 +49,43 @@ namespace JuegoDeCartas.Cards
                 if (nameText != null) nameText.text = "";
                 if (descriptionText != null) descriptionText.text = "";
                 if (costText != null) costText.text = "";
+                if (upgradeStatusText != null)
+                    upgradeStatusText.gameObject.SetActive(false);
                 if (artworkImage != null) artworkImage.enabled = false;
                 return;
             }
 
-            if (nameText != null) nameText.text = card.data.cardName;
+            CardEpiphany epiphany = card.Epiphany;
+            if (nameText != null)
+            {
+                nameText.text = epiphany != null &&
+                                !string.IsNullOrWhiteSpace(epiphany.epiphanyName)
+                    ? epiphany.epiphanyName
+                    : card.data.cardName;
+            }
             if (descriptionText != null)
             {
-                CardUpgradeOption upgrade = card.SelectedUpgrade;
-                string baseDescription = battleManager != null
-                    ? battleManager.GetRuntimeCardDescription(card.data)
-                    : card.data.description;
-                descriptionText.text = upgrade != null && !string.IsNullOrWhiteSpace(upgrade.description)
-                    ? baseDescription + "\n" + upgrade.description
-                    : baseDescription;
+                if (epiphany != null)
+                {
+                    descriptionText.text =
+                        CardDescriptionBuilder.BuildFinalDescription(card);
+                }
+                else
+                {
+                    CardUpgradeOption upgrade = card.SelectedUpgrade;
+                    string baseDescription = battleManager != null
+                        ? battleManager.GetRuntimeCardDescription(card.data)
+                        : card.data.description;
+                    string upgradeDescription = GetUpgradeDescription(card, upgrade);
+                    descriptionText.text = card.upgraded &&
+                                           !string.IsNullOrWhiteSpace(upgradeDescription)
+                        ? string.Format(
+                            upgradedDescriptionFormat,
+                            baseDescription,
+                            upgradeDescription
+                        )
+                        : baseDescription;
+                }
             }
             if (costText != null) costText.text = card.effectiveCost.ToString();
             if (artworkImage != null)
@@ -65,11 +94,58 @@ namespace JuegoDeCartas.Cards
                 artworkImage.enabled = card.data.sprite != null;
             }
 
-            if (backgroundImage == null)
-                backgroundImage = transform.Find("fondo carta")?.GetComponent<Image>();
+            if (frameImage != null)
+            {
+                Sprite frame = epiphany != null
+                    ? epiphanyFrameSprite
+                    : card.upgraded
+                        ? upgradedFrameSprite
+                        : normalFrameSprite;
+                if (frame != null)
+                    frameImage.sprite = frame;
+            }
 
-            if (backgroundImage != null)
-                backgroundImage.color = card.upgraded ? upgradedColor : normalColor;
+            if (upgradeStatusText != null)
+            {
+                upgradeStatusText.text = "";
+                upgradeStatusText.gameObject.SetActive(false);
+            }
+        }
+
+        string GetUpgradeDescription(Card currentCard, CardUpgradeOption upgrade)
+        {
+            if (upgrade != null)
+                return upgrade.GetCardDescription();
+
+            if (currentCard.costReduction > 0 &&
+                currentCard.reactivationCount > 0)
+            {
+                return string.Format(
+                    reducedCostDescriptionFormat,
+                    currentCard.costReduction
+                ) + " " + string.Format(
+                    reactivationDescriptionFormat,
+                    currentCard.reactivationCount + 1
+                );
+            }
+
+            if (currentCard.costReduction > 0)
+            {
+                return string.Format(
+                    reducedCostDescriptionFormat,
+                    currentCard.costReduction
+                );
+            }
+
+            if (currentCard.reactivationCount > 0)
+            {
+                return string.Format(
+                    reactivationDescriptionFormat,
+                    currentCard.reactivationCount + 1
+                );
+            }
+
+            return "";
         }
 
         public void OnClick()

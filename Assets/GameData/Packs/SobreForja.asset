@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: SobreForja
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Articulos.ItemPackData
   packName: Sobre de forja
-  description: Mejoras y manipulacion directa de cartas del mazo.
+  description: Mejoras, epifanias y manipulacion directa de cartas del mazo.
   image: {fileID: 0}
   displayRarity: 2
   shopAppearanceWeight: 14
   price: 450
   choiceCount: 3
-  allowedEffects: 0a0000000c0000000e000000
+  allowedEffects: 0a0000000c0000000e0000000f000000
   rarityWeights:
   - rarity: 0
     weight: 10

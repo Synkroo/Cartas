@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: SobreArcano
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Articulos.ItemPackData
   packName: Sobre arcano
-  description: Recursos de mana y nuevas cartas para ampliar el mazo.
+  description: Recursos de mana y cartas, incluso de otras clases, para ampliar el mazo.
   image: {fileID: 0}
   displayRarity: 1
   shopAppearanceWeight: 16
   price: 350
   choiceCount: 3
-  allowedEffects: 040000000800000009000000
+  allowedEffects: 04000000080000000900000010000000
   rarityWeights:
   - rarity: 0
     weight: 45

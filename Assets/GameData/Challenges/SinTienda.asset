@@ -13,8 +13,12 @@ MonoBehaviour:
   m_Name: SinTienda
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Challenges.ChallengeData
   challengeName: Sin tienda
-  description: Supera la mision sin comprar sobres, hacer restock ni cobrar intereses.
+  description: Supera esta mision especial sin comprar sobres, hacer restock ni cobrar intereses.
   image: {fileID: 0}
+  difficulty: 1
+  implemented: 1
+  ruleSummary: No aparecen tiendas entre combates. La eleccion de subclase se mantiene.
+  encounterMission: {fileID: 11400000, guid: 24b96661fa5b0f04f92be79e53f0bb0f, type: 2}
   modifier: 2
   requiredCharacter: {fileID: 0}
   combatCountOverride: 0

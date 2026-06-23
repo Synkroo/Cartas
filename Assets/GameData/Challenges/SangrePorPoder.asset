@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c83c181dc7341aa80fc2616546f5641, type: 3}
+  m_Name: SangrePorPoder
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Challenges.ChallengeData
+  challengeName: Sangre por poder
+  description: Cuanta menos vida conserves, mas dano hacen tus cartas. Curarte reduce el bono y obliga a decidir entre seguridad y potencia.
+  image: {fileID: 0}
+  difficulty: 2
+  implemented: 0
+  ruleSummary: El dano aumenta con la vida perdida. Las curaciones son menos eficaces y no se recupera vida entre combates.
+  encounterMission: {fileID: 11400000, guid: 24b96661fa5b0f04f92be79e53f0bb0f, type: 2}
+  modifier: 0
+  requiredCharacter: {fileID: 0}
+  combatCountOverride: 0

@@ -1,15 +1,23 @@
 using JuegoDeCartas.Characters;
+using JuegoDeCartas.Missions;
 using JuegoDeCartas.Progression;
 using UnityEngine;
 
 namespace JuegoDeCartas.Challenges
 {
+    public enum ChallengeDifficulty
+    {
+        Facil,
+        Media,
+        Dificil
+    }
+
     public enum ChallengeModifier
     {
-        SeededRun,
-        BossRush,
-        NoShop,
-        SingleClass
+        Concept = 0,
+        BossRush = 1,
+        NoShop = 2,
+        SingleClass = 3
     }
 
     [CreateAssetMenu(
@@ -22,6 +30,13 @@ namespace JuegoDeCartas.Challenges
         public string challengeName;
         [TextArea(3, 6)] public string description;
         public Sprite image;
+        public ChallengeDifficulty difficulty = ChallengeDifficulty.Media;
+        public bool implemented = true;
+        [TextArea(2, 5)] public string ruleSummary;
+
+        [Header("Special Mission")]
+        [Tooltip("Configuracion de enemigos usada por este reto. No aparece entre las misiones normales.")]
+        public MissionData encounterMission;
 
         [Header("Rules")]
         public ChallengeModifier modifier;
@@ -29,8 +44,20 @@ namespace JuegoDeCartas.Challenges
         [Min(0)] public int combatCountOverride;
 
         public bool IsCompleted =>
-            ProfileManager.IsTemporary ||
-            ProfilePrefs.GetInt(GetCompletionKey(), 0) == 1;
+            implemented &&
+            (ProfileManager.IsTemporary ||
+             ProfilePrefs.GetInt(GetCompletionKey(), 0) == 1);
+
+        public bool CountsForCompletion => implemented;
+        public bool IsPlayable => implemented && encounterMission != null;
+
+        public bool IsCompletedByCharacter(CharacterData character)
+        {
+            return implemented &&
+                   character != null &&
+                   (ProfileManager.IsTemporary ||
+                    ProfilePrefs.GetInt(GetCharacterCompletionKey(character), 0) == 1);
+        }
 
         public bool AllowsCharacter(CharacterData character)
         {
@@ -41,29 +68,52 @@ namespace JuegoDeCartas.Challenges
 
         public string GetRuleSummary()
         {
+            if (!string.IsNullOrWhiteSpace(ruleSummary))
+                return ruleSummary;
+
             return modifier switch
             {
                 ChallengeModifier.BossRush =>
-                    "Todos los combates son contra el jefe de la mision.",
+                    "Todos los combates son contra el jefe configurado para este reto.",
                 ChallengeModifier.NoShop =>
                     "No aparecen tiendas entre combates.",
                 ChallengeModifier.SingleClass when requiredCharacter != null =>
                     "Solo puede jugarse con " + requiredCharacter.characterName + ".",
                 ChallengeModifier.SingleClass =>
                     "Solo puede jugarse con la clase configurada.",
-                _ => "Run normal reproducible mediante su codigo de semilla."
+                _ => "Mision especial con reglas propias."
             };
         }
 
-        public void MarkCompleted()
+        public string GetDifficultyLabel()
         {
+            return difficulty switch
+            {
+                ChallengeDifficulty.Facil => "FACIL",
+                ChallengeDifficulty.Dificil => "DIFICIL",
+                _ => "MEDIA"
+            };
+        }
+
+        public void MarkCompleted(CharacterData character)
+        {
+            if (!implemented)
+                return;
+
             ProfilePrefs.SetInt(GetCompletionKey(), 1);
+            if (character != null)
+                ProfilePrefs.SetInt(GetCharacterCompletionKey(character), 1);
             ProfilePrefs.Save();
         }
 
         string GetCompletionKey()
         {
             return "ChallengeCompleted_" + name;
+        }
+
+        string GetCharacterCompletionKey(CharacterData character)
+        {
+            return GetCompletionKey() + "_" + character.name;
         }
 
         void OnValidate()

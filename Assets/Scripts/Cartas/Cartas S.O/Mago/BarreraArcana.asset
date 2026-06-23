@@ -22,25 +22,46 @@ MonoBehaviour:
   upgradeOptions:
   - upgradeName: Glifo eficiente
     description: Reduce su coste en 1.
+    cardDescription: Coste -1.
     costReduction: 1
     reactivations: 0
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Barrera doble
     description: Obtiene la armadura dos veces.
+    cardDescription: Armadura x2.
     costReduction: 0
     reactivations: 1
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Prisma protector
     description: Reduce su coste en 1 y se reactiva una vez.
+    cardDescription: Coste -1; 2 usos.
     costReduction: 1
     reactivations: 1
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Fortaleza arcana
     description: Se reactiva dos veces adicionales.
+    cardDescription: Se usa 3 veces.
     costReduction: 0
     reactivations: 2
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  epiphanyOptions:
+  - epiphanyName: Prisma arcano
+    description: Gana 7 de armadura adicional y roba una carta.
+    cardDescription: 'Epifania: +7 armadura y roba 1.'
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects:
+    - {fileID: 11400000, guid: e88227dabe349ab44b6da548c75a46d3, type: 2}
+  epiphany:
+    epiphanyName: 
+    description: 
+    cardDescription: 
+    costReduction: 0
+    reactivations: 0
     preventDestroyOnUse: 0
     bonusEffects: []

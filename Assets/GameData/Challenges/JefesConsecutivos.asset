@@ -13,8 +13,12 @@ MonoBehaviour:
   m_Name: JefesConsecutivos
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Challenges.ChallengeData
   challengeName: Jefes consecutivos
-  description: Una carrera corta sin enemigos normales. Cada combate repite el jefe de la mision.
+  description: Una mision especial corta sin enemigos normales. Cada combate enfrenta al jefe.
   image: {fileID: 0}
+  difficulty: 2
+  implemented: 1
+  ruleSummary: Todos los combates son contra el jefe configurado para este reto.
+  encounterMission: {fileID: 11400000, guid: 24b96661fa5b0f04f92be79e53f0bb0f, type: 2}
   modifier: 1
   requiredCharacter: {fileID: 0}
   combatCountOverride: 4

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 273ec2d1544d2a3418a576ab0bdfda26, type: 3}
+  m_Name: PortalDeArquetipos
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Articulos.ArticuloData
+  nombre: Portal de Arquetipos
+  rareza: 2
+  imagen: {fileID: 0}
+  descripcion: Elige una carta de una clase distinta y anadela a tu mazo.
+  tipoEfecto: 16
+  cantidad: 1
+  cardPool:
+  - {fileID: 11400000, guid: 22b6fa9e003c6c2478ecd2e68affa5ad, type: 2}
+  - {fileID: 11400000, guid: f74a44da8993536408fb5e7e2c69f46b, type: 2}
+  - {fileID: 11400000, guid: d4d2f2d3a1b44d8f9e7c123456789abc, type: 2}
+  - {fileID: 11400000, guid: 8b2deebacc9feea4d8d5b7b7ba83cf19, type: 2}
+  - {fileID: 11400000, guid: 7bd4a90f895693d4a804827de64d1099, type: 2}
+  - {fileID: 11400000, guid: 7cd004839d2e5c642809acf7ebd5b39b, type: 2}
+  - {fileID: 11400000, guid: 94df614082522b741b9080c0ee5955f5, type: 2}
+  - {fileID: 11400000, guid: 66ad6bd10a018b94ea561142bcdffdc2, type: 2}
+  - {fileID: 11400000, guid: 8bfaa640a2d58f447937873c30b021c6, type: 2}
+  - {fileID: 11400000, guid: 4d06ce7c3df745c88843b71bff25cf71, type: 2}
+  - {fileID: 11400000, guid: be0b9901aa8428746ba249a4a9319a26, type: 2}
+  - {fileID: 11400000, guid: 1041abf20c1d48b478ec5019ecd8d893, type: 2}
+  - {fileID: 11400000, guid: 084a201847c627b45a097d00a2f06df4, type: 2}
+  - {fileID: 11400000, guid: 78f51c903e093514687ca9ac10b80ba3, type: 2}
+  - {fileID: 11400000, guid: 25184310b7d449f882a03b4c5da3f3da, type: 2}
+  - {fileID: 11400000, guid: c1713dd55b63bc641bb84848649d6154, type: 2}

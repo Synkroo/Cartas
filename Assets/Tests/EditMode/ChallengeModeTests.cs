@@ -4,6 +4,7 @@ using JuegoDeCartas.Challenges;
 using JuegoDeCartas.Characters;
 using JuegoDeCartas.Enemies;
 using JuegoDeCartas.Managers;
+using JuegoDeCartas.Progression;
 using JuegoDeCartas.UI;
 using NUnit.Framework;
 using UnityEditor;
@@ -13,9 +14,15 @@ namespace JuegoDeCartas.Tests
 {
     public class ChallengeModeTests
     {
+        bool wasTemporary;
+        int previousSlot;
+
         [SetUp]
         public void SetUp()
         {
+            wasTemporary = ProfileManager.IsTemporary;
+            previousSlot = ProfileManager.ActiveSlot;
+            ProfileManager.Load(previousSlot);
             ChallengeRunState.Clear();
             CharacterRunState.Clear();
         }
@@ -25,6 +32,10 @@ namespace JuegoDeCartas.Tests
         {
             ChallengeRunState.Clear();
             CharacterRunState.Clear();
+            if (wasTemporary)
+                ProfileManager.LoadTemporary();
+            else
+                ProfileManager.Load(previousSlot);
         }
 
         [Test]
@@ -87,7 +98,7 @@ namespace JuegoDeCartas.Tests
             ChallengeData challenge = ScriptableObject.CreateInstance<ChallengeData>();
             challenge.modifier = ChallengeModifier.BossRush;
             challenge.combatCountOverride = 4;
-            ChallengeRunState.Configure(challenge, "BOSSES");
+            ChallengeRunState.ConfigureChallenge(challenge);
             ChallengeRunState.PrepareRun();
 
             EnemyData normal = ScriptableObject.CreateInstance<EnemyData>();
@@ -128,7 +139,7 @@ namespace JuegoDeCartas.Tests
             challenge.modifier = ChallengeModifier.SingleClass;
             challenge.requiredCharacter = knight;
 
-            ChallengeRunState.Configure(challenge, "KNIGHT");
+            ChallengeRunState.ConfigureChallenge(challenge);
 
             Assert.IsTrue(ChallengeRunState.AllowsCharacter(knight));
             Assert.IsFalse(ChallengeRunState.AllowsCharacter(mage));
@@ -142,7 +153,7 @@ namespace JuegoDeCartas.Tests
         {
             ChallengeData challenge = ScriptableObject.CreateInstance<ChallengeData>();
             challenge.modifier = ChallengeModifier.NoShop;
-            ChallengeRunState.Configure(challenge, "NO-SHOP");
+            ChallengeRunState.ConfigureChallenge(challenge);
 
             GameObject root = new GameObject("NoShopChallengeTest");
             ShopManager shop = root.AddComponent<ShopManager>();
@@ -166,19 +177,89 @@ namespace JuegoDeCartas.Tests
         }
 
         [Test]
-        public void ChallengeAssetsCoverInitialModes()
+        public void ChallengeAssetsAreSpecialMissionsAndSeedIsSeparate()
         {
-            ChallengeData seeded = LoadChallenge("SemillaLibre");
             ChallengeData bosses = LoadChallenge("JefesConsecutivos");
             ChallengeData noShop = LoadChallenge("SinTienda");
-            ChallengeData knight = LoadChallenge("SoloCaballero");
+            ChallengeData blood = LoadChallenge("SangrePorPoder");
+            ChallengeData unstableDeck = LoadChallenge("MazoInestable");
+            ChallengeData interest = LoadChallenge("InteresCompuesto");
+            ChallengeData sealedPack = LoadChallenge("SobreSellado");
+            ChallengeData enemyEchoes = LoadChallenge("EcosDelEnemigo");
 
-            Assert.AreEqual(ChallengeModifier.SeededRun, seeded.modifier);
             Assert.AreEqual(ChallengeModifier.BossRush, bosses.modifier);
+            Assert.AreEqual(ChallengeDifficulty.Dificil, bosses.difficulty);
             Assert.AreEqual(4, bosses.combatCountOverride);
+            Assert.NotNull(bosses.encounterMission);
             Assert.AreEqual(ChallengeModifier.NoShop, noShop.modifier);
-            Assert.AreEqual(ChallengeModifier.SingleClass, knight.modifier);
-            Assert.NotNull(knight.requiredCharacter);
+            Assert.AreEqual(ChallengeDifficulty.Media, noShop.difficulty);
+            Assert.NotNull(noShop.encounterMission);
+            Assert.IsTrue(bosses.IsPlayable);
+            Assert.IsTrue(noShop.IsPlayable);
+            Assert.IsFalse(blood.IsPlayable);
+            Assert.IsFalse(unstableDeck.IsPlayable);
+            Assert.IsFalse(interest.IsPlayable);
+            Assert.IsFalse(sealedPack.IsPlayable);
+            Assert.IsFalse(enemyEchoes.IsPlayable);
+            Assert.IsNull(AssetDatabase.LoadAssetAtPath<ChallengeData>(
+                "Assets/GameData/Challenges/SoloCaballero.asset"
+            ));
+            Assert.IsNull(AssetDatabase.LoadAssetAtPath<ChallengeData>(
+                "Assets/GameData/Challenges/SemillaLibre.asset"
+            ));
+        }
+
+        [Test]
+        public void SeededRunDoesNotBecomeAChallenge()
+        {
+            ChallengeRunState.ConfigureSeededRun("RUN-42");
+
+            Assert.IsTrue(ChallengeRunState.IsSeededRun);
+            Assert.IsFalse(ChallengeRunState.IsChallengeRun);
+            Assert.IsNull(ChallengeRunState.SelectedChallenge);
+            Assert.AreEqual("RUN-42", ChallengeRunState.SeedCode);
+        }
+
+        [Test]
+        public void ChallengeCompletionIsStoredPerCharacter()
+        {
+            CharacterData knight = ScriptableObject.CreateInstance<CharacterData>();
+            knight.name = "TestKnight";
+            CharacterData mage = ScriptableObject.CreateInstance<CharacterData>();
+            mage.name = "TestMage";
+            ChallengeData challenge = ScriptableObject.CreateInstance<ChallengeData>();
+            challenge.name = "TestChallenge_" + System.Guid.NewGuid().ToString("N");
+
+            challenge.MarkCompleted(knight);
+
+            Assert.IsTrue(challenge.IsCompleted);
+            Assert.IsTrue(challenge.IsCompletedByCharacter(knight));
+            Assert.IsFalse(challenge.IsCompletedByCharacter(mage));
+
+            ProfilePrefs.DeleteKey("ChallengeCompleted_" + challenge.name);
+            ProfilePrefs.DeleteKey("ChallengeCompleted_" + challenge.name + "_" + knight.name);
+            ProfilePrefs.Save();
+            Object.DestroyImmediate(knight);
+            Object.DestroyImmediate(mage);
+            Object.DestroyImmediate(challenge);
+        }
+
+        [Test]
+        public void ConceptChallengesDoNotCountAsCompletion()
+        {
+            CharacterData hero = ScriptableObject.CreateInstance<CharacterData>();
+            ChallengeData challenge = ScriptableObject.CreateInstance<ChallengeData>();
+            challenge.implemented = false;
+
+            challenge.MarkCompleted(hero);
+
+            Assert.IsFalse(challenge.IsCompleted);
+            Assert.IsFalse(challenge.IsCompletedByCharacter(hero));
+            Assert.IsFalse(challenge.CountsForCompletion);
+            Assert.IsFalse(challenge.IsPlayable);
+
+            Object.DestroyImmediate(hero);
+            Object.DestroyImmediate(challenge);
         }
 
         static ChallengeData LoadChallenge(string name)

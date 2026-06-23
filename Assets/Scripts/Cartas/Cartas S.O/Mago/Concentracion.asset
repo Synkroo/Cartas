@@ -22,25 +22,46 @@ MonoBehaviour:
   upgradeOptions:
   - upgradeName: Canalizacion
     description: Recupera mana una segunda vez.
+    cardDescription: Recupera mana x2.
     costReduction: 0
     reactivations: 1
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Meditacion
     description: Ya no se destruye al usarla.
+    cardDescription: No se destruye.
     costReduction: 0
     reactivations: 0
     preventDestroyOnUse: 1
     bonusEffects: []
   - upgradeName: Trance profundo
     description: Se reactiva una vez adicional.
+    cardDescription: Se usa 2 veces.
     costReduction: 0
     reactivations: 1
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Mente infinita
     description: Se reactiva dos veces y deja de destruirse al usarla.
+    cardDescription: 3 usos; no se destruye.
     costReduction: 0
     reactivations: 2
     preventDestroyOnUse: 1
+    bonusEffects: []
+  epiphanyOptions:
+  - epiphanyName: Trance perfecto
+    description: La carta deja de destruirse, roba una carta y recupera 1 de mana.
+    cardDescription: 'Epifania: no se destruye; roba 1 y +1 mana.'
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 1
+    bonusEffects:
+    - {fileID: 11400000, guid: a5254205472815942943c0670621384a, type: 2}
+  epiphany:
+    epiphanyName: 
+    description: 
+    cardDescription: 
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
     bonusEffects: []

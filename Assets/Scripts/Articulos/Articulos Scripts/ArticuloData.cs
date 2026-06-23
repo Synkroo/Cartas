@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using JuegoDeCartas.Cards;
 
 namespace JuegoDeCartas.Articulos
 {
@@ -11,6 +13,10 @@ namespace JuegoDeCartas.Articulos
         [TextArea] public string descripcion;
         public TipoEfectoArticulo tipoEfecto;
         public int cantidad;
+
+        [Header("Card Pool")]
+        [Tooltip("Pool opcional usado por articulos que ofrecen cartas externas.")]
+        public List<CardData> cardPool = new List<CardData>();
 
         void OnValidate()
         {
@@ -41,6 +47,8 @@ namespace JuegoDeCartas.Articulos
         DuplicarCarta,
         DuplicarCartaMejoras,
         ReducirCoste,
-        DescartarCarta
+        DescartarCarta,
+        DespertarEpifania,
+        AgregarCartaOtraClase
     }
 }

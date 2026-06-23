@@ -7,6 +7,7 @@ namespace JuegoDeCartas.Articulos
         public ItemPackData Definition { get; }
         public List<ArticuloData> Contents { get; }
         public bool Claimed { get; set; }
+        public bool Reserved { get; set; }
 
         public ItemPackOffer(ItemPackData definition, List<ArticuloData> contents)
         {

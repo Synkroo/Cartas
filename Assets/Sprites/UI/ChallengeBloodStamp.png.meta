@@ -1,0 +1,689 @@
+fileFormatVersion: 2
+guid: bf5378fd7e365d64ab7a72e33d9f65b8
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5110016064758542953
+    second: ChallengeBloodStamp_0
+  - first:
+      213: -63854203728000406
+    second: ChallengeBloodStamp_1
+  - first:
+      213: 2712348590902173763
+    second: ChallengeBloodStamp_2
+  - first:
+      213: 4899899632663470586
+    second: ChallengeBloodStamp_3
+  - first:
+      213: -8415684332891938744
+    second: ChallengeBloodStamp_4
+  - first:
+      213: 1957350116982423479
+    second: ChallengeBloodStamp_5
+  - first:
+      213: -877375770106806927
+    second: ChallengeBloodStamp_6
+  - first:
+      213: -7856326678848768636
+    second: ChallengeBloodStamp_7
+  - first:
+      213: -3101216532381460313
+    second: ChallengeBloodStamp_8
+  - first:
+      213: 3072624599387686994
+    second: ChallengeBloodStamp_9
+  - first:
+      213: 2168442552492668228
+    second: ChallengeBloodStamp_10
+  - first:
+      213: 5343513313915592050
+    second: ChallengeBloodStamp_11
+  - first:
+      213: 3032242305687345198
+    second: ChallengeBloodStamp_12
+  - first:
+      213: 832418534546014183
+    second: ChallengeBloodStamp_13
+  - first:
+      213: 5519493272076506467
+    second: ChallengeBloodStamp_14
+  - first:
+      213: 1834855066500810239
+    second: ChallengeBloodStamp_15
+  - first:
+      213: -6553043522206719391
+    second: ChallengeBloodStamp_16
+  - first:
+      213: -3084708493611894088
+    second: ChallengeBloodStamp_17
+  - first:
+      213: -7021977661526650738
+    second: ChallengeBloodStamp_18
+  - first:
+      213: -1648645291145732782
+    second: ChallengeBloodStamp_19
+  - first:
+      213: 4871171118362732420
+    second: ChallengeBloodStamp_20
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_0
+      rect:
+        serializedVersion: 2
+        x: 692
+        y: 992
+        width: 48
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79d078f86739519b0800000000000000
+      internalID: -5110016064758542953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_1
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 1026
+        width: 20
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6a8065a0f42d1ff0800000000000000
+      internalID: -63854203728000406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_2
+      rect:
+        serializedVersion: 2
+        x: 811
+        y: 1047
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34061cb3ca234a520800000000000000
+      internalID: 2712348590902173763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_3
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 306
+        width: 725
+        height: 707
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af129ff41c0fff340800000000000000
+      internalID: 4899899632663470586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_4
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 1002
+        width: 17
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 840e72cffab753b80800000000000000
+      internalID: -8415684332891938744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_5
+      rect:
+        serializedVersion: 2
+        x: 785
+        y: 1008
+        width: 15
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bf7ec79f87e92b10800000000000000
+      internalID: 1957350116982423479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_6
+      rect:
+        serializedVersion: 2
+        x: 938
+        y: 776
+        width: 60
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17dbf38b26fe2d3f0800000000000000
+      internalID: -877375770106806927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_7
+      rect:
+        serializedVersion: 2
+        x: 1003
+        y: 667
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4857bcb9288b8f290800000000000000
+      internalID: -7856326678848768636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_8
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 624
+        width: 32
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a895d7aef346f4d0800000000000000
+      internalID: -3101216532381460313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_9
+      rect:
+        serializedVersion: 2
+        x: 988
+        y: 636
+        width: 14
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25841ae2bc724aa20800000000000000
+      internalID: 3072624599387686994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_10
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 628
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 445ba29330bd71e10800000000000000
+      internalID: 2168442552492668228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_11
+      rect:
+        serializedVersion: 2
+        x: 988
+        y: 591
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27d52804c09f72a40800000000000000
+      internalID: 5343513313915592050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_12
+      rect:
+        serializedVersion: 2
+        x: 382
+        y: 297
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e28d76fbf40b41a20800000000000000
+      internalID: 3032242305687345198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_13
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 277
+        width: 67
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7eff0103f385d8b00800000000000000
+      internalID: 832418534546014183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_14
+      rect:
+        serializedVersion: 2
+        x: 503
+        y: 303
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 365574e23ed299c40800000000000000
+      internalID: 5519493272076506467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_15
+      rect:
+        serializedVersion: 2
+        x: 677
+        y: 299
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff54b1526f6b67910800000000000000
+      internalID: 1834855066500810239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_16
+      rect:
+        serializedVersion: 2
+        x: 692
+        y: 305
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 162a135d2a9ee05a0800000000000000
+      internalID: -6553043522206719391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_17
+      rect:
+        serializedVersion: 2
+        x: 727
+        y: 297
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8baf1a2f7f9e035d0800000000000000
+      internalID: -3084708493611894088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_18
+      rect:
+        serializedVersion: 2
+        x: 835
+        y: 295
+        width: 26
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e80d9f7558cec8e90800000000000000
+      internalID: -7021977661526650738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_19
+      rect:
+        serializedVersion: 2
+        x: 543
+        y: 245
+        width: 47
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25d53a4b7d5de19e0800000000000000
+      internalID: -1648645291145732782
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChallengeBloodStamp_20
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 294
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4872726d250e99340800000000000000
+      internalID: 4871171118362732420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ChallengeBloodStamp_0: -5110016064758542953
+      ChallengeBloodStamp_1: -63854203728000406
+      ChallengeBloodStamp_10: 2168442552492668228
+      ChallengeBloodStamp_11: 5343513313915592050
+      ChallengeBloodStamp_12: 3032242305687345198
+      ChallengeBloodStamp_13: 832418534546014183
+      ChallengeBloodStamp_14: 5519493272076506467
+      ChallengeBloodStamp_15: 1834855066500810239
+      ChallengeBloodStamp_16: -6553043522206719391
+      ChallengeBloodStamp_17: -3084708493611894088
+      ChallengeBloodStamp_18: -7021977661526650738
+      ChallengeBloodStamp_19: -1648645291145732782
+      ChallengeBloodStamp_2: 2712348590902173763
+      ChallengeBloodStamp_20: 4871171118362732420
+      ChallengeBloodStamp_3: 4899899632663470586
+      ChallengeBloodStamp_4: -8415684332891938744
+      ChallengeBloodStamp_5: 1957350116982423479
+      ChallengeBloodStamp_6: -877375770106806927
+      ChallengeBloodStamp_7: -7856326678848768636
+      ChallengeBloodStamp_8: -3101216532381460313
+      ChallengeBloodStamp_9: 3072624599387686994
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

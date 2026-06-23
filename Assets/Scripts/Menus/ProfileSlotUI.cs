@@ -16,50 +16,94 @@ namespace JuegoDeCartas.UI
         public Button saveButton;
         public Button deleteButton;
         public Button renameButton;
+        public TextMeshProUGUI renameButtonText;
+
+        [Header("Text")]
+        public string renameLabel = "Renombrar";
+        public string saveNameLabel = "Guardar nombre";
 
         Action<int> onLoad;
-        Action<int> onSave;
         Action<int> onDelete;
         Action<int, string> onRename;
+        bool isRenaming;
 
         void Awake()
         {
             if (loadButton != null)
                 loadButton.onClick.AddListener(() => onLoad?.Invoke(slotIndex));
-            if (saveButton != null)
-                saveButton.onClick.AddListener(() => onSave?.Invoke(slotIndex));
             if (deleteButton != null)
                 deleteButton.onClick.AddListener(() => onDelete?.Invoke(slotIndex));
             if (renameButton != null)
-                renameButton.onClick.AddListener(() => onRename?.Invoke(slotIndex, nameInput != null ? nameInput.text : ""));
+                renameButton.onClick.AddListener(ToggleRename);
+
+            if (renameButtonText == null && renameButton != null)
+                renameButtonText = renameButton.GetComponentInChildren<TextMeshProUGUI>(true);
         }
 
         public void Setup(
             ProfileInfo info,
             float completion,
             Action<int> load,
-            Action<int> save,
             Action<int> delete,
             Action<int, string> rename)
         {
             onLoad = load;
-            onSave = save;
             onDelete = delete;
             onRename = rename;
 
+            SetRenameMode(false);
             if (nameInput != null)
                 nameInput.SetTextWithoutNotify(info.Name);
             if (statusText != null)
             {
-                string saved = string.IsNullOrWhiteSpace(info.LastSaved) ? "Sin guardado manual" : info.LastSaved;
-                statusText.text = info.IsActive ? "Activo - " + saved : info.Exists ? saved : "Vacio";
+                statusText.text = info.IsActive
+                    ? "Activo - guardado automatico"
+                    : info.Exists
+                        ? "Guardado automatico"
+                        : "Vacio";
             }
             if (completionText != null)
                 completionText.text = Mathf.RoundToInt(completion * 100f) + "%";
             if (saveButton != null)
-                saveButton.interactable = info.IsActive;
+                saveButton.gameObject.SetActive(false);
             if (deleteButton != null)
                 deleteButton.interactable = info.Exists;
+        }
+
+        void ToggleRename()
+        {
+            if (!isRenaming)
+            {
+                SetRenameMode(true);
+                return;
+            }
+
+            string value = nameInput != null ? nameInput.text : "";
+            SetRenameMode(false);
+            onRename?.Invoke(slotIndex, value);
+        }
+
+        void SetRenameMode(bool editing)
+        {
+            isRenaming = editing;
+
+            if (nameInput != null)
+            {
+                nameInput.interactable = editing;
+                nameInput.readOnly = !editing;
+                if (editing)
+                {
+                    nameInput.Select();
+                    nameInput.ActivateInputField();
+                }
+                else
+                {
+                    nameInput.DeactivateInputField();
+                }
+            }
+
+            if (renameButtonText != null)
+                renameButtonText.text = editing ? saveNameLabel : renameLabel;
         }
     }
 }

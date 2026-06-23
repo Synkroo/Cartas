@@ -86,7 +86,7 @@ namespace JuegoDeCartas.UI
 
         public void ReturnFromCharacterSelection()
         {
-            if (ChallengeRunState.IsActive && challengeMenu != null)
+            if (ChallengeRunState.HasConfiguredRun && challengeMenu != null)
             {
                 challengeMenu.Open();
                 return;

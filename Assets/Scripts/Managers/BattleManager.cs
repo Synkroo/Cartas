@@ -7,6 +7,7 @@ using JuegoDeCartas.UI;
 using JuegoDeCartas.Characters;
 using JuegoDeCartas.Progression;
 using JuegoDeCartas.Challenges;
+using JuegoDeCartas.Relics;
 
 namespace JuegoDeCartas.Managers
 {
@@ -22,6 +23,7 @@ namespace JuegoDeCartas.Managers
         public DeckViewerUI deckViewer;
         public GameManager gameManager;
         public JuegoDeCartas.Stats.GameStatsTracker statsTracker;
+        public RelicInventory relicInventory;
 
         [Header("Wave")]
         public WaveManager waveManager = new WaveManager();
@@ -59,6 +61,8 @@ namespace JuegoDeCartas.Managers
         void Start()
         {
             Time.timeScale = 1f;
+            if (relicInventory != null)
+                relicInventory.Initialize(this);
             ApplySelectedCharacter();
             CollectionProgress.RegisterRunStarted(CharacterRunState.SelectedCharacter);
 
@@ -80,6 +84,8 @@ namespace JuegoDeCartas.Managers
             waveManager.OnEnemyDefeated += OnEnemyDefeated;
 
             waveManager.Initialize();
+            if (relicInventory != null)
+                relicInventory.OnCombatStarted();
 
             if (deckManager != null)
                 deckManager.InitializeDeck();
@@ -139,7 +145,9 @@ namespace JuegoDeCartas.Managers
 
         void ApplySelectedMission()
         {
-            MissionData mission = MissionRunState.SelectedMission;
+            MissionData mission = ChallengeRunState.IsChallengeRun
+                ? ChallengeRunState.EncounterMission
+                : MissionRunState.SelectedMission;
             if (mission == null)
                 return;
 
@@ -203,9 +211,9 @@ namespace JuegoDeCartas.Managers
                 statsTracker.PopulateStatsText();
 
             MissionData mission = MissionRunState.SelectedMission;
-            if (ChallengeRunState.IsActive)
+            if (ChallengeRunState.IsChallengeRun)
             {
-                ChallengeRunState.MarkCompleted();
+                ChallengeRunState.MarkCompleted(CharacterRunState.SelectedCharacter);
             }
             else if (mission != null)
             {
@@ -290,10 +298,24 @@ namespace JuegoDeCartas.Managers
                 }
             }
 
+            CardEpiphany epiphany = card.Epiphany;
+            if (epiphany != null && epiphany.bonusEffects != null)
+            {
+                foreach (var effect in epiphany.bonusEffects)
+                {
+                    if (effect == null)
+                        continue;
+
+                    lastCardDamageDealt = 0;
+                    effect.Apply(this);
+                    totalDamage += lastCardDamageDealt;
+                }
+            }
+
             if (statsTracker != null)
                 statsTracker.RegisterCardPlayed(totalDamage);
 
-            FinishCardResolution();
+            FinishCardResolution(card, cost);
             RenderHand();
             UpdateUI();
             if (deckViewer != null && deckViewer.panel != null && deckViewer.panel.activeSelf)
@@ -314,6 +336,8 @@ namespace JuegoDeCartas.Managers
                 statsTracker.RegisterDamageDealt(totalDamage);
 
             waveManager.DamageEnemy(totalDamage, out bool died);
+            if (relicInventory != null)
+                relicInventory.OnDamageDealt(totalDamage);
 
             UpdateUI();
         }
@@ -383,9 +407,17 @@ namespace JuegoDeCartas.Managers
                 cardsPlayedThisTurn == 0 && HasPassive(SubclassPassiveType.FirstCardBonusDamage)
                     ? Mathf.Max(0, ActiveSubclass.amount)
                     : 0;
+
+            if (relicInventory != null)
+            {
+                pendingFirstCardDamageBonus +=
+                    relicInventory.GetFirstCardDamageBonus(
+                        cardsPlayedThisTurn
+                    );
+            }
         }
 
-        void FinishCardResolution()
+        void FinishCardResolution(Card card, int paidCost)
         {
             pendingFirstCardDamageBonus = 0;
             cardsPlayedThisTurn++;
@@ -414,6 +446,9 @@ namespace JuegoDeCartas.Managers
             {
                 GainPlayerArmor(Mathf.Max(1, ActiveSubclass.amount));
             }
+
+            if (relicInventory != null)
+                relicInventory.OnCardResolved(card, paidCost);
         }
 
         bool HasPassive(SubclassPassiveType passiveType)
@@ -440,7 +475,10 @@ namespace JuegoDeCartas.Managers
         {
             if (battleEnded || player == null) return;
 
-            int dealt = player.TakeDamage(damage);
+            int incomingDamage = relicInventory != null
+                ? relicInventory.ModifyIncomingDamage(damage)
+                : damage;
+            int dealt = player.TakeDamage(incomingDamage);
 
             UpdateUI();
 
@@ -463,6 +501,8 @@ namespace JuegoDeCartas.Managers
                 return;
 
             waveManager.SpawnNext();
+            if (relicInventory != null)
+                relicInventory.OnCombatStarted();
 
             deckManager.deck.AddRange(deckManager.hand);
             deckManager.hand.Clear();
@@ -474,15 +514,37 @@ namespace JuegoDeCartas.Managers
 
         public void ApplyPlayerDamageBonus(int amount, int turns)
         {
+            int effectiveTurns = relicInventory != null
+                ? relicInventory.ModifyBuffDuration(turns)
+                : turns;
+
             if (HasPassive(SubclassPassiveType.StackDamageBuffs))
             {
                 playerDamageBonus += amount;
-                playerDamageBonusTurnsRemaining = Mathf.Max(0, turns);
+                playerDamageBonusTurnsRemaining =
+                    Mathf.Max(0, effectiveTurns);
                 return;
             }
 
             playerDamageBonus = amount;
-            playerDamageBonusTurnsRemaining = Mathf.Max(0, turns);
+            playerDamageBonusTurnsRemaining = Mathf.Max(0, effectiveTurns);
+        }
+
+        public int HealPlayer(int amount)
+        {
+            if (player == null || amount <= 0)
+                return 0;
+
+            int previous = player.stats.health;
+            player.stats.health = Mathf.Min(
+                player.stats.maxHealth,
+                player.stats.health + amount
+            );
+            player.stats.Clamp();
+            int healed = player.stats.health - previous;
+            if (healed > 0)
+                UpdateUI();
+            return healed;
         }
 
         public void AdvancePlayerDamageBonusTurn()

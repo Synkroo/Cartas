@@ -18,6 +18,13 @@ namespace JuegoDeCartas.UI
         public Image image;
         public Image background;
 
+        [Header("Reservation")]
+        public Button reserveButton;
+        public GameObject reservedMarker;
+        public TextMeshProUGUI reserveText;
+        public string reserveLabel = "RESERVAR";
+        public string reservedLabel = "FIJADO";
+
         [Header("Rarity Colors")]
         public Color commonColor = new Color(0.15f, 0.45f, 0.75f, 1f);
         public Color rareColor = new Color(0.15f, 0.65f, 0.25f, 1f);
@@ -29,6 +36,7 @@ namespace JuegoDeCartas.UI
 
         ItemPackOffer offer;
         Action<ItemPackOffer> onSelected;
+        Action<ItemPackOffer> onReservationChanged;
 
         void Awake()
         {
@@ -36,12 +44,18 @@ namespace JuegoDeCartas.UI
                 button = GetComponent<Button>();
             if (button != null)
                 button.onClick.AddListener(Select);
+            if (reserveButton != null)
+                reserveButton.onClick.AddListener(ToggleReservation);
         }
 
-        public void Setup(ItemPackOffer newOffer, Action<ItemPackOffer> selected)
+        public void Setup(
+            ItemPackOffer newOffer,
+            Action<ItemPackOffer> selected,
+            Action<ItemPackOffer> reservationChanged = null)
         {
             offer = newOffer;
             onSelected = selected;
+            onReservationChanged = reservationChanged;
 
             ItemPackData definition = offer?.Definition;
             if (definition == null)
@@ -63,13 +77,25 @@ namespace JuegoDeCartas.UI
             if (background != null)
                 background.color = GetRarityColor(definition.displayRarity);
             SetClaimed(offer.Claimed);
+            RefreshReservation();
         }
 
         public void SetClaimed(bool claimed)
         {
             if (button != null)
                 button.interactable = !claimed;
+            if (reserveButton != null)
+                reserveButton.interactable = !claimed;
             gameObject.SetActive(!claimed);
+        }
+
+        public void RefreshReservation()
+        {
+            bool reserved = offer != null && offer.Reserved && !offer.Claimed;
+            if (reservedMarker != null)
+                reservedMarker.SetActive(reserved);
+            if (reserveText != null)
+                reserveText.text = reserved ? reservedLabel : reserveLabel;
         }
 
         public void PlayEntrance(float delay)
@@ -82,6 +108,15 @@ namespace JuegoDeCartas.UI
         {
             if (offer != null && !offer.Claimed)
                 StartCoroutine(OpenRoutine());
+        }
+
+        void ToggleReservation()
+        {
+            if (offer == null || offer.Claimed)
+                return;
+
+            onReservationChanged?.Invoke(offer);
+            RefreshReservation();
         }
 
         IEnumerator OpenRoutine()
