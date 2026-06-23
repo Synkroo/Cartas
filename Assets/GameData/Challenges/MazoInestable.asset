@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c83c181dc7341aa80fc2616546f5641, type: 3}
   m_Name: MazoInestable
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Challenges.ChallengeData
+  contentId: d367706f94544802bc2db74d3030ef32
   challengeName: Mazo inestable
-  description: Tras cada combate una carta aleatoria recibe una mejora, pero otra se duplica o desaparece. El mazo cambia sin pedir permiso.
+  description: Tras cada combate una carta aleatoria recibe una mejora, pero otra
+    se duplica o desaparece. El mazo cambia sin pedir permiso.
   image: {fileID: 0}
   difficulty: 2
   implemented: 0
-  ruleSummary: Cada victoria transforma dos cartas al azar usando el sistema de mejoras, duplicado y destruccion.
+  ruleSummary: Cada victoria transforma dos cartas al azar usando el sistema de mejoras,
+    duplicado y destruccion.
   encounterMission: {fileID: 11400000, guid: 24b96661fa5b0f04f92be79e53f0bb0f, type: 2}
   modifier: 0
   requiredCharacter: {fileID: 0}

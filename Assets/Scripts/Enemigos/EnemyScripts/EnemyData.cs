@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using JuegoDeCartas.Cards;
+using JuegoDeCartas.Progression;
 using UnityEngine;
 
 namespace JuegoDeCartas.Enemies
@@ -68,7 +69,7 @@ namespace JuegoDeCartas.Enemies
     }
 
     [CreateAssetMenu(fileName = "EnemyData", menuName = "Game/Enemy")]
-    public class EnemyData : ScriptableObject
+    public class EnemyData : StableContentData
     {
         public string enemyName;
 
@@ -97,6 +98,7 @@ namespace JuegoDeCartas.Enemies
 
         void OnValidate()
         {
+            EnsureContentId();
             maxHealth = Mathf.Max(1, maxHealth);
             startArmor = Mathf.Max(0, startArmor);
             minDamage = Mathf.Max(0, minDamage);

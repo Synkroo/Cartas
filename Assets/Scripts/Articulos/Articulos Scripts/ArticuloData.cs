@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using JuegoDeCartas.Cards;
+using JuegoDeCartas.Progression;
 
 namespace JuegoDeCartas.Articulos
 {
     [CreateAssetMenu(fileName = "NuevoArticulo", menuName = "Tienda/Articulo")]
-    public class ArticuloData : ScriptableObject
+    public class ArticuloData : StableContentData
     {
         public string nombre;
         public Rareza rareza;
@@ -20,6 +21,7 @@ namespace JuegoDeCartas.Articulos
 
         void OnValidate()
         {
+            EnsureContentId();
             cantidad = Mathf.Max(0, cantidad);
         }
     }

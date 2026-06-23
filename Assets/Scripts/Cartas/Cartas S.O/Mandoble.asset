@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: Mandoble
   m_EditorClassIdentifier: 
+  contentId: 4d06ce7c3df745c88843b71bff25cf71
   cardName: Mandoble
   description: Golpe pesado que hace 20 de dano.
   sprite: {fileID: 0}

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: Saqueo
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
+  contentId: c1713dd55b63bc641bb84848649d6154
   cardName: Saqueo
   description: Roba 2 cartas para continuar la cadena.
   sprite: {fileID: 0}

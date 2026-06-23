@@ -7,7 +7,7 @@ using JuegoDeCartas.Progression;
 namespace JuegoDeCartas.Missions
 {
     [CreateAssetMenu(fileName = "NuevaMision", menuName = "Juego de Cartas/Misiones/Mision")]
-    public class MissionData : ScriptableObject
+    public class MissionData : StableContentData
     {
         [Header("Info")]
         public string missionName;
@@ -36,7 +36,11 @@ namespace JuegoDeCartas.Missions
         public bool IsDifficultyCompleted(MissionDifficulty difficulty)
         {
             return ProfileManager.IsTemporary ||
-                   ProfilePrefs.GetInt(GetCompletionKey(difficulty), 0) == 1;
+                   ProfilePrefs.GetIntMigrating(
+                       GetCompletionKey(difficulty),
+                       GetLegacyCompletionKey(difficulty),
+                       0
+                   ) == 1;
         }
 
         public void MarkCompleted(MissionDifficulty difficulty)
@@ -60,7 +64,14 @@ namespace JuegoDeCartas.Missions
         {
             return character != null &&
                    (ProfileManager.IsTemporary ||
-                    ProfilePrefs.GetInt(GetCharacterCompletionKey(difficulty, character), 0) == 1);
+                    ProfilePrefs.GetIntMigrating(
+                        GetCharacterCompletionKey(difficulty, character),
+                        GetLegacyCharacterCompletionKey(
+                            difficulty,
+                            character
+                        ),
+                        0
+                    ) == 1);
         }
 
         public static bool IsAnyDifficultyCompleted(MissionDifficulty difficulty)
@@ -75,7 +86,17 @@ namespace JuegoDeCartas.Missions
         {
             return character != null &&
                    (ProfileManager.IsTemporary ||
-                    ProfilePrefs.GetInt(GetGlobalCharacterCompletionKey(difficulty, character), 0) == 1);
+                    ProfilePrefs.GetIntMigrating(
+                        GetGlobalCharacterCompletionKey(
+                            difficulty,
+                            character
+                        ),
+                        GetLegacyGlobalCharacterCompletionKey(
+                            difficulty,
+                            character
+                        ),
+                        0
+                    ) == 1);
         }
 
         public float GetEnemyStatMultiplier(MissionDifficulty difficulty)
@@ -90,11 +111,17 @@ namespace JuegoDeCartas.Missions
 
         void OnValidate()
         {
+            EnsureContentId();
             combatCount = Mathf.Max(1, combatCount);
             miniBossFrequency = Mathf.Max(1, miniBossFrequency);
         }
 
         string GetCompletionKey(MissionDifficulty difficulty)
+        {
+            return "MissionCompleted_" + ContentId + "_" + difficulty;
+        }
+
+        string GetLegacyCompletionKey(MissionDifficulty difficulty)
         {
             return "MissionCompleted_" + name + "_" + difficulty;
         }
@@ -106,14 +133,32 @@ namespace JuegoDeCartas.Missions
 
         string GetCharacterCompletionKey(MissionDifficulty difficulty, CharacterData character)
         {
-            return "MissionCompleted_" + name + "_" + difficulty + "_" + character.name;
+            return "MissionCompleted_" + ContentId + "_" + difficulty +
+                   "_" + ContentIdUtility.GetId(character);
+        }
+
+        string GetLegacyCharacterCompletionKey(
+            MissionDifficulty difficulty,
+            CharacterData character)
+        {
+            return "MissionCompleted_" + name + "_" + difficulty +
+                   "_" + character.name;
         }
 
         static string GetGlobalCharacterCompletionKey(
             MissionDifficulty difficulty,
             CharacterData character)
         {
-            return "AnyMissionCompleted_" + difficulty + "_" + character.name;
+            return "AnyMissionCompleted_" + difficulty + "_" +
+                   ContentIdUtility.GetId(character);
+        }
+
+        static string GetLegacyGlobalCharacterCompletionKey(
+            MissionDifficulty difficulty,
+            CharacterData character)
+        {
+            return "AnyMissionCompleted_" + difficulty + "_" +
+                   character.name;
         }
     }
 }

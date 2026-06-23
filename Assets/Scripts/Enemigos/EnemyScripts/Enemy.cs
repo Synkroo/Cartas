@@ -20,6 +20,7 @@ namespace JuegoDeCartas.Enemies
         public int currentGoldRewardOverride { get; private set; }
         public Sprite currentSprite { get; private set; }
         public RuntimeAnimatorController currentAnimatorController { get; private set; }
+        public bool IsDefeated { get; private set; }
 
         private BattleManager battle;
         private readonly List<int> mechanicUseCounts = new List<int>();
@@ -45,6 +46,7 @@ namespace JuegoDeCartas.Enemies
                 turnsSurvived = 0;
                 mechanicUseCounts.Clear();
                 mechanicDamageAccumulations.Clear();
+                IsDefeated = false;
                 return;
             }
 
@@ -66,6 +68,7 @@ namespace JuegoDeCartas.Enemies
 
             mechanicUseCounts.Clear();
             mechanicDamageAccumulations.Clear();
+            IsDefeated = false;
             int mechanicCount = data.mechanics != null ? data.mechanics.Count : 0;
             for (int i = 0; i < mechanicCount; i++)
             {
@@ -84,21 +87,33 @@ namespace JuegoDeCartas.Enemies
             ExecuteTurnStartMechanics();
         }
 
-        public bool TakeDamage(int damage)
+        public DamageResult TakeDamage(int damage)
         {
-            int incomingDamage = Mathf.Max(0, damage);
-            int remaining = incomingDamage;
+            int attempted = Mathf.Max(0, damage);
+            if (IsDefeated || stats.health <= 0)
+                return DamageResult.Ignored(attempted);
+
+            int remaining = attempted;
+            int absorbed = 0;
             if (stats.armor > 0)
             {
-                int absorbed = Mathf.Min(stats.armor, remaining);
+                absorbed = Mathf.Min(stats.armor, remaining);
                 stats.armor -= absorbed;
                 remaining -= absorbed;
             }
 
-            stats.health -= remaining;
+            int previousHealth = Mathf.Max(0, stats.health);
+            int healthDamage = Mathf.Min(previousHealth, remaining);
+            stats.health -= healthDamage;
             stats.Clamp();
-            lastDamageTaken += incomingDamage;
-            return stats.health <= 0;
+            lastDamageTaken += healthDamage;
+            IsDefeated = previousHealth > 0 && stats.health <= 0;
+            return new DamageResult(
+                attempted,
+                absorbed,
+                healthDamage,
+                IsDefeated
+            );
         }
 
         public int RollProjectedNextAttackDamage()
@@ -292,6 +307,7 @@ namespace JuegoDeCartas.Enemies
             damageModifier = 0;
             lastDamageTaken = 0;
             turnsSurvived = 0;
+            IsDefeated = false;
         }
 
         static int ApplyPercent(int value, float percent, int minimum)

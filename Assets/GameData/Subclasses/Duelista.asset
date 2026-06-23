@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a47fab1d20770468c4266131ee4d03, type: 3}
   m_Name: Duelista
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
+  contentId: 54bd3c2c213c39148bf1971335c82037
   subclassName: Duelista
   icon: {fileID: 0}
   description: Abre cada turno con un golpe preciso.

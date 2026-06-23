@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using JuegoDeCartas.Effects;
+using JuegoDeCartas.Progression;
 
 namespace JuegoDeCartas.Cards
 {
@@ -43,7 +44,7 @@ namespace JuegoDeCartas.Cards
     }
 
     [CreateAssetMenu(fileName = "New Card", menuName = "Cards/Card")]
-    public class CardData : ScriptableObject
+    public class CardData : StableContentData
     {
         public string cardName;
         [TextArea(2, 5)] public string description;
@@ -75,6 +76,7 @@ namespace JuegoDeCartas.Cards
 
         void OnValidate()
         {
+            EnsureContentId();
             cost = Mathf.Max(0, cost);
         }
     }

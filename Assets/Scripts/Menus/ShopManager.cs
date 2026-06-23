@@ -41,6 +41,12 @@ namespace JuegoDeCartas.UI
 
         public bool pauseTime = true;
 
+        [Header("Controls")]
+        public Button closeButton;
+        public Button deckButton;
+        public Button restockButton;
+        public TextMeshProUGUI restockPriceText;
+
         [Header("Text")]
         public TextMeshProUGUI shopTitleText;
         public string shopTitle = "Elige un sobre";
@@ -97,11 +103,11 @@ namespace JuegoDeCartas.UI
         void Awake()
         {
             if (menusCanvas != null)
-                menusRaycaster = menusCanvas.GetComponent<GraphicRaycaster>()
-                                 ?? menusCanvas.gameObject.AddComponent<GraphicRaycaster>();
+                menusRaycaster = menusCanvas.GetComponent<GraphicRaycaster>();
 
-            if (shopTitleText == null)
-                shopTitleText = transform.Find("Cabecero/TituloText")?.GetComponent<TextMeshProUGUI>();
+            if (menusCanvas != null && menusRaycaster == null)
+                Debug.LogError("El Canvas de tienda necesita un GraphicRaycaster configurado en la escena.", this);
+
         }
 
         void CacheRaycasters()
@@ -114,25 +120,22 @@ namespace JuegoDeCartas.UI
 
         void OnEnable()
         {
-            var salirBtn = transform.Find("BotonSalir")?.GetComponent<Button>();
-            if (salirBtn != null)
+            if (closeButton != null)
             {
-                salirBtn.onClick.RemoveAllListeners();
-                salirBtn.onClick.AddListener(OnSalir);
+                closeButton.onClick.RemoveAllListeners();
+                closeButton.onClick.AddListener(OnSalir);
             }
 
-            var verMazoBtn = transform.Find("BotonVerMazo")?.GetComponent<Button>();
-            if (verMazoBtn != null)
+            if (deckButton != null)
             {
-                verMazoBtn.onClick.RemoveAllListeners();
-                verMazoBtn.onClick.AddListener(OnVerMazo);
+                deckButton.onClick.RemoveAllListeners();
+                deckButton.onClick.AddListener(OnVerMazo);
             }
 
-            var restockBtn = transform.Find("Cabecero/PanelRestock")?.GetComponent<Button>();
-            if (restockBtn != null)
+            if (restockButton != null)
             {
-                restockBtn.onClick.RemoveAllListeners();
-                restockBtn.onClick.AddListener(OnRestock);
+                restockButton.onClick.RemoveAllListeners();
+                restockButton.onClick.AddListener(OnRestock);
             }
         }
 
@@ -227,9 +230,8 @@ namespace JuegoDeCartas.UI
             if (interestText != null)
                 interestText.text = string.Format(interestFormat, lastInterestEarned);
 
-            var restockPrecioText = transform.Find("Cabecero/PanelRestock/Precio200")?.GetComponent<TextMeshProUGUI>();
-            if (restockPrecioText != null)
-                restockPrecioText.text = restockCost + currencySuffix;
+            if (restockPriceText != null)
+                restockPriceText.text = restockCost + currencySuffix;
         }
 
         void ClearSlots()

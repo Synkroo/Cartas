@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
   m_Name: SlimeAmarillo
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
+  contentId: 74994e212ba90734a97f6e3bd23fbd23
   enemyName: Slime Amarillo
   maxHealth: 30
   minDamage: 4
@@ -29,8 +30,8 @@ MonoBehaviour:
     cardsToAdd: 0
     cardDestination: 0
     shuffleIntoDrawPile: 0
-    firstTriggerTurn: 0
-    triggerEveryXTurns: 0
+    firstTriggerTurn: 1
+    triggerEveryXTurns: 1
     reviveCount: 0
     maxHealthPercentOnRevive: 80
     armorPercentOnRevive: 0

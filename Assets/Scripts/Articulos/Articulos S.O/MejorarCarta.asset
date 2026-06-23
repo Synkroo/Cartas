@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273ec2d1544d2a3418a576ab0bdfda26, type: 3}
   m_Name: MejorarCarta
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Articulos.ArticuloData
+  contentId: 9c7e61d5881d6c34eb8be308a013bf6c
   nombre: Yunque Encantado
   rareza: 1
   imagen: {fileID: 0}
   descripcion: Mejora una carta de tu mazo.
   tipoEfecto: 10
   cantidad: 1
+  cardPool: []

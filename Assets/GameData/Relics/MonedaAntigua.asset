@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68205d89f9ff42046a546843886a37a7, type: 3}
   m_Name: MonedaAntigua
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Relics.RelicData
+  contentId: 0a4b5fc8af586e847898fc939524d787
   relicName: Moneda antigua
   description: Obtienes 20 de oro adicional por intereses en cada tienda.
   icon: {fileID: 21300000, guid: d12b237ab0cc9824599854a236687f46, type: 3}

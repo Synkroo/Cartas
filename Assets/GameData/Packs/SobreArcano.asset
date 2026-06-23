@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54d7ae47a9b33da41a7a0930a6c0f862, type: 3}
   m_Name: SobreArcano
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Articulos.ItemPackData
+  contentId: cb4343db05fb30548b88bf379680b1f7
   packName: Sobre arcano
-  description: Recursos de mana y cartas, incluso de otras clases, para ampliar el mazo.
+  description: Recursos de mana y cartas, incluso de otras clases, para ampliar el
+    mazo.
   image: {fileID: 0}
   displayRarity: 1
   shopAppearanceWeight: 16

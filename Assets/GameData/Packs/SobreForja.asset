@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54d7ae47a9b33da41a7a0930a6c0f862, type: 3}
   m_Name: SobreForja
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Articulos.ItemPackData
+  contentId: 047047455e586474a8918f835ffad8c0
   packName: Sobre de forja
   description: Mejoras, epifanias y manipulacion directa de cartas del mazo.
   image: {fileID: 0}

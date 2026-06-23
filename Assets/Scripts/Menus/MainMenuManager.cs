@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using JuegoDeCartas.Challenges;
 using JuegoDeCartas.Missions;
 using JuegoDeCartas.Progression;
+using JuegoDeCartas.Managers;
 using TMPro;
 
 namespace JuegoDeCartas.UI
@@ -41,7 +42,7 @@ namespace JuegoDeCartas.UI
 
         public void PlayGame()
         {
-            ChallengeRunState.Clear();
+            RunStateCoordinator.Reset();
             SetButtonsInteractable(false);
 
             if (characterMenu == null)
@@ -69,6 +70,7 @@ namespace JuegoDeCartas.UI
 
         public void OpenChallenges()
         {
+            RunStateCoordinator.Reset();
             SetButtonsInteractable(false);
             if (mainMenuRoot != null)
                 mainMenuRoot.SetActive(false);

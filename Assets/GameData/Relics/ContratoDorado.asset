@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68205d89f9ff42046a546843886a37a7, type: 3}
   m_Name: ContratoDorado
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Relics.RelicData
+  contentId: c7cd6687362146a42ac975effaba936e
   relicName: Contrato dorado
   description: Cada enemigo derrotado entrega 40 de oro adicional.
   icon: {fileID: 21300000, guid: b28a9293d0f1387469a609a1c2c43a03, type: 3}

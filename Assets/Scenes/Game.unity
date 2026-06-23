@@ -12528,6 +12528,10 @@ MonoBehaviour:
   dineroText: {fileID: 1308803593}
   menusCanvas: {fileID: 331000001}
   pauseTime: 1
+  closeButton: {fileID: 1784110936}
+  deckButton: {fileID: 814971875}
+  restockButton: {fileID: 1331067101}
+  restockPriceText: {fileID: 1023126236}
   shopTitleText: {fileID: 754986022}
   shopTitle: Sobres y reliquias
   currencySuffix: ' oro'

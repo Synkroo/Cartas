@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54d7ae47a9b33da41a7a0930a6c0f862, type: 3}
   m_Name: SobreEpico
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Articulos.ItemPackData
+  contentId: 5cc76e6f05dc0344789192e29af8aaa5
   packName: Sobre epico
   description: Contiene 5 articulos y favorece las recompensas epicas.
   image: {fileID: 0}

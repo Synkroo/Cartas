@@ -6,6 +6,10 @@ using JuegoDeCartas.Managers;
 using JuegoDeCartas.Effects;
 using JuegoDeCartas.Stats;
 using JuegoDeCartas.UI;
+using JuegoDeCartas.Enemies;
+using JuegoDeCartas.Relics;
+using JuegoDeCartas.Challenges;
+using JuegoDeCartas.Missions;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -339,11 +343,116 @@ namespace JuegoDeCartas.Tests
             entity.stats.health = 20;
             entity.stats.armor = 5;
 
-            int dealt = entity.TakeDamage(8);
+            DamageResult result = entity.TakeDamage(8);
 
-            Assert.AreEqual(3, dealt);
+            Assert.AreEqual(5, result.armorAbsorbed);
+            Assert.AreEqual(3, result.healthDamage);
             Assert.AreEqual(17, entity.stats.health);
             Assert.AreEqual(0, entity.stats.armor);
+        }
+
+        [Test]
+        public void DamageResultCapsOverkillToHealthActuallyLost()
+        {
+            Entity entity = new Entity();
+            entity.stats.maxHealth = 20;
+            entity.stats.health = 3;
+            entity.stats.armor = 2;
+
+            DamageResult result = entity.TakeDamage(100);
+
+            Assert.AreEqual(100, result.attemptedDamage);
+            Assert.AreEqual(2, result.armorAbsorbed);
+            Assert.AreEqual(3, result.healthDamage);
+            Assert.IsTrue(result.defeated);
+            Assert.AreEqual(0, entity.stats.health);
+        }
+
+        [Test]
+        public void MultiHitCardDefersShopAndRewardsEnemyOnlyOnce()
+        {
+            MissionRunState.Clear();
+            ChallengeRunState.Clear();
+            RunRandom.Initialize(12345);
+
+            GameObject root = new GameObject("MultiHitBattle");
+            BattleManager battle = root.AddComponent<BattleManager>();
+            battle.player = new Entity();
+            battle.player.stats.maxHealth = 20;
+            battle.player.stats.health = 10;
+            battle.player.stats.maxMana = 3;
+            battle.player.stats.mana = 3;
+            battle.deckManager = root.AddComponent<DeckManager>();
+            battle.turnManager = root.AddComponent<TurnManager>();
+            battle.turnManager.battle = battle;
+            battle.turnManager.currentTurn = TurnManager.Turn.Player;
+            battle.statsTracker = root.AddComponent<GameStatsTracker>();
+
+            GameManager gameManager = root.AddComponent<GameManager>();
+            gameManager.dinero = 0;
+            battle.gameManager = gameManager;
+
+            ShopManager shop = root.AddComponent<ShopManager>();
+            shop.gameManager = gameManager;
+            shop.battle = battle;
+            shop.pauseTime = false;
+            shop.interestPerStep = 0;
+            shop.shopPanel = new GameObject("ShopPanel");
+            shop.shopPanel.transform.SetParent(root.transform);
+            shop.shopPanel.SetActive(false);
+            gameManager.shopManager = shop;
+
+            RelicData lifeSteal = ScriptableObject.CreateInstance<RelicData>();
+            lifeSteal.effectType = RelicEffectType.LifeSteal;
+            lifeSteal.percentage = 50;
+            RelicInventory relicInventory =
+                root.AddComponent<RelicInventory>();
+            battle.relicInventory = relicInventory;
+            relicInventory.Initialize(battle);
+            Assert.IsTrue(relicInventory.TryAdd(lifeSteal));
+
+            EnemyData first = CreateEnemy("First", 3, 7);
+            EnemyData second = CreateEnemy("Second", 20, 0);
+            battle.waveManager.battleManager = battle;
+            battle.waveManager.gameManager = gameManager;
+            battle.waveManager.statsTracker = battle.statsTracker;
+            battle.waveManager.normalEnemies =
+                new List<EnemyData> { first };
+            battle.waveManager.finalBoss = second;
+            battle.waveManager.totalCombats = 2;
+            int defeatedEvents = 0;
+            battle.waveManager.OnEnemyDefeated += () => defeatedEvents++;
+            battle.waveManager.Initialize();
+
+            MultiHitProbeEffect effect =
+                ScriptableObject.CreateInstance<MultiHitProbeEffect>();
+            effect.firstDamage = 10;
+            effect.secondDamage = 10;
+            effect.shopPanel = shop.shopPanel;
+
+            CardData cardData = ScriptableObject.CreateInstance<CardData>();
+            cardData.cost = 0;
+            cardData.effects = new List<CardEffect> { effect };
+            Card card = new Card(cardData);
+            battle.deckManager.hand.Add(card);
+
+            battle.PlayCard(card);
+
+            Assert.IsFalse(effect.shopWasOpenBetweenHits);
+            Assert.IsTrue(shop.shopPanel.activeSelf);
+            Assert.AreEqual(1, defeatedEvents);
+            Assert.AreEqual(1, battle.statsTracker.enemiesDefeated);
+            Assert.AreEqual(150, gameManager.dinero);
+            Assert.AreEqual(3, battle.statsTracker.totalDamageDealt);
+            Assert.AreEqual(11, battle.player.stats.health);
+
+            Time.timeScale = 1f;
+            Object.DestroyImmediate(cardData);
+            Object.DestroyImmediate(effect);
+            Object.DestroyImmediate(first);
+            Object.DestroyImmediate(second);
+            Object.DestroyImmediate(lifeSteal);
+            Object.DestroyImmediate(root);
         }
 
         [Test]
@@ -512,6 +621,37 @@ namespace JuegoDeCartas.Tests
 
             Object.DestroyImmediate(data);
             Object.DestroyImmediate(root);
+        }
+
+        static EnemyData CreateEnemy(
+            string name,
+            int health,
+            int armor)
+        {
+            EnemyData enemy = ScriptableObject.CreateInstance<EnemyData>();
+            enemy.name = name;
+            enemy.enemyName = name;
+            enemy.maxHealth = health;
+            enemy.startArmor = armor;
+            enemy.minDamage = 0;
+            enemy.maxDamage = 0;
+            return enemy;
+        }
+    }
+
+    public class MultiHitProbeEffect : CardEffect
+    {
+        public int firstDamage;
+        public int secondDamage;
+        public GameObject shopPanel;
+        public bool shopWasOpenBetweenHits;
+
+        public override void Apply(BattleManager battle)
+        {
+            battle.DamageEnemy(firstDamage);
+            shopWasOpenBetweenHits =
+                shopPanel != null && shopPanel.activeSelf;
+            battle.DamageEnemy(secondDamage);
         }
     }
 }

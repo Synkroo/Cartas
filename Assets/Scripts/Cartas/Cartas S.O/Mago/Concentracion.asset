@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: Concentracion
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
+  contentId: 7cd004839d2e5c642809acf7ebd5b39b
   cardName: Concentracion
   description: Recupera 1 de mana. Se destruye al usarla.
   sprite: {fileID: 0}

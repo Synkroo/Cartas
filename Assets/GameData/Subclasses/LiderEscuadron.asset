@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a47fab1d20770468c4266131ee4d03, type: 3}
   m_Name: LiderEscuadron
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
+  contentId: bd47aa5e0148ab54eb620bfc22024089
   subclassName: Lider de escuadron
   icon: {fileID: 0}
   description: Coordina mejoras temporales para crear turnos explosivos.

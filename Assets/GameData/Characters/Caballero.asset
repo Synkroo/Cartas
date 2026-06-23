@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fd8505a6c6b0d846b0e6af17842d894, type: 3}
   m_Name: Caballero
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.CharacterData
+  contentId: 90bd81ad475e59d488bbd4d103680eed
   characterName: Caballero
   portrait: {fileID: 0}
   description: Combatiente resistente y directo. Su mazo inicial combina dano, armadura

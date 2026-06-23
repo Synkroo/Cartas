@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a47fab1d20770468c4266131ee4d03, type: 3}
   m_Name: Saqueador
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
+  contentId: 2939f8cdd3b556047b4273d105690449
   subclassName: Saqueador
   icon: {fileID: 0}
   description: Convierte las cadenas largas en economia.

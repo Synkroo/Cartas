@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: Espada
   m_EditorClassIdentifier: 
+  contentId: 66ad6bd10a018b94ea561142bcdffdc2
   cardName: Espada
   description: "Arma cuerpo a cuerpo afilada, hace 10 de da\xF1o"
   sprite: {fileID: 0}

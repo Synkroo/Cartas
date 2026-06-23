@@ -8,6 +8,9 @@ using JuegoDeCartas.Progression;
 using JuegoDeCartas.Stats;
 using JuegoDeCartas.Cards;
 using JuegoDeCartas.Relics;
+using JuegoDeCartas.Challenges;
+using JuegoDeCartas.UI;
+using System.Reflection;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -88,6 +91,72 @@ namespace JuegoDeCartas.Tests
         }
 
         [Test]
+        public void LegacyCollectionKeyMigratesBeforeAssetRename()
+        {
+            CardData card = ScriptableObject.CreateInstance<CardData>();
+            card.name = "LegacyCardName";
+            SetContentId(card, "stable-card-id");
+
+            string legacyKey =
+                "Collection_CardUsed_LegacyCardName";
+            string stableKey =
+                "Collection_CardUsed_stable-card-id";
+            Track(legacyKey);
+            Track(stableKey);
+            ProfilePrefs.SetInt(legacyKey, 7);
+
+            Assert.AreEqual(7, CollectionProgress.GetCardUsedCount(card));
+            Assert.IsTrue(
+                PlayerPrefs.HasKey(ProfileManager.ScopedKey(stableKey))
+            );
+
+            card.name = "RenamedCard";
+            Assert.AreEqual(7, CollectionProgress.GetCardUsedCount(card));
+
+            Object.DestroyImmediate(card);
+        }
+
+        [Test]
+        public void LegacyKeyMigratesForInactiveProfileSlot()
+        {
+            const int slot = 1;
+            const string legacyKey = "LegacyInactiveSlotValue";
+            const string stableKey = "StableInactiveSlotValue";
+            string legacyScoped =
+                ProfileManager.ScopedKeyForSlot(slot, legacyKey);
+            string stableScoped =
+                ProfileManager.ScopedKeyForSlot(slot, stableKey);
+            int? previousLegacy = PlayerPrefs.HasKey(legacyScoped)
+                ? PlayerPrefs.GetInt(legacyScoped)
+                : null;
+            int? previousStable = PlayerPrefs.HasKey(stableScoped)
+                ? PlayerPrefs.GetInt(stableScoped)
+                : null;
+
+            try
+            {
+                PlayerPrefs.DeleteKey(stableScoped);
+                PlayerPrefs.SetInt(legacyScoped, 19);
+
+                Assert.AreEqual(
+                    19,
+                    ProfilePrefs.GetIntForSlotMigrating(
+                        slot,
+                        stableKey,
+                        legacyKey,
+                        0
+                    )
+                );
+                Assert.AreEqual(19, PlayerPrefs.GetInt(stableScoped));
+            }
+            finally
+            {
+                RestoreInt(legacyScoped, previousLegacy);
+                RestoreInt(stableScoped, previousStable);
+            }
+        }
+
+        [Test]
         public void EpiphanyDiscoveryIsPersistedPerCardAndOption()
         {
             CardData card = ScriptableObject.CreateInstance<CardData>();
@@ -128,6 +197,52 @@ namespace JuegoDeCartas.Tests
             Assert.IsTrue(CollectionProgress.IsSubclassSeen(subclass));
 
             Object.DestroyImmediate(subclass);
+        }
+
+        [Test]
+        public void ConceptChallengesDoNotReduceProfileCompletion()
+        {
+            CharacterData hero =
+                ScriptableObject.CreateInstance<CharacterData>();
+            hero.name = "CompletionHero";
+            hero.unlockedByDefault = true;
+            SetContentId(hero, "completion-hero");
+
+            ChallengeData implemented =
+                ScriptableObject.CreateInstance<ChallengeData>();
+            implemented.name = "ImplementedChallenge";
+            implemented.implemented = true;
+            SetContentId(implemented, "implemented-challenge");
+
+            ChallengeData concept =
+                ScriptableObject.CreateInstance<ChallengeData>();
+            concept.name = "ConceptChallenge";
+            concept.implemented = false;
+            SetContentId(concept, "concept-challenge");
+
+            Track(
+                "ChallengeCompleted_implemented-challenge"
+            );
+            Track(
+                "ChallengeCompleted_implemented-challenge_completion-hero"
+            );
+            implemented.MarkCompleted(hero);
+
+            GameObject root = new GameObject("ProfileCompletion");
+            ProfileMenu menu = root.AddComponent<ProfileMenu>();
+            menu.heroes = new List<CharacterData> { hero };
+            menu.challenges = new List<ChallengeData>
+            {
+                implemented,
+                concept
+            };
+
+            Assert.AreEqual(1f, menu.CalculateActiveCompletion());
+
+            Object.DestroyImmediate(root);
+            Object.DestroyImmediate(concept);
+            Object.DestroyImmediate(implemented);
+            Object.DestroyImmediate(hero);
         }
 
         [Test]
@@ -285,6 +400,26 @@ namespace JuegoDeCartas.Tests
                 ? PlayerPrefs.GetInt(scopedKey)
                 : null;
             PlayerPrefs.DeleteKey(scopedKey);
+        }
+
+        static void SetContentId(
+            StableContentData asset,
+            string contentId)
+        {
+            typeof(StableContentData)
+                .GetField(
+                    "contentId",
+                    BindingFlags.Instance | BindingFlags.NonPublic
+                )
+                .SetValue(asset, contentId);
+        }
+
+        static void RestoreInt(string key, int? value)
+        {
+            if (value.HasValue)
+                PlayerPrefs.SetInt(key, value.Value);
+            else
+                PlayerPrefs.DeleteKey(key);
         }
     }
 }

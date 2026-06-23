@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68205d89f9ff42046a546843886a37a7, type: 3}
   m_Name: PlacaRemendada
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Relics.RelicData
+  contentId: 04e4a3ff67064f84fb96e865a47366b5
   relicName: Placa remendada
   description: Ganas 2 de armadura al empezar cada turno.
   icon: {fileID: 21300000, guid: a1b8761aefec1954aa2528eb74eea910, type: 3}

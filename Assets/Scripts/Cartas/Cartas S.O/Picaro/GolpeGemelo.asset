@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: GolpeGemelo
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
+  contentId: 8bfaa640a2d58f447937873c30b021c6
   cardName: Golpe Gemelo
   description: Golpea dos veces e inflige 5 de dano por golpe.
   sprite: {fileID: 0}

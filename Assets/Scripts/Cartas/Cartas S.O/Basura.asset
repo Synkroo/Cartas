@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: Basura
   m_EditorClassIdentifier: 
+  contentId: d4d2f2d3a1b44d8f9e7c123456789abc
   cardName: Basura
   description: Literalmente basura, usala para descartarla
   sprite: {fileID: 0}

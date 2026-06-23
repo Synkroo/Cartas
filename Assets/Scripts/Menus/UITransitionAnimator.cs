@@ -113,7 +113,7 @@ namespace JuegoDeCartas.UI
             if (canvasGroup == null)
                 canvasGroup = GetComponent<CanvasGroup>();
             if (canvasGroup == null)
-                canvasGroup = gameObject.AddComponent<CanvasGroup>();
+                Debug.LogError("UITransitionAnimator necesita un CanvasGroup configurado en la escena o prefab.", this);
 
             visiblePosition = target != null ? target.anchoredPosition : Vector2.zero;
             visibleScale = target != null ? target.localScale : Vector3.one;

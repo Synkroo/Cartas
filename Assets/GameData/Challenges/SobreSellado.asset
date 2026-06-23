@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c83c181dc7341aa80fc2616546f5641, type: 3}
   m_Name: SobreSellado
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Challenges.ChallengeData
+  contentId: 7b752050754049e99c4ab6744f84b3fa
   challengeName: Sobre sellado
-  description: Cada tienda ofrece un unico sobre de alta rareza. No hay restock y rechazar su contenido cierra la tienda.
+  description: Cada tienda ofrece un unico sobre de alta rareza. No hay restock y
+    rechazar su contenido cierra la tienda.
   image: {fileID: 0}
   difficulty: 1
   implemented: 0
-  ruleSummary: Solo aparece un sobre por tienda, con mejores rarezas pero sin segundas oportunidades.
+  ruleSummary: Solo aparece un sobre por tienda, con mejores rarezas pero sin segundas
+    oportunidades.
   encounterMission: {fileID: 11400000, guid: 24b96661fa5b0f04f92be79e53f0bb0f, type: 2}
   modifier: 0
   requiredCharacter: {fileID: 0}

@@ -37,6 +37,8 @@ namespace JuegoDeCartas.Managers
         private bool subclassApplied;
         private int cardsPlayedThisTurn;
         private int pendingFirstCardDamageBonus;
+        private bool resolvingCard;
+        private bool pendingPostCombatTransition;
 
         [HideInInspector] public int armorPerTurn;
         [HideInInspector] public int regenPerRound;
@@ -254,6 +256,7 @@ namespace JuegoDeCartas.Managers
             player.stats.mana -= cost;
             CollectionProgress.MarkCardUsed(card.data);
             BeginCardResolution();
+            resolvingCard = true;
 
             deckManager.hand.Remove(card);
 
@@ -263,53 +266,60 @@ namespace JuegoDeCartas.Managers
             int repeats = 1 + card.reactivationCount;
             int totalDamage = 0;
 
-            foreach (var effect in card.data.effects)
+            try
             {
-                if (effect == null)
-                    continue;
-
-                if (effect.UsesReactivationMultiplier)
-                {
-                    lastCardDamageDealt = 0;
-                    effect.Apply(this, repeats);
-                    totalDamage += lastCardDamageDealt;
-                    continue;
-                }
-
-                for (int i = 0; i < repeats; i++)
-                {
-                    lastCardDamageDealt = 0;
-                    effect.Apply(this);
-                    totalDamage += lastCardDamageDealt;
-                }
-            }
-
-            CardUpgradeOption upgrade = card.SelectedUpgrade;
-            if (upgrade != null && upgrade.bonusEffects != null)
-            {
-                foreach (var effect in upgrade.bonusEffects)
+                foreach (var effect in card.data.effects)
                 {
                     if (effect == null)
                         continue;
 
-                    lastCardDamageDealt = 0;
-                    effect.Apply(this);
-                    totalDamage += lastCardDamageDealt;
+                    if (effect.UsesReactivationMultiplier)
+                    {
+                        lastCardDamageDealt = 0;
+                        effect.Apply(this, repeats);
+                        totalDamage += lastCardDamageDealt;
+                        continue;
+                    }
+
+                    for (int i = 0; i < repeats; i++)
+                    {
+                        lastCardDamageDealt = 0;
+                        effect.Apply(this);
+                        totalDamage += lastCardDamageDealt;
+                    }
+                }
+
+                CardUpgradeOption upgrade = card.SelectedUpgrade;
+                if (upgrade != null && upgrade.bonusEffects != null)
+                {
+                    foreach (var effect in upgrade.bonusEffects)
+                    {
+                        if (effect == null)
+                            continue;
+
+                        lastCardDamageDealt = 0;
+                        effect.Apply(this);
+                        totalDamage += lastCardDamageDealt;
+                    }
+                }
+
+                CardEpiphany epiphany = card.Epiphany;
+                if (epiphany != null && epiphany.bonusEffects != null)
+                {
+                    foreach (var effect in epiphany.bonusEffects)
+                    {
+                        if (effect == null)
+                            continue;
+
+                        lastCardDamageDealt = 0;
+                        effect.Apply(this);
+                        totalDamage += lastCardDamageDealt;
+                    }
                 }
             }
-
-            CardEpiphany epiphany = card.Epiphany;
-            if (epiphany != null && epiphany.bonusEffects != null)
+            finally
             {
-                foreach (var effect in epiphany.bonusEffects)
-                {
-                    if (effect == null)
-                        continue;
-
-                    lastCardDamageDealt = 0;
-                    effect.Apply(this);
-                    totalDamage += lastCardDamageDealt;
-                }
+                resolvingCard = false;
             }
 
             if (statsTracker != null)
@@ -318,6 +328,7 @@ namespace JuegoDeCartas.Managers
             FinishCardResolution(card, cost);
             RenderHand();
             UpdateUI();
+            ResolvePendingPostCombatTransition();
             if (deckViewer != null && deckViewer.panel != null && deckViewer.panel.activeSelf)
                 deckViewer.ShowDiscard();
         }
@@ -330,16 +341,32 @@ namespace JuegoDeCartas.Managers
             pendingFirstCardDamageBonus = 0;
             int totalDamage = Mathf.Max(0, damage + playerDamageBonus + firstCardBonus);
 
-            lastCardDamageDealt += totalDamage;
+            DamageResult result = waveManager.DamageEnemy(totalDamage);
+            lastCardDamageDealt += result.healthDamage;
 
-            if (statsTracker != null)
-                statsTracker.RegisterDamageDealt(totalDamage);
+            if (statsTracker != null && result.healthDamage > 0)
+                statsTracker.RegisterDamageDealt(result.healthDamage);
 
-            waveManager.DamageEnemy(totalDamage, out bool died);
-            if (relicInventory != null)
-                relicInventory.OnDamageDealt(totalDamage);
+            if (relicInventory != null && result.healthDamage > 0)
+                relicInventory.OnDamageDealt(result.healthDamage);
 
             UpdateUI();
+        }
+
+        public void RequestPostCombatTransition()
+        {
+            pendingPostCombatTransition = true;
+            if (!resolvingCard)
+                ResolvePendingPostCombatTransition();
+        }
+
+        void ResolvePendingPostCombatTransition()
+        {
+            if (!pendingPostCombatTransition || resolvingCard)
+                return;
+
+            pendingPostCombatTransition = false;
+            waveManager.FlushPostDeathTransition();
         }
 
         public int GainPlayerArmor(int amount)
@@ -478,12 +505,12 @@ namespace JuegoDeCartas.Managers
             int incomingDamage = relicInventory != null
                 ? relicInventory.ModifyIncomingDamage(damage)
                 : damage;
-            int dealt = player.TakeDamage(incomingDamage);
+            DamageResult result = player.TakeDamage(incomingDamage);
 
             UpdateUI();
 
             if (statsTracker != null)
-                statsTracker.RegisterDamageReceived(dealt);
+                statsTracker.RegisterDamageReceived(result.healthDamage);
 
             if (player.stats.health <= 0 && gameManager != null)
             {

@@ -112,7 +112,11 @@ namespace JuegoDeCartas.UI
 
                     Button btn = obj.GetComponent<Button>();
                     if (btn == null)
-                        btn = obj.AddComponent<Button>();
+                    {
+                        Debug.LogError("El prefab de carta seleccionable necesita un componente Button.", obj);
+                        Destroy(obj);
+                        continue;
+                    }
 
                     Card captured = card;
                     btn.onClick.RemoveAllListeners();

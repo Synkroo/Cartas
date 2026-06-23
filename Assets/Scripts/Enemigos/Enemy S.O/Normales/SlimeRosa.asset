@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
   m_Name: SlimeRosa
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
+  contentId: c1000000000000000000000000000001
   enemyName: Slime Rosa
   maxHealth: 22
   minDamage: 3

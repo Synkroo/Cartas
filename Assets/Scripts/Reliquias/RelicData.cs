@@ -1,4 +1,5 @@
 using UnityEngine;
+using JuegoDeCartas.Progression;
 
 namespace JuegoDeCartas.Relics
 {
@@ -26,7 +27,7 @@ namespace JuegoDeCartas.Relics
     }
 
     [CreateAssetMenu(fileName = "NuevaReliquia", menuName = "Tienda/Reliquia")]
-    public class RelicData : ScriptableObject
+    public class RelicData : StableContentData
     {
         [Header("Info")]
         public string relicName;
@@ -46,6 +47,7 @@ namespace JuegoDeCartas.Relics
 
         void OnValidate()
         {
+            EnsureContentId();
             price = Mathf.Max(0, price);
             appearanceWeight = Mathf.Max(0f, appearanceWeight);
             amount = Mathf.Max(0, amount);

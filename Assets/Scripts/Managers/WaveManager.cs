@@ -22,6 +22,8 @@ namespace JuegoDeCartas.Managers
 
         readonly List<EnemyData> runtimeWave = new List<EnemyData>();
         private int currentEnemyIndex = 0;
+        private bool pendingPostDeathTransition;
+        private bool pendingWaveCleared;
 
         public Enemy enemy { get; private set; }
         public int CompletedCombatCount => currentEnemyIndex;
@@ -41,6 +43,8 @@ namespace JuegoDeCartas.Managers
         public void Initialize()
         {
             currentEnemyIndex = 0;
+            pendingPostDeathTransition = false;
+            pendingWaveCleared = false;
             BuildRuntimeWave();
             SpawnNext();
         }
@@ -132,19 +136,17 @@ namespace JuegoDeCartas.Managers
             }
         }
 
-        public void DamageEnemy(int damage, out bool died)
+        public DamageResult DamageEnemy(int damage)
         {
-            died = false;
-            if (enemy == null) return;
+            if (enemy == null)
+                return DamageResult.Ignored(Mathf.Max(0, damage));
 
-            died = enemy.TakeDamage(damage);
+            DamageResult result = enemy.TakeDamage(damage);
 
-            if (died)
+            if (result.defeated)
             {
                 if (enemy.TryHandleDefeat())
                 {
-                    died = false;
-
                     if (uiManager != null)
                         uiManager.SetEnemyVisual(enemy.data.enemyName, enemy.currentSprite, enemy.currentAnimatorController);
 
@@ -154,12 +156,14 @@ namespace JuegoDeCartas.Managers
                         enemyHealthBar.SetVisible(true);
                     }
 
-                    return;
+                    return result.WithRevive();
                 }
 
                 enemy.stats.health = 0;
                 HandleDeath();
             }
+
+            return result;
         }
 
         void HandleDeath()
@@ -194,16 +198,34 @@ namespace JuegoDeCartas.Managers
             OnGoldEarned?.Invoke(gold);
             OnEnemyDefeated?.Invoke();
 
-            bool noMoreEnemies = currentEnemyIndex >= runtimeWave.Count;
+            pendingPostDeathTransition = true;
+            pendingWaveCleared = currentEnemyIndex >= runtimeWave.Count;
 
-            if (noMoreEnemies)
+            if (pendingWaveCleared)
             {
                 if (enemyHealthBar != null)
                     enemyHealthBar.SetVisible(false);
+            }
 
+            if (battleManager != null)
+                battleManager.RequestPostCombatTransition();
+            else
+                FlushPostDeathTransition();
+        }
+
+        public void FlushPostDeathTransition()
+        {
+            if (!pendingPostDeathTransition)
+                return;
+
+            bool waveCleared = pendingWaveCleared;
+            pendingPostDeathTransition = false;
+            pendingWaveCleared = false;
+
+            if (waveCleared)
+            {
                 if (statsTracker != null)
                     statsTracker.PopulateStatsText();
-
                 OnWaveCleared?.Invoke();
                 return;
             }

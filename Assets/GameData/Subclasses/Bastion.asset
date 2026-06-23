@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a47fab1d20770468c4266131ee4d03, type: 3}
   m_Name: Bastion
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
+  contentId: dcc2bc9298639d741abdfe1a377c23da
   subclassName: Bastion
   icon: {fileID: 0}
   description: Mantiene parte de sus defensas entre turnos.

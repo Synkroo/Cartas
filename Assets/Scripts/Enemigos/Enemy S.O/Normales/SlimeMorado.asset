@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
   m_Name: SlimeMorado
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
+  contentId: c697b5b3e819a0a4b8dc709c3ccab0f2
   enemyName: Slime Morado
   maxHealth: 45
   minDamage: 6

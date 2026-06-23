@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c83c181dc7341aa80fc2616546f5641, type: 3}
   m_Name: InteresCompuesto
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Challenges.ChallengeData
+  contentId: 29d2a375e643468f914dd79e86e4ab7a
   challengeName: Interes compuesto
-  description: Los enemigos no entregan oro. Toda la economia depende de ahorrar, cobrar intereses y decidir cuando romper la reserva.
+  description: Los enemigos no entregan oro. Toda la economia depende de ahorrar,
+    cobrar intereses y decidir cuando romper la reserva.
   image: {fileID: 0}
   difficulty: 1
   implemented: 0
-  ruleSummary: Empiezas con una reserva limitada, no hay recompensas de oro y los intereses tienen un limite mayor.
+  ruleSummary: Empiezas con una reserva limitada, no hay recompensas de oro y los
+    intereses tienen un limite mayor.
   encounterMission: {fileID: 11400000, guid: 24b96661fa5b0f04f92be79e53f0bb0f, type: 2}
   modifier: 0
   requiredCharacter: {fileID: 0}

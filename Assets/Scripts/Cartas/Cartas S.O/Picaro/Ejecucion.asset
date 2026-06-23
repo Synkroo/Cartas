@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: Ejecucion
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
+  contentId: 94df614082522b741b9080c0ee5955f5
   cardName: Ejecucion
   description: Inflige 16 de dano.
   sprite: {fileID: 0}

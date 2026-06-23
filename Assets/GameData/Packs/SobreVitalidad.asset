@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54d7ae47a9b33da41a7a0930a6c0f862, type: 3}
   m_Name: SobreVitalidad
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Articulos.ItemPackData
+  contentId: f6938c25b88ecae45a9508c91b6a9ca2
   packName: Sobre de vitalidad
   description: Curacion, vida maxima y efectos defensivos persistentes.
   image: {fileID: 0}

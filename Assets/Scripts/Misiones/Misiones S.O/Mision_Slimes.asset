@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621bb9e4ea6f3394fadbc589520dffd0, type: 3}
   m_Name: Mision_Slimes
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Missions.MissionData
+  contentId: 24b96661fa5b0f04f92be79e53f0bb0f
   missionName: Derrotar a los slimes
   image: {fileID: 0}
   description: Derrota a todos los slimes del tablon y acaba con King Slime al final

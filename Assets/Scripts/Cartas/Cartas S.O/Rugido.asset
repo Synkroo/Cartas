@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: Rugido
   m_EditorClassIdentifier: 
+  contentId: 25184310b7d449f882a03b4c5da3f3da
   cardName: Rugido
   description: Ganas 5 de dano durante 3 turnos. No se acumula.
   sprite: {fileID: 0}

@@ -115,10 +115,23 @@ namespace JuegoDeCartas.Progression
                    optionIndex >= 0 &&
                    optionIndex < card.GetEpiphanyOptions().Count &&
                    (ProfileManager.IsTemporary ||
-                    ProfilePrefs.GetInt(EpiphanyKey(card, optionIndex), 0) == 1);
+                    ProfilePrefs.GetIntMigrating(
+                        EpiphanyKey(card, optionIndex),
+                        LegacyEpiphanyKey(card, optionIndex),
+                        0
+                    ) == 1);
         }
 
         public static string GetEpiphanyCollectionId(CardData card, int optionIndex)
+        {
+            return card != null
+                ? ContentIdUtility.GetId(card) + "_" + optionIndex
+                : "";
+        }
+
+        public static string GetLegacyEpiphanyCollectionId(
+            CardData card,
+            int optionIndex)
         {
             return card != null ? card.name + "_" + optionIndex : "";
         }
@@ -166,7 +179,12 @@ namespace JuegoDeCartas.Progression
         static bool GetFlag(string category, Object asset)
         {
             return asset != null &&
-                   (ProfileManager.IsTemporary || ProfilePrefs.GetInt(Key(category, asset), 0) == 1);
+                   (ProfileManager.IsTemporary ||
+                    ProfilePrefs.GetIntMigrating(
+                        Key(category, asset),
+                        LegacyKey(category, asset),
+                        0
+                    ) == 1);
         }
 
         static void Add(string category, Object asset, int amount)
@@ -175,7 +193,12 @@ namespace JuegoDeCartas.Progression
                 return;
 
             string key = Key(category, asset);
-            ProfilePrefs.SetInt(key, ProfilePrefs.GetInt(key, 0) + amount);
+            int current = ProfilePrefs.GetIntMigrating(
+                key,
+                LegacyKey(category, asset),
+                0
+            );
+            ProfilePrefs.SetInt(key, current + amount);
         }
 
         static void SetMaximum(string category, Object asset, int value)
@@ -186,10 +209,22 @@ namespace JuegoDeCartas.Progression
 
         static int GetInt(string category, Object asset)
         {
-            return asset != null ? ProfilePrefs.GetInt(Key(category, asset), 0) : 0;
+            return asset != null
+                ? ProfilePrefs.GetIntMigrating(
+                    Key(category, asset),
+                    LegacyKey(category, asset),
+                    0
+                )
+                : 0;
         }
 
         static string Key(string category, Object asset)
+        {
+            return Prefix + category + "_" +
+                   ContentIdUtility.GetId(asset);
+        }
+
+        static string LegacyKey(string category, Object asset)
         {
             return Prefix + category + "_" + asset.name;
         }
@@ -198,6 +233,14 @@ namespace JuegoDeCartas.Progression
         {
             return Prefix + "EpiphanySeen_" +
                    GetEpiphanyCollectionId(card, optionIndex);
+        }
+
+        static string LegacyEpiphanyKey(
+            CardData card,
+            int optionIndex)
+        {
+            return Prefix + "EpiphanySeen_" +
+                   GetLegacyEpiphanyCollectionId(card, optionIndex);
         }
     }
 }

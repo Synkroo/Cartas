@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54d7ae47a9b33da41a7a0930a6c0f862, type: 3}
   m_Name: SobreEpifania
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Articulos.ItemPackData
+  contentId: ef5f8725fdda1ac418be44f170056ac0
   packName: Sobre de epifania
   description: Contiene un Prisma de Epifania para despertar una carta.
   image: {fileID: 0}

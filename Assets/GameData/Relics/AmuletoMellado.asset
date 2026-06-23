@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68205d89f9ff42046a546843886a37a7, type: 3}
   m_Name: AmuletoMellado
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Relics.RelicData
+  contentId: 4ea7cb2ad5c25b2459bb5765ff97a505
   relicName: Amuleto mellado
   description: El primer ataque recibido de cada combate hace 4 menos de dano.
   icon: {fileID: 21300000, guid: 8ce0b7700824c9d44bc16bc8f86b5aba, type: 3}

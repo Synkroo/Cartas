@@ -4,6 +4,7 @@ using JuegoDeCartas.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using JuegoDeCartas.Managers;
 
 namespace JuegoDeCartas.Challenges
 {
@@ -92,7 +93,7 @@ namespace JuegoDeCartas.Challenges
 
         public void Close()
         {
-            ChallengeRunState.Clear();
+            RunStateCoordinator.Reset();
             if (panel != null)
                 panel.SetActive(false);
             if (mainMenuManager != null)

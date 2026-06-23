@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fd8505a6c6b0d846b0e6af17842d894, type: 3}
   m_Name: Mago
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.CharacterData
+  contentId: 48ef4c3c10e21b54e9a36e56de1e60b9
   characterName: Mago
   portrait: {fileID: 0}
   description: Especialista en hechizos encadenados. Tiene menos vida, pero empieza

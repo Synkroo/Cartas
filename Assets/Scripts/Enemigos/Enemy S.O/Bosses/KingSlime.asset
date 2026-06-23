@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
   m_Name: KingSlime
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
+  contentId: f12aa39aea7041c41b356d4859877152
   enemyName: Rey Slime
   maxHealth: 120
   minDamage: 9

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273ec2d1544d2a3418a576ab0bdfda26, type: 3}
   m_Name: PortalDeArquetipos
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Articulos.ArticuloData
+  contentId: 346db36ae2364b34598bbdafa5a394c0
   nombre: Portal de Arquetipos
   rareza: 2
   imagen: {fileID: 0}

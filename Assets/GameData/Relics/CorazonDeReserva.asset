@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68205d89f9ff42046a546843886a37a7, type: 3}
   m_Name: CorazonDeReserva
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Relics.RelicData
+  contentId: 41c74c1201073f540a9c311b8cb1f508
   relicName: Corazon de reserva
   description: Recuperas 5 de vida al derrotar a un enemigo.
   icon: {fileID: 21300000, guid: 9784f70eb0e81674aa67f17f24c8d34e, type: 3}

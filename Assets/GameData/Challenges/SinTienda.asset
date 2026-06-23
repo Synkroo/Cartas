@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c83c181dc7341aa80fc2616546f5641, type: 3}
   m_Name: SinTienda
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Challenges.ChallengeData
+  contentId: 2f1f21e9902e4387b98968f9298d6ec8
   challengeName: Sin tienda
-  description: Supera esta mision especial sin comprar sobres, hacer restock ni cobrar intereses.
+  description: Supera esta mision especial sin comprar sobres, hacer restock ni cobrar
+    intereses.
   image: {fileID: 0}
   difficulty: 1
   implemented: 1

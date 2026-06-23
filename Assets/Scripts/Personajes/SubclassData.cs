@@ -1,4 +1,5 @@
 using UnityEngine;
+using JuegoDeCartas.Progression;
 
 namespace JuegoDeCartas.Characters
 {
@@ -16,7 +17,7 @@ namespace JuegoDeCartas.Characters
     }
 
     [CreateAssetMenu(fileName = "NuevaSubclase", menuName = "Juego de Cartas/Personajes/Subclase")]
-    public class SubclassData : ScriptableObject
+    public class SubclassData : StableContentData
     {
         [Header("Info")]
         public string subclassName;
@@ -35,6 +36,7 @@ namespace JuegoDeCartas.Characters
 
         void OnValidate()
         {
+            EnsureContentId();
             amount = Mathf.Max(0, amount);
             triggerCount = Mathf.Max(1, triggerCount);
             percentage = Mathf.Clamp(percentage, 0, 100);

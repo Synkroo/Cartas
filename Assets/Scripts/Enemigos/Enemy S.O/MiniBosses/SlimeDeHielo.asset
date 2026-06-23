@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
   m_Name: SlimeDeHielo
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
+  contentId: 4bbbe1eca8a61614c9b30016c7b839ca
   enemyName: Slime de Hielo
   maxHealth: 70
   minDamage: 6

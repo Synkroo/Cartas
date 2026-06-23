@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54d7ae47a9b33da41a7a0930a6c0f862, type: 3}
   m_Name: SobreCaos
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Articulos.ItemPackData
+  contentId: 589e005915771d343bac8c00cc355081
   packName: Sobre del caos
   description: Una seleccion amplia con alta probabilidad de efectos raros y epicos.
   image: {fileID: 0}

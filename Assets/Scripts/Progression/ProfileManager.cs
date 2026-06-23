@@ -192,6 +192,25 @@ namespace JuegoDeCartas.Progression
             return defaultValue;
         }
 
+        public static int GetIntMigrating(
+            string key,
+            string legacyKey,
+            int defaultValue = 0)
+        {
+            string scoped = ProfileManager.ScopedKey(key);
+            if (PlayerPrefs.HasKey(scoped))
+                return PlayerPrefs.GetInt(scoped, defaultValue);
+
+            int value = GetInt(legacyKey, defaultValue);
+            if (!ProfileManager.IsTemporary &&
+                HasStoredInt(legacyKey))
+            {
+                PlayerPrefs.SetInt(scoped, value);
+                PlayerPrefs.Save();
+            }
+            return value;
+        }
+
         public static void SetInt(string key, int value)
         {
             if (!ProfileManager.IsTemporary)
@@ -229,6 +248,56 @@ namespace JuegoDeCartas.Progression
                 return PlayerPrefs.GetInt(key, defaultValue);
             }
             return defaultValue;
+        }
+
+        public static int GetIntForSlotMigrating(
+            int slot,
+            string key,
+            string legacyKey,
+            int defaultValue = 0)
+        {
+            string scoped = ProfileManager.ScopedKeyForSlot(slot, key);
+            if (PlayerPrefs.HasKey(scoped))
+                return PlayerPrefs.GetInt(scoped, defaultValue);
+
+            string legacyScoped =
+                ProfileManager.ScopedKeyForSlot(slot, legacyKey);
+            if (PlayerPrefs.HasKey(legacyScoped))
+            {
+                int value = PlayerPrefs.GetInt(
+                    legacyScoped,
+                    defaultValue
+                );
+                PlayerPrefs.SetInt(scoped, value);
+                PlayerPrefs.Save();
+                return value;
+            }
+
+            if (slot == 0 &&
+                PlayerPrefs.GetInt(
+                    $"Profiles_Slot_{slot}_Generation",
+                    0
+                ) == 0 &&
+                PlayerPrefs.HasKey(legacyKey))
+            {
+                int value = PlayerPrefs.GetInt(
+                    legacyKey,
+                    defaultValue
+                );
+                PlayerPrefs.SetInt(scoped, value);
+                PlayerPrefs.Save();
+                return value;
+            }
+
+            return defaultValue;
+        }
+
+        static bool HasStoredInt(string key)
+        {
+            string scoped = ProfileManager.ScopedKey(key);
+            return PlayerPrefs.HasKey(scoped) ||
+                   (ProfileManager.CanUseLegacyFallback &&
+                    PlayerPrefs.HasKey(key));
         }
     }
 }

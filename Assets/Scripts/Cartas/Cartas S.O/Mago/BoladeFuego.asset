@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: BoladeFuego
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
+  contentId: 8b2deebacc9feea4d8d5b7b7ba83cf19
   cardName: Bola de Fuego
   description: Inflige 18 de dano.
   sprite: {fileID: 0}

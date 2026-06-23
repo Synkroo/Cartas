@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a47fab1d20770468c4266131ee4d03, type: 3}
   m_Name: EruditoArcano
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
+  contentId: df76af60a40f6e3479183f4359d14a6c
   subclassName: Erudito arcano
   icon: {fileID: 0}
   description: Convierte las cadenas de hechizos en nuevas opciones.

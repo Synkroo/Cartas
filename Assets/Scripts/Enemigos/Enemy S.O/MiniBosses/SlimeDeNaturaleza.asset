@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
   m_Name: SlimeDeNaturaleza
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
+  contentId: 4e5957d14d607e84eae1125b55e85a67
   enemyName: Slime de Naturaleza
   maxHealth: 60
   minDamage: 7

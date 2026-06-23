@@ -10,6 +10,7 @@ using JuegoDeCartas.Enemies;
 using JuegoDeCartas.Missions;
 using JuegoDeCartas.Progression;
 using JuegoDeCartas.Relics;
+using JuegoDeCartas.Managers;
 
 namespace JuegoDeCartas.UI
 {
@@ -88,17 +89,13 @@ namespace JuegoDeCartas.UI
         void Load(int slot)
         {
             ProfileManager.Load(slot);
-            CharacterRunState.Clear();
-            MissionRunState.Clear();
-            ChallengeRunState.Clear();
+            RunStateCoordinator.Reset();
         }
 
         void Delete(int slot)
         {
             ProfileManager.Delete(slot);
-            CharacterRunState.Clear();
-            MissionRunState.Clear();
-            ChallengeRunState.Clear();
+            RunStateCoordinator.Reset();
         }
 
         void Rename(int slot, string value)
@@ -109,9 +106,7 @@ namespace JuegoDeCartas.UI
         void LoadTemporary()
         {
             ProfileManager.LoadTemporary();
-            CharacterRunState.Clear();
-            MissionRunState.Clear();
-            ChallengeRunState.Clear();
+            RunStateCoordinator.Reset();
         }
 
         float CalculateCompletionForSlot(int slot)
@@ -150,7 +145,17 @@ namespace JuegoDeCartas.UI
                 {
                     string key = "Collection_EpiphanySeen_" +
                                  CollectionProgress.GetEpiphanyCollectionId(card, e);
-                    if (ProfilePrefs.GetIntForSlot(slot, key, 0) == 1)
+                    string legacyKey = "Collection_EpiphanySeen_" +
+                        CollectionProgress.GetLegacyEpiphanyCollectionId(
+                            card,
+                            e
+                        );
+                    if (ProfilePrefs.GetIntForSlotMigrating(
+                        slot,
+                        key,
+                        legacyKey,
+                        0
+                    ) == 1)
                         completed++;
                 }
             }
@@ -168,14 +173,22 @@ namespace JuegoDeCartas.UI
                         continue;
                     for (int d = 1; d <= 3; d++)
                     {
-                        string key = $"MissionCompleted_{mission.name}_{(MissionDifficulty)d}_{hero.name}";
-                        if (ProfilePrefs.GetIntForSlot(slot, key, 0) == 1)
+                        string key =
+                            $"MissionCompleted_{mission.ContentId}_{(MissionDifficulty)d}_{hero.ContentId}";
+                        string legacyKey =
+                            $"MissionCompleted_{mission.name}_{(MissionDifficulty)d}_{hero.name}";
+                        if (ProfilePrefs.GetIntForSlotMigrating(
+                            slot,
+                            key,
+                            legacyKey,
+                            0
+                        ) == 1)
                             completed++;
                     }
                 }
             }
 
-            total += challenges.Count * heroes.Count;
+            total += GetCompletableChallengeCount() * heroes.Count;
             for (int c = 0; c < challenges.Count; c++)
             {
                 ChallengeData challenge = challenges[c];
@@ -188,8 +201,16 @@ namespace JuegoDeCartas.UI
                     if (hero == null)
                         continue;
 
-                    string key = $"ChallengeCompleted_{challenge.name}_{hero.name}";
-                    if (ProfilePrefs.GetIntForSlot(slot, key, 0) == 1)
+                    string key =
+                        $"ChallengeCompleted_{challenge.ContentId}_{hero.ContentId}";
+                    string legacyKey =
+                        $"ChallengeCompleted_{challenge.name}_{hero.name}";
+                    if (ProfilePrefs.GetIntForSlotMigrating(
+                        slot,
+                        key,
+                        legacyKey,
+                        0
+                    ) == 1)
                         completed++;
                 }
             }
@@ -254,7 +275,7 @@ namespace JuegoDeCartas.UI
                 }
             }
 
-            total += challenges.Count * heroes.Count;
+            total += GetCompletableChallengeCount() * heroes.Count;
             for (int c = 0; c < challenges.Count; c++)
             {
                 ChallengeData challenge = challenges[c];
@@ -295,16 +316,40 @@ namespace JuegoDeCartas.UI
             return count;
         }
 
+        int GetCompletableChallengeCount()
+        {
+            int count = 0;
+            for (int i = 0; i < challenges.Count; i++)
+            {
+                if (challenges[i] != null &&
+                    challenges[i].CountsForCompletion)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
         static bool HasCollectionFlag(int slot, string category, Object asset)
         {
             return asset != null &&
-                   ProfilePrefs.GetIntForSlot(slot, $"Collection_{category}_{asset.name}", 0) == 1;
+                   ProfilePrefs.GetIntForSlotMigrating(
+                       slot,
+                       $"Collection_{category}_{ContentIdUtility.GetId(asset)}",
+                       $"Collection_{category}_{asset.name}",
+                       0
+                   ) == 1;
         }
 
         static int GetCollectionCount(int slot, string category, Object asset)
         {
             return asset != null
-                ? ProfilePrefs.GetIntForSlot(slot, $"Collection_{category}_{asset.name}", 0)
+                ? ProfilePrefs.GetIntForSlotMigrating(
+                    slot,
+                    $"Collection_{category}_{ContentIdUtility.GetId(asset)}",
+                    $"Collection_{category}_{asset.name}",
+                    0
+                )
                 : 0;
         }
 

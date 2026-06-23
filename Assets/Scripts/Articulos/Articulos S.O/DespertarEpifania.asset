@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273ec2d1544d2a3418a576ab0bdfda26, type: 3}
   m_Name: DespertarEpifania
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Articulos.ArticuloData
+  contentId: 733762e0a06a02440aa43e8a78c36655
   nombre: Prisma de Epifania
   rareza: 2
   imagen: {fileID: 0}

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using JuegoDeCartas.Progression;
 
 namespace JuegoDeCartas.Articulos
 {
@@ -12,7 +13,7 @@ namespace JuegoDeCartas.Articulos
     }
 
     [CreateAssetMenu(fileName = "NuevoSobre", menuName = "Tienda/Sobre")]
-    public class ItemPackData : ScriptableObject
+    public class ItemPackData : StableContentData
     {
         public string packName;
         [TextArea] public string description;
@@ -35,6 +36,7 @@ namespace JuegoDeCartas.Articulos
 
         void OnValidate()
         {
+            EnsureContentId();
             shopAppearanceWeight = Mathf.Max(0f, shopAppearanceWeight);
             price = Mathf.Max(0, price);
             choiceCount = Mathf.Max(1, choiceCount);

@@ -24,7 +24,7 @@ namespace JuegoDeCartas.Challenges
         fileName = "NuevoReto",
         menuName = "Juego de Cartas/Retos/Reto"
     )]
-    public class ChallengeData : ScriptableObject
+    public class ChallengeData : StableContentData
     {
         [Header("Info")]
         public string challengeName;
@@ -46,7 +46,11 @@ namespace JuegoDeCartas.Challenges
         public bool IsCompleted =>
             implemented &&
             (ProfileManager.IsTemporary ||
-             ProfilePrefs.GetInt(GetCompletionKey(), 0) == 1);
+             ProfilePrefs.GetIntMigrating(
+                 GetCompletionKey(),
+                 GetLegacyCompletionKey(),
+                 0
+             ) == 1);
 
         public bool CountsForCompletion => implemented;
         public bool IsPlayable => implemented && encounterMission != null;
@@ -56,7 +60,11 @@ namespace JuegoDeCartas.Challenges
             return implemented &&
                    character != null &&
                    (ProfileManager.IsTemporary ||
-                    ProfilePrefs.GetInt(GetCharacterCompletionKey(character), 0) == 1);
+                    ProfilePrefs.GetIntMigrating(
+                        GetCharacterCompletionKey(character),
+                        GetLegacyCharacterCompletionKey(character),
+                        0
+                    ) == 1);
         }
 
         public bool AllowsCharacter(CharacterData character)
@@ -108,16 +116,28 @@ namespace JuegoDeCartas.Challenges
 
         string GetCompletionKey()
         {
-            return "ChallengeCompleted_" + name;
+            return "ChallengeCompleted_" + ContentId;
         }
 
         string GetCharacterCompletionKey(CharacterData character)
         {
-            return GetCompletionKey() + "_" + character.name;
+            return GetCompletionKey() + "_" +
+                   ContentIdUtility.GetId(character);
+        }
+
+        string GetLegacyCompletionKey()
+        {
+            return "ChallengeCompleted_" + name;
+        }
+
+        string GetLegacyCharacterCompletionKey(CharacterData character)
+        {
+            return GetLegacyCompletionKey() + "_" + character.name;
         }
 
         void OnValidate()
         {
+            EnsureContentId();
             combatCountOverride = Mathf.Max(0, combatCountOverride);
         }
     }

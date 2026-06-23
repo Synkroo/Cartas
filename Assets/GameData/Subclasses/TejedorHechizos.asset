@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a47fab1d20770468c4266131ee4d03, type: 3}
   m_Name: TejedorHechizos
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
+  contentId: 61f9c0445067dbf45bfa7c19bb93ece0
   subclassName: Tejedor de hechizos
   icon: {fileID: 0}
   description: Recicla mana mientras encadena cartas.

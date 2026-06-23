@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54d7ae47a9b33da41a7a0930a6c0f862, type: 3}
   m_Name: SobreArquetipos
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Articulos.ItemPackData
+  contentId: 1b18f942caf19a54ab0b1f0c36da9520
   packName: Sobre de arquetipos
   description: Contiene un Portal de Arquetipos para elegir una carta de otra clase.
   image: {fileID: 0}

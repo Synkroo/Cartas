@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using JuegoDeCartas.Managers;
 
 namespace JuegoDeCartas.UI
 {
@@ -40,10 +41,11 @@ namespace JuegoDeCartas.UI
         void Awake()
         {
             if (menusCanvas != null)
-            {
-                menusRaycaster = menusCanvas.GetComponent<GraphicRaycaster>()
-                                 ?? menusCanvas.gameObject.AddComponent<GraphicRaycaster>();
-            }
+                menusRaycaster = menusCanvas.GetComponent<GraphicRaycaster>();
+
+            if (menusCanvas != null && menusRaycaster == null)
+                Debug.LogError("El Canvas de fin de partida necesita un GraphicRaycaster configurado en la escena.", this);
+
             HideAll();
         }
 
@@ -201,6 +203,7 @@ namespace JuegoDeCartas.UI
         public void RestartGame()
         {
             HideAll();
+            RunStateCoordinator.Reset();
             UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
         }
 

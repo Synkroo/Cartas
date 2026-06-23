@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
   m_Name: SlimeAzul
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
+  contentId: a01e5eb851ff80b4883f25a924632142
   enemyName: Slime Azul Oscuro
   maxHealth: 40
   minDamage: 5

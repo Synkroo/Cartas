@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using JuegoDeCartas.Cards;
+using JuegoDeCartas.Progression;
 
 namespace JuegoDeCartas.Characters
 {
     [CreateAssetMenu(fileName = "NuevoPersonaje", menuName = "Juego de Cartas/Personajes/Personaje")]
-    public class CharacterData : ScriptableObject
+    public class CharacterData : StableContentData
     {
         [Header("Info")]
         public string characterName;
@@ -55,6 +56,7 @@ namespace JuegoDeCartas.Characters
 
         void OnValidate()
         {
+            EnsureContentId();
             maxHealth = Mathf.Max(1, maxHealth);
             maxMana = Mathf.Max(0, maxMana);
             cardsPerTurn = Mathf.Max(0, cardsPerTurn);

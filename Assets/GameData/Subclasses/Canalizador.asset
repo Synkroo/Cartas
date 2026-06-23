@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a47fab1d20770468c4266131ee4d03, type: 3}
   m_Name: Canalizador
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
+  contentId: d5f4aebca3b451e4b9592c2be9527c03
   subclassName: Canalizador
   icon: {fileID: 0}
   description: Amplia permanentemente su reserva arcana.

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: BarreraArcana
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
+  contentId: f74a44da8993536408fb5e7e2c69f46b
   cardName: Barrera Arcana
   description: Obtiene 6 de armadura.
   sprite: {fileID: 0}

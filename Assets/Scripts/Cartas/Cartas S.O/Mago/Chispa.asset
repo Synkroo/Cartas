@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: Chispa
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
+  contentId: 7bd4a90f895693d4a804827de64d1099
   cardName: Chispa
   description: Inflige 8 de dano.
   sprite: {fileID: 0}

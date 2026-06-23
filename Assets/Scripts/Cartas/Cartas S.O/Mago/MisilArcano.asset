@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: MisilArcano
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
+  contentId: be0b9901aa8428746ba249a4a9319a26
   cardName: Misil Arcano
   description: Inflige 6 de dano y roba 1 carta.
   sprite: {fileID: 0}

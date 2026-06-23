@@ -25,6 +25,12 @@ namespace JuegoDeCartas.Challenges
             Initialize(unchecked(Environment.TickCount * 397 ^ Guid.NewGuid().GetHashCode()));
         }
 
+        public static void Reset()
+        {
+            random = null;
+            CurrentSeed = 0;
+        }
+
         public static int Range(int minInclusive, int maxExclusive)
         {
             EnsureInitialized();

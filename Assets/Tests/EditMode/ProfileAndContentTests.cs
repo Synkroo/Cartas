@@ -251,5 +251,26 @@ namespace JuegoDeCartas.Tests
                     EditorSceneManager.CloseScene(scene, true);
             }
         }
+
+        [Test]
+        public void PersistentContentAssetsHaveUniqueStableIds()
+        {
+            StableContentData[] assets = AssetDatabase
+                .FindAssets("t:ScriptableObject", new[] { "Assets" })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Select(AssetDatabase.LoadAssetAtPath<StableContentData>)
+                .Where(asset => asset != null)
+                .ToArray();
+
+            Assert.GreaterOrEqual(assets.Length, 82);
+            Assert.IsTrue(assets.All(asset =>
+                !string.IsNullOrWhiteSpace(asset.ContentId) &&
+                asset.ContentId.Length == 32
+            ));
+            Assert.AreEqual(
+                assets.Length,
+                assets.Select(asset => asset.ContentId).Distinct().Count()
+            );
+        }
     }
 }

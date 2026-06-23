@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using JuegoDeCartas.Managers;
 
 namespace JuegoDeCartas.UI
 {
@@ -104,6 +105,7 @@ namespace JuegoDeCartas.UI
         public void BackToMenu()
         {
             Time.timeScale = 1f;
+            RunStateCoordinator.Reset();
             UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
         }
 

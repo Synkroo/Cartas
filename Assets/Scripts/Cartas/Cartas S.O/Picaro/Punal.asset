@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: Punal
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
+  contentId: 084a201847c627b45a097d00a2f06df4
   cardName: Punal
   description: Inflige 7 de dano sin gastar mana.
   sprite: {fileID: 0}

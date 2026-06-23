@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: PasoSombrio
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
+  contentId: 1041abf20c1d48b478ec5019ecd8d893
   cardName: Paso Sombrio
   description: Obtiene 5 de armadura y roba 1 carta.
   sprite: {fileID: 0}
