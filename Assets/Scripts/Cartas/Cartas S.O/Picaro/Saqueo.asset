@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: Saqueo
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
   contentId: c1713dd55b63bc641bb84848649d6154
-  cardName: Saqueo
-  description: Roba 2 cartas para continuar la cadena.
+  cardName: Golpe de Saqueo
+  description: Roba 2 cartas. Aplica Veneno.
   sprite: {fileID: 0}
-  cost: 1
+  cost: 2
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: 0015c065089f7d649afefbcb7ba7cded, type: 2}
+  - {fileID: 11400000, guid: aa7c2fd0412c42f4b8c5f13607ef101b, type: 2}
   upgradeOptions:
   - upgradeName: Manos rapidas
     description: Reduce su coste en 1.

@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Ejecucion
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
   contentId: 94df614082522b741b9080c0ee5955f5
-  cardName: Ejecucion
-  description: Inflige 16 de dano.
+  cardName: Remate Preciso
+  description: '16 daño. Consume Debilidad: +2% por acumulacion.'
   sprite: {fileID: 0}
   cost: 2
   destroyOnUse: 0
   effects:
-  - {fileID: 11400000, guid: 375633b5fc94db74b8995c81bf0dc3d8, type: 2}
+  - {fileID: 11400000, guid: b89f7ff7260f4140ab69421b9e5ae723, type: 2}
   upgradeOptions:
   - upgradeName: Golpe final
     description: Ejecuta el ataque dos veces.
@@ -51,8 +51,8 @@ MonoBehaviour:
     bonusEffects: []
   epiphanyOptions:
   - epiphanyName: Sentencia final
-    description: Inflige 16 de dano adicional y gana 5 de armadura.
-    cardDescription: 'Epifania: +16 dano y +5 armadura.'
+    description: Inflige 16 de daño adicional y gana 5 de armadura.
+    cardDescription: 'Epifania: +16 daño y +5 armadura.'
     costReduction: 0
     reactivations: 0
     preventDestroyOnUse: 0

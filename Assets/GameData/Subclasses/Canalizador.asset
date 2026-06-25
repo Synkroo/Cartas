@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: Canalizador
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
   contentId: d5f4aebca3b451e4b9592c2be9527c03
-  subclassName: Canalizador
+  subclassName: Criomante
   icon: {fileID: 0}
-  description: Amplia permanentemente su reserva arcana.
-  passiveDescription: Obtiene 1 de mana maximo adicional al elegir esta subclase.
+  description: Guarda cartas congeladas y las rompe para duplicar sus efectos.
+  passiveDescription: Al romper una carta congelada, obtiene su efecto 2 veces. Al
+    empezar el turno y al congelar, gana 5 de armadura por cada carta congelada en
+    mano.
   character: {fileID: 11400000, guid: 48ef4c3c10e21b54e9a36e56de1e60b9, type: 2}
-  passiveType: 3
-  amount: 1
+  passiveType: 11
+  amount: 5
   triggerCount: 1
   percentage: 0

@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: MisilArcano
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
   contentId: be0b9901aa8428746ba249a4a9319a26
-  cardName: Misil Arcano
-  description: Inflige 6 de dano y roba 1 carta.
+  cardName: Rayo Canalizado
+  description: 6 daño. +1 Stun. Roba 1 carta.
   sprite: {fileID: 0}
-  cost: 1
+  cost: 2
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: 3d3f155257904b241a142a65e1b2aa0c, type: 2}
+  - {fileID: 11400000, guid: b2d46b7a2d4e49d2b0fbef235ed09112, type: 2}
   - {fileID: 11400000, guid: d47528f99022eec459cee0d87d91c0ee, type: 2}
   upgradeOptions:
   - upgradeName: Formula eficiente
@@ -30,7 +31,7 @@ MonoBehaviour:
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Misiles gemelos
-    description: Repite el dano y el robo.
+    description: Repite el daño y el robo.
     cardDescription: Efecto x2.
     costReduction: 0
     reactivations: 1
@@ -52,8 +53,8 @@ MonoBehaviour:
     bonusEffects: []
   epiphanyOptions:
   - epiphanyName: Misil prismado
-    description: Inflige 6 de dano adicional y gana 4 de armadura.
-    cardDescription: 'Epifania: +6 dano y +4 armadura.'
+    description: Inflige 6 de daño adicional y gana 4 de armadura.
+    cardDescription: 'Epifania: +6 daño y +4 armadura.'
     costReduction: 0
     reactivations: 0
     preventDestroyOnUse: 0

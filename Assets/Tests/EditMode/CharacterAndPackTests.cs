@@ -157,7 +157,7 @@ namespace JuegoDeCartas.Tests
             SubclassData subclass = ScriptableObject.CreateInstance<SubclassData>();
             subclass.subclassName = "Lider";
             subclass.description = "Descripcion de subclase.";
-            subclass.passiveDescription = "Los aumentos de dano se acumulan.";
+            subclass.passiveDescription = "Los aumentos de daño se acumulan.";
 
             PlayerFrameHoverTooltip.ResolveIdentityTooltip(
                 character,
@@ -175,7 +175,7 @@ namespace JuegoDeCartas.Tests
             Assert.AreEqual("Caballero", classTitle);
             Assert.AreEqual("Equilibra ataque y defensa.", classDescription);
             Assert.AreEqual("Lider", subclassTitle);
-            Assert.AreEqual("Los aumentos de dano se acumulan.", subclassDescription);
+            Assert.AreEqual("Los aumentos de daño se acumulan.", subclassDescription);
 
             Object.DestroyImmediate(subclass);
             Object.DestroyImmediate(character);
@@ -296,7 +296,7 @@ namespace JuegoDeCartas.Tests
             character.subclasses = new List<SubclassData> { leader };
 
             CardData card = ScriptableObject.CreateInstance<CardData>();
-            card.description = "Ganas 5 de dano durante 3 turnos. No se acumula.";
+            card.description = "Ganas 5 de daño durante 3 turnos. No se acumula.";
 
             GameObject root = new GameObject("RuntimeDescriptionTest");
             BattleManager battle = root.AddComponent<BattleManager>();
@@ -307,7 +307,7 @@ namespace JuegoDeCartas.Tests
             Assert.IsTrue(battle.ActivateSubclass(leader));
 
             string description = battle.GetRuntimeCardDescription(card);
-            Assert.AreEqual("Ganas 5 de dano durante 3 turnos.", description);
+            Assert.AreEqual("Ganas 5 de daño durante 3 turnos.", description);
             StringAssert.DoesNotContain("No se acumula", description);
 
             Object.DestroyImmediate(root);

@@ -27,6 +27,14 @@ namespace JuegoDeCartas.Enemies
         DiscardPile = 1
     }
 
+    public enum EnemyStatusType
+    {
+        Weakness = 0,
+        Poison = 1,
+        Bleed = 2,
+        Stun = 3
+    }
+
     [Serializable]
     public class EnemyMechanicData
     {

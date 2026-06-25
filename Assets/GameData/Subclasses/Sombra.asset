@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Sombra
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
   contentId: a60a5f38f52172b42ba589a8fd5fcf7d
-  subclassName: Sombra
+  subclassName: Desangrador
   icon: {fileID: 0}
-  description: Se protege al mantener el ritmo de juego.
-  passiveDescription: Cada 3 cartas jugadas en un turno, obtiene 8 de armadura.
+  description: Acumula sangrado para que el enemigo pierda vida cada turno.
+  passiveDescription: Cada aplicacion de Sangrado suma 1 acumulacion extra. El sangrado
+    inflige su total al inicio de cada turno enemigo y no se consume solo.
   character: {fileID: 11400000, guid: 8bebb5ff9ba7a1c4f8de39aeef561d4b, type: 2}
-  passiveType: 8
-  amount: 8
-  triggerCount: 3
+  passiveType: 16
+  amount: 1
+  triggerCount: 1
   percentage: 0

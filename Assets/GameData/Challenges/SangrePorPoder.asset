@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Challenges.ChallengeData
   contentId: 93d8eb476fd846f5a80405e796d457a1
   challengeName: Sangre por poder
-  description: Cuanta menos vida conserves, mas dano hacen tus cartas. Curarte reduce
+  description: Cuanta menos vida conserves, mas daño hacen tus cartas. Curarte reduce
     el bono y obliga a decidir entre seguridad y potencia.
   image: {fileID: 0}
   difficulty: 2
   implemented: 0
-  ruleSummary: El dano aumenta con la vida perdida. Las curaciones son menos eficaces
+  ruleSummary: El daño aumenta con la vida perdida. Las curaciones son menos eficaces
     y no se recupera vida entre combates.
   encounterMission: {fileID: 11400000, guid: 24b96661fa5b0f04f92be79e53f0bb0f, type: 2}
   modifier: 0

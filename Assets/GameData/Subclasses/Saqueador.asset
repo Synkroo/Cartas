@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Saqueador
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
   contentId: 2939f8cdd3b556047b4273d105690449
-  subclassName: Saqueador
+  subclassName: Alquimista venenoso
   icon: {fileID: 0}
-  description: Convierte las cadenas largas en economia.
-  passiveDescription: Cada 4 cartas jugadas en un turno, obtiene 25 de oro.
+  description: Usa venenos para desgastar y reducir el ataque enemigo.
+  passiveDescription: Cada aplicacion de Veneno suma 1 acumulacion extra. El veneno
+    hace daño al inicio del turno enemigo y reduce su ataque.
   character: {fileID: 11400000, guid: 8bebb5ff9ba7a1c4f8de39aeef561d4b, type: 2}
-  passiveType: 7
-  amount: 25
-  triggerCount: 4
+  passiveType: 15
+  amount: 1
+  triggerCount: 1
   percentage: 0

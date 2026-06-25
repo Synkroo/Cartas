@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: TejedorHechizos
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
   contentId: 61f9c0445067dbf45bfa7c19bb93ece0
-  subclassName: Tejedor de hechizos
+  subclassName: Electromante
   icon: {fileID: 0}
-  description: Recicla mana mientras encadena cartas.
-  passiveDescription: Cada 2 cartas jugadas en un turno, recupera 1 de mana.
+  description: Sobrecarga al enemigo acumulando stun hasta bloquear su ataque.
+  passiveDescription: Al llegar a 5 de stun, además del aturdimiento inflige 10 de
+    daño extra. Cada carga de stun aumenta ese daño extra un 10%.
   character: {fileID: 11400000, guid: 48ef4c3c10e21b54e9a36e56de1e60b9, type: 2}
-  passiveType: 5
-  amount: 1
-  triggerCount: 2
-  percentage: 0
+  passiveType: 13
+  amount: 10
+  triggerCount: 1
+  percentage: 10

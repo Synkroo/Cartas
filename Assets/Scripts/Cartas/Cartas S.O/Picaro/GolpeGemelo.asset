@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: GolpeGemelo
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
   contentId: 8bfaa640a2d58f447937873c30b021c6
-  cardName: Golpe Gemelo
-  description: Golpea dos veces e inflige 5 de dano por golpe.
+  cardName: Doble Tajo
+  description: 2 golpes de 5 daño. +1 Sangrado.
   sprite: {fileID: 0}
   cost: 1
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: 727f642d1b44a71428ff33c06cf4f2e3, type: 2}
   - {fileID: 11400000, guid: 727f642d1b44a71428ff33c06cf4f2e3, type: 2}
+  - {fileID: 11400000, guid: 92d743f6f8344e2ebd9677320eef1c0a, type: 2}
   upgradeOptions:
   - upgradeName: Cadena perfecta
     description: Repite la secuencia completa una vez.
@@ -52,8 +53,8 @@ MonoBehaviour:
     bonusEffects: []
   epiphanyOptions:
   - epiphanyName: Cuatro cortes
-    description: Inflige 10 de dano adicional y recupera 1 de mana.
-    cardDescription: 'Epifania: +10 dano y recupera 1 mana.'
+    description: Inflige 10 de daño adicional y recupera 1 de mana.
+    cardDescription: 'Epifania: +10 daño y recupera 1 mana.'
     costReduction: 0
     reactivations: 0
     preventDestroyOnUse: 0

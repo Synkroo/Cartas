@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   contentId: 4d06ce7c3df745c88843b71bff25cf71
   cardName: Mandoble
-  description: Golpe pesado que hace 20 de dano.
+  description: Golpe pesado que hace 20 de daño.
   sprite: {fileID: 0}
   cost: 2
   destroyOnUse: 0
@@ -51,8 +51,8 @@ MonoBehaviour:
     bonusEffects: []
   epiphanyOptions:
   - epiphanyName: Veredicto
-    description: Despues del golpe, inflige 14 de dano adicional.
-    cardDescription: 'Epifania: +14 dano.'
+    description: Despues del golpe, inflige 14 de daño adicional.
+    cardDescription: 'Epifania: +14 daño.'
     costReduction: 0
     reactivations: 0
     preventDestroyOnUse: 0

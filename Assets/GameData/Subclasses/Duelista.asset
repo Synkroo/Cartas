@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Duelista
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
   contentId: 54bd3c2c213c39148bf1971335c82037
-  subclassName: Duelista
+  subclassName: Asesino
   icon: {fileID: 0}
-  description: Abre cada turno con un golpe preciso.
-  passiveDescription: La primera carta que inflige dano cada turno causa 5 de dano
+  description: Acumula debilidad para preparar golpes criticos.
+  passiveDescription: Los criticos contra enemigos con Debilidad infligen 8 de daño
     adicional.
   character: {fileID: 11400000, guid: 8bebb5ff9ba7a1c4f8de39aeef561d4b, type: 2}
-  passiveType: 6
-  amount: 5
+  passiveType: 14
+  amount: 8
   triggerCount: 1
   percentage: 0

@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: Concentracion
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
   contentId: 7cd004839d2e5c642809acf7ebd5b39b
-  cardName: Concentracion
-  description: Recupera 1 de mana. Se destruye al usarla.
+  cardName: Fractura Gelida
+  description: 'Recupera 1 mana. Rompe 1 congelada: coste -1 y 4 daño.'
   sprite: {fileID: 0}
   cost: 0
   destroyOnUse: 1
   effects:
   - {fileID: 11400000, guid: a84a6a544131cee46b4a752aaf1bcb29, type: 2}
+  - {fileID: 11400000, guid: d0a4b6c289024bf69d85e00a2dbf0f11, type: 2}
   upgradeOptions:
   - upgradeName: Canalizacion
     description: Recupera mana una segunda vez.

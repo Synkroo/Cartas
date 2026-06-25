@@ -53,7 +53,7 @@ namespace JuegoDeCartas.Stats
         {
             return $"Turnos jugados: {turnsPlayed}\n\n" +
                    $"Enemigos derrotados: {enemiesDefeated}\n\n" +
-                   $"Dano realizado: {totalDamageDealt}\n\n" +
+                   $"Daño realizado: {totalDamageDealt}\n\n" +
                    $"Armadura total: {totalArmorGained}\n\n" +
                    $"Cartas usadas: {cardsUsed}\n\n" +
                    $"Intereses obtenidos: {totalInterestEarned}";
@@ -62,10 +62,10 @@ namespace JuegoDeCartas.Stats
         public string GetSecondaryStatsText()
         {
             return $"Rondas jugadas: {roundsPlayed}\n\n" +
-                   $"Dano maximo enemigo: {maxEnemyDamage}\n\n" +
-                   $"Dano recibido: {totalDamageReceived}\n\n" +
+                   $"Daño maximo enemigo: {maxEnemyDamage}\n\n" +
+                   $"Daño recibido: {totalDamageReceived}\n\n" +
                    $"Armadura maxima: {maxArmor}\n\n" +
-                   $"Dano maximo cartas: {maxCardDamage}";
+                   $"Daño maximo cartas: {maxCardDamage}";
         }
 
         public void PopulateStatsText()

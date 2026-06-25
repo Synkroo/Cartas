@@ -23,6 +23,12 @@ namespace JuegoDeCartas.UI
         public Action onCancel;
         public Action onClose;
 
+        [Header("Layout")]
+        public Vector2 minimumGridSpacing = new Vector2(34f, 40f);
+        public Vector3 selectionCardScale = new Vector3(0.68f, 1.02f, 0.68f);
+        public bool closeWhenClickOutside = true;
+        public RectTransform clickInsideArea;
+
         TextMeshProUGUI tituloText;
         GridLayoutGroup grid;
 
@@ -40,6 +46,8 @@ namespace JuegoDeCartas.UI
                 tituloText = transform.Find("Cabecero/Titulo")?.GetComponent<TextMeshProUGUI>();
 
             if (contentParent != null) grid = contentParent.GetComponent<GridLayoutGroup>();
+            if (clickInsideArea == null && contentParent != null)
+                clickInsideArea = contentParent as RectTransform;
 
             if (battle == null)
                 battle = FindAnyObjectByType<BattleManager>();
@@ -50,6 +58,31 @@ namespace JuegoDeCartas.UI
                 volverBtn.onClick.RemoveAllListeners();
                 volverBtn.onClick.AddListener(Close);
             }
+        }
+
+        void Update()
+        {
+            if (!closeWhenClickOutside ||
+                panel == null ||
+                !panel.activeSelf ||
+                !Input.GetMouseButtonDown(0))
+            {
+                return;
+            }
+
+            RectTransform insideArea = clickInsideArea != null
+                ? clickInsideArea
+                : contentParent as RectTransform;
+            if (insideArea != null &&
+                RectTransformUtility.RectangleContainsScreenPoint(
+                    insideArea,
+                    Input.mousePosition
+                ))
+            {
+                return;
+            }
+
+            Close();
         }
 
         public void OpenForSelection(List<Card> cards, string title, Action<Card> onSelect, Action onCancelAction)
@@ -93,6 +126,10 @@ namespace JuegoDeCartas.UI
             {
                 float cols = grid.constraintCount;
                 var contentRT = contentParent as RectTransform;
+                grid.spacing = new Vector2(
+                    Mathf.Max(grid.spacing.x, minimumGridSpacing.x),
+                    Mathf.Max(grid.spacing.y, minimumGridSpacing.y)
+                );
                 float cellW = (contentRT.rect.width - (cols - 1) * grid.spacing.x) / cols;
                 if (cellW > 0)
                     grid.cellSize = new Vector2(cellW, cellW / 0.7f);
@@ -123,7 +160,7 @@ namespace JuegoDeCartas.UI
                     btn.onClick.AddListener(() => SelectCard(captured));
                 }
 
-                obj.transform.localScale = new Vector3(0.7f, 1.05f, 0.7f);
+                obj.transform.localScale = selectionCardScale;
 
                 CardHover hover = obj.GetComponent<CardHover>();
                 if (hover != null)

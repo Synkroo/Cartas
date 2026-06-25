@@ -73,6 +73,8 @@ namespace JuegoDeCartas.UI
         public Transform deckContent;
         public GameObject cardPrefab;
         public Vector2 deckCardSlotSize = new Vector2(150f, 220f);
+        public Vector2 deckCardSpacing = new Vector2(36f, 36f);
+        public bool applyDeckGridLayout = true;
 
         CharacterData currentHero;
         bool heroDeckVisible;
@@ -286,7 +288,7 @@ namespace JuegoDeCartas.UI
                 enemy.enemyName,
                 enemy.sprite,
                 mechanics,
-                $"Tipo: {tier}\nVida: {enemy.maxHealth}\nDano: {enemy.minDamage}-{enemy.maxDamage}\nArmadura: {enemy.startArmor}",
+                $"Tipo: {tier}\nVida: {enemy.maxHealth}\nDaño: {enemy.minDamage}-{enemy.maxDamage}\nArmadura: {enemy.startArmor}",
                 $"Derrotado: {CollectionProgress.GetEnemyDefeatedCount(enemy)} veces"
             );
         }
@@ -483,8 +485,8 @@ namespace JuegoDeCartas.UI
             builder.AppendLine(availability);
             builder.AppendLine($"Runs: {CollectionProgress.GetHeroRuns(hero)}");
             builder.AppendLine($"Victorias: {CollectionProgress.GetHeroWins(hero)}");
-            builder.AppendLine($"Mayor dano de carta: {CollectionProgress.GetHeroMaxCardDamage(hero)}");
-            builder.AppendLine($"Mayor dano en run: {CollectionProgress.GetHeroMaxRunDamage(hero)}");
+            builder.AppendLine($"Mayor daño de carta: {CollectionProgress.GetHeroMaxCardDamage(hero)}");
+            builder.AppendLine($"Mayor daño en run: {CollectionProgress.GetHeroMaxRunDamage(hero)}");
             builder.AppendLine($"Armadura maxima: {CollectionProgress.GetHeroMaxArmor(hero)}");
             builder.AppendLine($"Enemigos derrotados: {CollectionProgress.GetHeroEnemiesDefeated(hero)}");
             builder.AppendLine($"Cartas usadas: {CollectionProgress.GetHeroCardsUsed(hero)}");
@@ -615,6 +617,8 @@ namespace JuegoDeCartas.UI
             if (hero == null || deckContent == null || cardPrefab == null)
                 return;
 
+            ApplyDeckGridLayout();
+
             for (int i = 0; i < hero.startingDeck.Count; i++)
             {
                 CardData cardData = hero.startingDeck[i];
@@ -631,8 +635,22 @@ namespace JuegoDeCartas.UI
                 {
                     view.Setup(new Card(cardData), null);
                     view.interactable = false;
+                    view.inspectionEnabled = true;
                 }
             }
+        }
+
+        void ApplyDeckGridLayout()
+        {
+            if (!applyDeckGridLayout || deckContent == null)
+                return;
+
+            GridLayoutGroup grid = deckContent.GetComponent<GridLayoutGroup>();
+            if (grid == null)
+                return;
+
+            grid.cellSize = deckCardSlotSize;
+            grid.spacing = deckCardSpacing;
         }
 
         void ClearEntries()

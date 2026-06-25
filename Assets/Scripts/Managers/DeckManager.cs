@@ -103,8 +103,21 @@ namespace JuegoDeCartas.Managers
             if (hand == null || discard == null)
                 return;
 
-            discard.AddRange(hand);
-            hand.Clear();
+            for (int i = hand.Count - 1; i >= 0; i--)
+            {
+                Card card = hand[i];
+                if (card == null)
+                {
+                    hand.RemoveAt(i);
+                    continue;
+                }
+
+                if (card.frozen)
+                    continue;
+
+                discard.Add(card);
+                hand.RemoveAt(i);
+            }
 
             OnDeckChanged?.Invoke();
         }

@@ -15,9 +15,10 @@ MonoBehaviour:
   contentId: 90bd81ad475e59d488bbd4d103680eed
   characterName: Caballero
   portrait: {fileID: 0}
-  description: Combatiente resistente y directo. Su mazo inicial combina dano, armadura
-    y mejoras temporales.
-  mechanicDescription: 'Mecanica: equilibrio entre ataque y defensa.'
+  description: Combatiente resistente y directo. Su mazo inicial permite jugar daño
+    creciente, bufos acumulables o armadura ofensiva.
+  mechanicDescription: 'Mecanica: daño directo, mejoras temporales y escudos que
+    pueden convertirse en presion.'
   maxHealth: 50
   maxMana: 3
   cardsPerTurn: 4

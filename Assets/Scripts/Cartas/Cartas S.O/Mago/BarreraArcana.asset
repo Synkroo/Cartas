@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: BarreraArcana
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
   contentId: f74a44da8993536408fb5e7e2c69f46b
-  cardName: Barrera Arcana
-  description: Obtiene 6 de armadura.
+  cardName: Escarcha Arcana
+  description: 6 armadura. Congela 1 carta.
   sprite: {fileID: 0}
   cost: 1
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: 42daa1f0dd6ba384187fa628ce7fa2a9, type: 2}
+  - {fileID: 11400000, guid: c312e664c77b45afaecfcdbb92b75a11, type: 2}
   upgradeOptions:
   - upgradeName: Glifo eficiente
     description: Reduce su coste en 1.

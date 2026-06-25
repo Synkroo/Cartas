@@ -21,8 +21,14 @@ namespace JuegoDeCartas.Enemies
         public Sprite currentSprite { get; private set; }
         public RuntimeAnimatorController currentAnimatorController { get; private set; }
         public bool IsDefeated { get; private set; }
+        public int weaknessStacks { get; private set; }
+        public int poisonStacks { get; private set; }
+        public int bleedStacks { get; private set; }
+        public int stunStacks { get; private set; }
 
         private BattleManager battle;
+        private bool weaknessAppliedSinceLastTick;
+        private bool bleedAppliedSinceLastTick;
         private readonly List<int> mechanicUseCounts = new List<int>();
         private readonly List<int> mechanicDamageAccumulations = new List<int>();
 
@@ -46,6 +52,7 @@ namespace JuegoDeCartas.Enemies
                 turnsSurvived = 0;
                 mechanicUseCounts.Clear();
                 mechanicDamageAccumulations.Clear();
+                ClearStatuses();
                 IsDefeated = false;
                 return;
             }
@@ -68,6 +75,7 @@ namespace JuegoDeCartas.Enemies
 
             mechanicUseCounts.Clear();
             mechanicDamageAccumulations.Clear();
+            ClearStatuses();
             IsDefeated = false;
             int mechanicCount = data.mechanics != null ? data.mechanics.Count : 0;
             for (int i = 0; i < mechanicCount; i++)
@@ -122,6 +130,96 @@ namespace JuegoDeCartas.Enemies
             int minDamage = Mathf.Max(0, currentMinDamage + projectedModifier);
             int maxDamage = Mathf.Max(minDamage, currentMaxDamage + projectedModifier);
             return RunRandom.Range(minDamage, maxDamage + 1);
+        }
+
+        public void AddStatus(EnemyStatusType statusType, int amount)
+        {
+            if (amount <= 0)
+                return;
+
+            switch (statusType)
+            {
+                case EnemyStatusType.Weakness:
+                    weaknessStacks += amount;
+                    weaknessAppliedSinceLastTick = true;
+                    break;
+                case EnemyStatusType.Poison:
+                    poisonStacks = Mathf.Max(poisonStacks, 1);
+                    break;
+                case EnemyStatusType.Bleed:
+                    bleedStacks += amount;
+                    bleedAppliedSinceLastTick = true;
+                    break;
+                case EnemyStatusType.Stun:
+                    stunStacks += amount;
+                    break;
+            }
+        }
+
+        public int GetStatus(EnemyStatusType statusType)
+        {
+            return statusType switch
+            {
+                EnemyStatusType.Weakness => weaknessStacks,
+                EnemyStatusType.Poison => poisonStacks,
+                EnemyStatusType.Bleed => bleedStacks,
+                EnemyStatusType.Stun => stunStacks,
+                _ => 0
+            };
+        }
+
+        public int ConsumeStatus(EnemyStatusType statusType, int amount)
+        {
+            if (amount <= 0)
+                return 0;
+
+            int current = GetStatus(statusType);
+            int consumed = Mathf.Min(current, amount);
+            SetStatus(statusType, current - consumed);
+            return consumed;
+        }
+
+        public void SetStatus(EnemyStatusType statusType, int amount)
+        {
+            int value = Mathf.Max(0, amount);
+            switch (statusType)
+            {
+                case EnemyStatusType.Weakness:
+                    weaknessStacks = value;
+                    break;
+                case EnemyStatusType.Poison:
+                    poisonStacks = value;
+                    break;
+                case EnemyStatusType.Bleed:
+                    bleedStacks = value;
+                    break;
+                case EnemyStatusType.Stun:
+                    stunStacks = value;
+                    break;
+            }
+        }
+
+        public bool WasStatusAppliedSinceLastTick(EnemyStatusType statusType)
+        {
+            return statusType switch
+            {
+                EnemyStatusType.Weakness => weaknessAppliedSinceLastTick,
+                EnemyStatusType.Bleed => bleedAppliedSinceLastTick,
+                _ => false
+            };
+        }
+
+        public void ClearStatusAppliedSinceLastTick(EnemyStatusType statusType)
+        {
+            switch (statusType)
+            {
+                case EnemyStatusType.Weakness:
+                    weaknessAppliedSinceLastTick = false;
+                    break;
+                case EnemyStatusType.Bleed:
+                    bleedAppliedSinceLastTick = false;
+                    break;
+            }
         }
 
         public int GetProjectedNextTurnArmorGain()
@@ -307,7 +405,18 @@ namespace JuegoDeCartas.Enemies
             damageModifier = 0;
             lastDamageTaken = 0;
             turnsSurvived = 0;
+            ClearStatuses();
             IsDefeated = false;
+        }
+
+        void ClearStatuses()
+        {
+            weaknessStacks = 0;
+            poisonStacks = 0;
+            bleedStacks = 0;
+            stunStacks = 0;
+            weaknessAppliedSinceLastTick = false;
+            bleedAppliedSinceLastTick = false;
         }
 
         static int ApplyPercent(int value, float percent, int minimum)

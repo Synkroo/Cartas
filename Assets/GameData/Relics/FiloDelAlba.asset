@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Relics.RelicData
   contentId: fd879a56eb89f2c4ba4327bc7f9bfa04
   relicName: Filo del alba
-  description: La primera carta de cada turno inflige 4 de dano adicional.
+  description: La primera carta de cada turno inflige 4 de daño adicional.
   icon: {fileID: 21300000, guid: 2dc1d375324ca0d49b2f600648c72a31, type: 3}
   rarity: 1
   price: 480

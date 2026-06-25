@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   contentId: 25184310b7d449f882a03b4c5da3f3da
   cardName: Rugido
-  description: Ganas 5 de dano durante 3 turnos. No se acumula.
+  description: Ganas 5 de daño durante 3 turnos. No se acumula.
   sprite: {fileID: 0}
   cost: 1
   destroyOnUse: 0
@@ -29,8 +29,8 @@ MonoBehaviour:
     preventDestroyOnUse: 0
     bonusEffects: []
   - upgradeName: Rugido feroz
-    description: Duplica la bonificacion de dano.
-    cardDescription: Bono de dano x2.
+    description: Duplica la bonificacion de daño.
+    cardDescription: Bono de daño x2.
     costReduction: 0
     reactivations: 1
     preventDestroyOnUse: 0
@@ -51,8 +51,8 @@ MonoBehaviour:
     bonusEffects: []
   epiphanyOptions:
   - epiphanyName: Voz ancestral
-    description: Gana 3 de armadura y 3 de dano durante 3 turnos.
-    cardDescription: 'Epifania: +3 armadura; +3 dano 3 turnos.'
+    description: Gana 3 de armadura y 3 de daño durante 3 turnos.
+    cardDescription: 'Epifania: +3 armadura; +3 daño 3 turnos.'
     costReduction: 0
     reactivations: 0
     preventDestroyOnUse: 0

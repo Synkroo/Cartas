@@ -15,9 +15,10 @@ MonoBehaviour:
   contentId: 48ef4c3c10e21b54e9a36e56de1e60b9
   characterName: Mago
   portrait: {fileID: 0}
-  description: Especialista en hechizos encadenados. Tiene menos vida, pero empieza
-    con mas mana y cartas que roban o recuperan recursos.
-  mechanicDescription: 'Mecanica: gastar, recuperar mana y encadenar hechizos.'
+  description: Especialista en hechizos elementales. Tiene menos vida, pero usa hielo
+    para guardar cartas, fuego para quemarlas y rayo para controlar al enemigo.
+  mechanicDescription: 'Mecanica: hielo, fuego y electricidad para preparar manos,
+    vaciarlas o aturdir.'
   maxHealth: 40
   maxMana: 4
   cardsPerTurn: 4

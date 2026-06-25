@@ -51,8 +51,8 @@ MonoBehaviour:
     bonusEffects: []
   epiphanyOptions:
   - epiphanyName: Filo eterno
-    description: Tras el ataque, inflige 5 de dano y gana 3 de armadura.
-    cardDescription: 'Epifania: +5 dano y +3 armadura.'
+    description: Tras el ataque, inflige 5 de daño y gana 3 de armadura.
+    cardDescription: 'Epifania: +5 daño y +3 armadura.'
     costReduction: 0
     reactivations: 0
     preventDestroyOnUse: 0

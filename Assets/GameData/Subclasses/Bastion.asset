@@ -15,10 +15,11 @@ MonoBehaviour:
   contentId: dcc2bc9298639d741abdfe1a377c23da
   subclassName: Bastion
   icon: {fileID: 0}
-  description: Mantiene parte de sus defensas entre turnos.
-  passiveDescription: Conserva el 50% de la armadura al comenzar un nuevo turno.
+  description: Convierte la defensa en daño y mantiene parte del escudo.
+  passiveDescription: Al ganar armadura, inflige al enemigo un 50% de la armadura
+    obtenida y conserva el 50% al comenzar un nuevo turno.
   character: {fileID: 11400000, guid: 90bd81ad475e59d488bbd4d103680eed, type: 2}
-  passiveType: 2
+  passiveType: 10
   amount: 0
   triggerCount: 1
   percentage: 50

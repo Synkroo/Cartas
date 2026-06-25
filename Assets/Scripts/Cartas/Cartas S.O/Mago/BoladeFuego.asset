@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: BoladeFuego
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
   contentId: 8b2deebacc9feea4d8d5b7b7ba83cf19
-  cardName: Bola de Fuego
-  description: Inflige 18 de dano.
+  cardName: Combustion
+  description: '18 daño. Quema 1 carta: +4 daño. +2 daño por hueco.'
   sprite: {fileID: 0}
   cost: 2
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: d0379660ceabe2349ac772591ea1b8d9, type: 2}
+  - {fileID: 11400000, guid: e181e78bb77f4a0e907f0c4bcf46d211, type: 2}
+  - {fileID: 11400000, guid: f12b713fab124227879bc366b01f8531, type: 2}
   upgradeOptions:
   - upgradeName: Combustion estable
     description: Reduce su coste en 1.
@@ -51,8 +53,8 @@ MonoBehaviour:
     bonusEffects: []
   epiphanyOptions:
   - epiphanyName: Supernova
-    description: La explosion inflige 12 de dano adicional.
-    cardDescription: 'Epifania: +12 dano.'
+    description: La explosion inflige 12 de daño adicional.
+    cardDescription: 'Epifania: +12 daño.'
     costReduction: 0
     reactivations: 0
     preventDestroyOnUse: 0

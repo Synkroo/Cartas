@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: Chispa
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
   contentId: 7bd4a90f895693d4a804827de64d1099
-  cardName: Chispa
-  description: Inflige 8 de dano.
+  cardName: Descarga
+  description: 8 daño. +1 Stun.
   sprite: {fileID: 0}
   cost: 1
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: 894f8eaa882343c4eb8707dd1106978f, type: 2}
+  - {fileID: 11400000, guid: 0c852e4de3fb4f4ea923829d0e746b20, type: 2}
   upgradeOptions:
   - upgradeName: Descarga gratuita
     description: Reduce su coste en 1.
@@ -51,8 +52,8 @@ MonoBehaviour:
     bonusEffects: []
   epiphanyOptions:
   - epiphanyName: Sobrecarga
-    description: Inflige 4 de dano adicional y recupera 1 de mana.
-    cardDescription: 'Epifania: +4 dano y recupera 1 mana.'
+    description: Inflige 4 de daño adicional y recupera 1 de mana.
+    cardDescription: 'Epifania: +4 daño y recupera 1 mana.'
     costReduction: 0
     reactivations: 0
     preventDestroyOnUse: 0

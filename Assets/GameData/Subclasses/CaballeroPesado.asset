@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: CaballeroPesado
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
   contentId: d2ec0e5dbcd20b241879519d20506bc4
-  subclassName: Caballero pesado
+  subclassName: Furia de acero
   icon: {fileID: 0}
-  description: Convierte la defensa en presion ofensiva.
-  passiveDescription: Al ganar armadura, inflige al enemigo un 50% de la armadura
-    obtenida.
+  description: Aumenta su presion cada vez que usa cartas de daño.
+  passiveDescription: Cada carta que inflige daño durante el combate aumenta en 2
+    el daño de las siguientes cartas de daño.
   character: {fileID: 11400000, guid: 90bd81ad475e59d488bbd4d103680eed, type: 2}
-  passiveType: 0
-  amount: 0
+  passiveType: 9
+  amount: 2
   triggerCount: 1
-  percentage: 50
+  percentage: 0

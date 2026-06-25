@@ -15,9 +15,10 @@ MonoBehaviour:
   contentId: 8bebb5ff9ba7a1c4f8de39aeef561d4b
   characterName: Picaro
   portrait: {fileID: 0}
-  description: Especialista en cartas baratas, robo y cadenas largas de ataques.
-  mechanicDescription: 'Mecanica: encadenar varias cartas en un turno y mantener
-    la mano llena.'
+  description: Especialista en cartas baratas y estados. Su mazo inicial combina
+    Debilidad, Veneno y Sangrado para preparar ejecuciones o controlar al enemigo.
+  mechanicDescription: 'Mecanica: acumular estados negativos y convertirlos en daño
+    critico, control o daño por turno.'
   maxHealth: 42
   maxMana: 3
   cardsPerTurn: 5

@@ -258,7 +258,7 @@ namespace JuegoDeCartas.Tests
             string secondary = stats.GetSecondaryStatsText();
 
             StringAssert.Contains("Enemigos derrotados: 14", primary);
-            StringAssert.Contains("Dano maximo enemigo: 16", secondary);
+            StringAssert.Contains("Daño maximo enemigo: 16", secondary);
             Assert.IsFalse(primary.Contains("\t"));
             Assert.IsFalse(secondary.Contains("\t"));
 

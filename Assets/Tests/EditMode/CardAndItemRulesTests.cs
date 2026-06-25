@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JuegoDeCartas.Articulos;
 using JuegoDeCartas.Cards;
+using JuegoDeCartas.Characters;
 using JuegoDeCartas.Managers;
 using JuegoDeCartas.Effects;
 using JuegoDeCartas.Stats;
@@ -302,14 +303,14 @@ namespace JuegoDeCartas.Tests
             epiphanyBonus.armor = 3;
 
             CardData data = ScriptableObject.CreateInstance<CardData>();
-            data.description = "Inflige 10 de dano.";
+            data.description = "Inflige 10 de daño.";
             data.effects.Add(baseDamage);
             data.epiphanyOptions = new List<CardEpiphany>
             {
                 new CardEpiphany
                 {
                     epiphanyName = "Filo revelado",
-                    description = "Inflige 5 de dano adicional.",
+                    description = "Inflige 5 de daño adicional.",
                     bonusEffects = new List<CardEffect> { epiphanyBonus }
                 }
             };
@@ -333,6 +334,473 @@ namespace JuegoDeCartas.Tests
             Object.DestroyImmediate(epiphanyBonus);
             Object.DestroyImmediate(baseDamage);
             Object.DestroyImmediate(data);
+        }
+
+        [Test]
+        public void DamageRampOnlyAffectsCardDamageNotStatusTicks()
+        {
+            RunRandom.Initialize(123);
+            CharacterRunState.Clear();
+
+            GameObject root = CreateBattleObject(
+                "DamageRampBattle",
+                out BattleManager battle,
+                out EnemyData enemyData
+            );
+            SubclassData subclass = ScriptableObject.CreateInstance<SubclassData>();
+            CharacterData character = ScriptableObject.CreateInstance<CharacterData>();
+            subclass.character = character;
+            subclass.passiveType = SubclassPassiveType.DamageCardRamp;
+            subclass.amount = 2;
+            character.subclasses = new List<SubclassData> { subclass };
+            CharacterRunState.Select(character);
+            Assert.IsTrue(battle.ActivateSubclass(subclass));
+
+            CombatMechanicEffect damage =
+                ScriptableObject.CreateInstance<CombatMechanicEffect>();
+            damage.action = CombatMechanicAction.DealDamage;
+            damage.amount = 5;
+            CardData data = ScriptableObject.CreateInstance<CardData>();
+            data.cost = 0;
+            data.effects = new List<CardEffect> { damage };
+            Card first = new Card(data);
+            Card second = new Card(data);
+            battle.deckManager.hand.Add(first);
+            battle.deckManager.hand.Add(second);
+
+            battle.PlayCard(first);
+            Assert.AreEqual(95, battle.enemy.stats.health);
+            Assert.AreEqual(2, battle.CombatDamageBonus);
+
+            battle.PlayCard(second);
+            Assert.AreEqual(88, battle.enemy.stats.health);
+            Assert.AreEqual(4, battle.CombatDamageBonus);
+
+            battle.ApplyEnemyStatus(EnemyStatusType.Poison, 3);
+            battle.ApplyEnemyTurnStartStatuses();
+            Assert.AreEqual(85, battle.enemy.stats.health);
+
+            CharacterRunState.Clear();
+            Object.DestroyImmediate(data);
+            Object.DestroyImmediate(damage);
+            Object.DestroyImmediate(subclass);
+            Object.DestroyImmediate(character);
+            Object.DestroyImmediate(enemyData);
+            Object.DestroyImmediate(root);
+        }
+
+        [Test]
+        public void FreezeShatterAndBurnMoveCardsThroughExpectedZones()
+        {
+            RunRandom.Initialize(456);
+            GameObject root = CreateBattleObject(
+                "FreezeBurnBattle",
+                out BattleManager battle,
+                out EnemyData enemyData
+            );
+            CardData data = ScriptableObject.CreateInstance<CardData>();
+            data.cost = 1;
+            battle.deckManager.hand.Add(new Card(data));
+            battle.deckManager.hand.Add(new Card(data));
+            battle.deckManager.hand.Add(new Card(data));
+
+            Card freezeTarget = battle.deckManager.hand[1];
+            Assert.AreEqual(1, battle.FreezeCardsFromHand(1, freezeTarget));
+            Assert.AreEqual(1, battle.FrozenCardCount);
+            Assert.AreEqual(3, battle.deckManager.hand.Count);
+            Assert.IsTrue(freezeTarget.frozen);
+
+            Assert.AreEqual(1, battle.ShatterFrozenCards(1, 4, 1, 0, freezeTarget));
+            Assert.AreEqual(0, battle.FrozenCardCount);
+            Assert.AreEqual(3, battle.deckManager.hand.Count);
+            Assert.AreEqual(96, battle.enemy.stats.health);
+            Assert.IsTrue(freezeTarget.upgraded);
+            Assert.AreEqual(0, freezeTarget.effectiveCost);
+
+            Card burnTarget = battle.deckManager.hand[0];
+            Assert.AreEqual(1, battle.BurnCardsFromHand(1, burnTarget));
+            Assert.AreEqual(2, battle.deckManager.hand.Count);
+            Assert.AreEqual(1, battle.deckManager.discard.Count);
+            Assert.Contains(burnTarget, battle.deckManager.discard);
+            Assert.IsFalse(burnTarget.frozen);
+            Assert.AreEqual(1, battle.BurnedCardsThisTurn);
+            Assert.AreEqual(1, battle.BurnedCardsThisCombat);
+
+            Card resetTarget = battle.deckManager.hand[0];
+            Assert.AreEqual(1, battle.FreezeCardsFromHand(1, resetTarget));
+            battle.ResetTemporaryCombatEffects();
+            Assert.AreEqual(0, battle.FrozenCardCount);
+            Assert.IsFalse(resetTarget.frozen);
+            Assert.AreEqual(2, battle.deckManager.discard.Count);
+
+            Object.DestroyImmediate(data);
+            Object.DestroyImmediate(enemyData);
+            Object.DestroyImmediate(root);
+        }
+
+        [Test]
+        public void FrozenCardsStayInHandUntilDurationEnds()
+        {
+            GameObject root = CreateBattleObject(
+                "FreezeDurationBattle",
+                out BattleManager battle,
+                out EnemyData enemyData
+            );
+            CardData data = ScriptableObject.CreateInstance<CardData>();
+            data.cost = 1;
+            Card frozen = new Card(data);
+            Card normal = new Card(data);
+            battle.deckManager.hand.Add(frozen);
+            battle.deckManager.hand.Add(normal);
+
+            Assert.AreEqual(1, battle.FreezeCardsFromHand(1, frozen));
+
+            battle.AdvanceFrozenCardsForPlayerTurnEnd();
+            battle.deckManager.DiscardHand();
+            Assert.Contains(frozen, battle.deckManager.hand);
+            Assert.IsTrue(frozen.frozen);
+            Assert.AreEqual(1, battle.deckManager.discard.Count);
+
+            battle.AdvanceFrozenCardsForPlayerTurnEnd();
+            battle.deckManager.DiscardHand();
+            Assert.Contains(frozen, battle.deckManager.hand);
+            Assert.IsTrue(frozen.frozen);
+
+            battle.AdvanceFrozenCardsForPlayerTurnEnd();
+            battle.deckManager.DiscardHand();
+            Assert.IsFalse(frozen.frozen);
+            Assert.IsFalse(battle.deckManager.hand.Contains(frozen));
+            Assert.Contains(frozen, battle.deckManager.discard);
+            Assert.AreEqual(0, battle.FrozenCardCount);
+
+            Object.DestroyImmediate(data);
+            Object.DestroyImmediate(enemyData);
+            Object.DestroyImmediate(root);
+        }
+
+        [Test]
+        public void MageIceSubclassGrantsArmorAndDoublesShatteredCardEffects()
+        {
+            CharacterRunState.Clear();
+            GameObject root = CreateBattleObject(
+                "MageIceBattle",
+                out BattleManager battle,
+                out EnemyData enemyData
+            );
+            SubclassData subclass = ScriptableObject.CreateInstance<SubclassData>();
+            CharacterData character = ScriptableObject.CreateInstance<CharacterData>();
+            subclass.character = character;
+            subclass.passiveType = SubclassPassiveType.MageIceMastery;
+            subclass.amount = 5;
+            character.subclasses = new List<SubclassData> { subclass };
+            CharacterRunState.Select(character);
+            Assert.IsTrue(battle.ActivateSubclass(subclass));
+
+            CombatMechanicEffect damage =
+                ScriptableObject.CreateInstance<CombatMechanicEffect>();
+            damage.action = CombatMechanicAction.DealDamage;
+            damage.amount = 4;
+            CardData data = ScriptableObject.CreateInstance<CardData>();
+            data.cost = 1;
+            data.effects = new List<CardEffect> { damage };
+            Card frozen = new Card(data);
+            battle.deckManager.hand.Add(frozen);
+
+            Assert.AreEqual(1, battle.FreezeCardsFromHand(1, frozen));
+            Assert.AreEqual(5, battle.player.stats.armor);
+            Assert.AreEqual(5, battle.GetArmorAtPlayerTurnStart(0));
+
+            Assert.AreEqual(1, battle.ShatterFrozenCards(1, 0, 0, 0, frozen));
+            Assert.AreEqual(92, battle.enemy.stats.health);
+
+            CharacterRunState.Clear();
+            Object.DestroyImmediate(data);
+            Object.DestroyImmediate(damage);
+            Object.DestroyImmediate(subclass);
+            Object.DestroyImmediate(character);
+            Object.DestroyImmediate(enemyData);
+            Object.DestroyImmediate(root);
+        }
+
+        [Test]
+        public void MageFireSubclassDrawsAfterBurnAndExplodesRepeatedBurns()
+        {
+            CharacterRunState.Clear();
+            GameObject root = CreateBattleObject(
+                "MageFireBattle",
+                out BattleManager battle,
+                out EnemyData enemyData
+            );
+            SubclassData subclass = ScriptableObject.CreateInstance<SubclassData>();
+            CharacterData character = ScriptableObject.CreateInstance<CharacterData>();
+            subclass.character = character;
+            subclass.passiveType = SubclassPassiveType.MageFireMastery;
+            character.subclasses = new List<SubclassData> { subclass };
+            CharacterRunState.Select(character);
+            Assert.IsTrue(battle.ActivateSubclass(subclass));
+
+            CombatMechanicEffect damage =
+                ScriptableObject.CreateInstance<CombatMechanicEffect>();
+            damage.action = CombatMechanicAction.DealDamage;
+            damage.amount = 7;
+            CardData burnedData = ScriptableObject.CreateInstance<CardData>();
+            burnedData.cost = 1;
+            burnedData.effects = new List<CardEffect> { damage };
+            CardData fillerData = ScriptableObject.CreateInstance<CardData>();
+            Card burned = new Card(burnedData);
+            battle.deckManager.hand.Add(burned);
+            battle.deckManager.deck.Add(new Card(fillerData));
+
+            Assert.AreEqual(1, battle.BurnCardsFromHand(1, burned));
+            Assert.IsTrue(burned.burned);
+            Assert.AreEqual(1, burned.burnCount);
+            Assert.AreEqual(1, battle.deckManager.hand.Count);
+            Assert.AreEqual(100, battle.enemy.stats.health);
+
+            battle.deckManager.discard.Remove(burned);
+            battle.deckManager.hand.Add(burned);
+            battle.deckManager.deck.Add(new Card(fillerData));
+
+            Assert.AreEqual(1, battle.BurnCardsFromHand(1, burned));
+            Assert.AreEqual(0, burned.burnCount);
+            Assert.AreEqual(93, battle.enemy.stats.health);
+            Assert.AreEqual(2, battle.BurnedCardsThisTurn);
+            Assert.IsTrue(battle.deckManager.hand.Count >= 1);
+
+            CharacterRunState.Clear();
+            Object.DestroyImmediate(fillerData);
+            Object.DestroyImmediate(burnedData);
+            Object.DestroyImmediate(damage);
+            Object.DestroyImmediate(subclass);
+            Object.DestroyImmediate(character);
+            Object.DestroyImmediate(enemyData);
+            Object.DestroyImmediate(root);
+        }
+
+        [Test]
+        public void MageElectricSubclassOverloadsWhenStunThresholdIsReached()
+        {
+            CharacterRunState.Clear();
+            GameObject root = CreateBattleObject(
+                "MageElectricBattle",
+                out BattleManager battle,
+                out EnemyData enemyData
+            );
+            SubclassData subclass = ScriptableObject.CreateInstance<SubclassData>();
+            CharacterData character = ScriptableObject.CreateInstance<CharacterData>();
+            subclass.character = character;
+            subclass.passiveType = SubclassPassiveType.MageElectricOverload;
+            subclass.amount = 10;
+            subclass.percentage = 10;
+            character.subclasses = new List<SubclassData> { subclass };
+            CharacterRunState.Select(character);
+            Assert.IsTrue(battle.ActivateSubclass(subclass));
+
+            battle.ApplyEnemyStatus(EnemyStatusType.Stun, 4);
+            Assert.AreEqual(100, battle.enemy.stats.health);
+
+            battle.ApplyEnemyStatus(EnemyStatusType.Stun, 1);
+
+            Assert.AreEqual(85, battle.enemy.stats.health);
+            Assert.AreEqual(BattleManager.StunThreshold, battle.enemy.GetStatus(EnemyStatusType.Stun));
+            Assert.IsTrue(battle.ConsumeEnemyStunForTurn());
+            Assert.AreEqual(0, battle.enemy.GetStatus(EnemyStatusType.Stun));
+
+            CharacterRunState.Clear();
+            Object.DestroyImmediate(subclass);
+            Object.DestroyImmediate(character);
+            Object.DestroyImmediate(enemyData);
+            Object.DestroyImmediate(root);
+        }
+
+        [Test]
+        public void TargetedMechanicClickSelectsSourceThenAppliesToClickedCard()
+        {
+            GameObject root = CreateBattleObject(
+                "TargetedMechanicBattle",
+                out BattleManager battle,
+                out EnemyData enemyData
+            );
+            CombatMechanicEffect freeze =
+                ScriptableObject.CreateInstance<CombatMechanicEffect>();
+            freeze.action = CombatMechanicAction.FreezeCards;
+            freeze.amount = 1;
+            CardData sourceData = ScriptableObject.CreateInstance<CardData>();
+            sourceData.cost = 1;
+            sourceData.effects = new List<CardEffect> { freeze };
+            CardData targetData = ScriptableObject.CreateInstance<CardData>();
+            targetData.cost = 0;
+            Card source = new Card(sourceData);
+            Card target = new Card(targetData);
+            battle.deckManager.hand.Add(source);
+            battle.deckManager.hand.Add(target);
+
+            battle.HandleCardClicked(source);
+
+            Assert.IsTrue(battle.IsCardAwaitingMechanicTarget(source));
+            Assert.Contains(source, battle.deckManager.hand);
+            Assert.AreEqual(3, battle.player.stats.mana);
+
+            battle.HandleCardClicked(target);
+
+            Assert.IsFalse(battle.IsCardAwaitingMechanicTarget(source));
+            Assert.IsFalse(battle.deckManager.hand.Contains(source));
+            Assert.Contains(source, battle.deckManager.discard);
+            Assert.Contains(target, battle.deckManager.hand);
+            Assert.IsTrue(target.frozen);
+            Assert.AreEqual(2, battle.player.stats.mana);
+
+            Object.DestroyImmediate(targetData);
+            Object.DestroyImmediate(sourceData);
+            Object.DestroyImmediate(freeze);
+            Object.DestroyImmediate(enemyData);
+            Object.DestroyImmediate(root);
+        }
+
+        [Test]
+        public void EnemyStatusesTickControlAndModifyDamage()
+        {
+            GameObject root = CreateBattleObject(
+                "StatusBattle",
+                out BattleManager battle,
+                out EnemyData enemyData
+            );
+
+            battle.ApplyEnemyStatus(EnemyStatusType.Poison, 4);
+            battle.ApplyEnemyStatus(EnemyStatusType.Bleed, 3);
+            battle.ApplyEnemyStatus(EnemyStatusType.Weakness, 3);
+            battle.ApplyEnemyStatus(EnemyStatusType.Stun, BattleManager.StunThreshold);
+
+            Assert.AreEqual(1, battle.enemy.GetStatus(EnemyStatusType.Poison));
+            Assert.AreEqual(10, battle.ModifyEnemyAttackDamage(10));
+            Assert.IsTrue(battle.ConsumeEnemyStunForTurn());
+            Assert.AreEqual(0, battle.enemy.GetStatus(EnemyStatusType.Stun));
+
+            battle.ApplyEnemyTurnStartStatuses();
+            Assert.AreEqual(92, battle.enemy.stats.health);
+            Assert.AreEqual(1, battle.enemy.GetStatus(EnemyStatusType.Poison));
+            Assert.AreEqual(3, battle.enemy.GetStatus(EnemyStatusType.Bleed));
+            Assert.AreEqual(3, battle.enemy.GetStatus(EnemyStatusType.Weakness));
+
+            battle.ApplyEnemyTurnStartStatuses();
+            Assert.AreEqual(84, battle.enemy.stats.health);
+            Assert.AreEqual(0, battle.enemy.GetStatus(EnemyStatusType.Bleed));
+            Assert.AreEqual(2, battle.enemy.GetStatus(EnemyStatusType.Weakness));
+
+            Object.DestroyImmediate(enemyData);
+            Object.DestroyImmediate(root);
+        }
+
+        [Test]
+        public void WeaknessCriticalDamageConsumesStacksAndUsesSubclassBonus()
+        {
+            CharacterRunState.Clear();
+            GameObject root = CreateBattleObject(
+                "WeaknessBattle",
+                out BattleManager battle,
+                out EnemyData enemyData
+            );
+            SubclassData subclass = ScriptableObject.CreateInstance<SubclassData>();
+            CharacterData character = ScriptableObject.CreateInstance<CharacterData>();
+            subclass.character = character;
+            subclass.passiveType = SubclassPassiveType.WeaknessCriticalDamage;
+            subclass.amount = 8;
+            character.subclasses = new List<SubclassData> { subclass };
+            CharacterRunState.Select(character);
+            Assert.IsTrue(battle.ActivateSubclass(subclass));
+
+            battle.ApplyEnemyStatus(EnemyStatusType.Weakness, 3);
+            int resolvedDamage = battle.DamageEnemyWithWeakness(16, 3, 2, true);
+
+            Assert.AreEqual(18, resolvedDamage);
+            Assert.AreEqual(82, battle.enemy.stats.health);
+            Assert.AreEqual(0, battle.enemy.GetStatus(EnemyStatusType.Weakness));
+
+            CharacterRunState.Clear();
+            Object.DestroyImmediate(subclass);
+            Object.DestroyImmediate(character);
+            Object.DestroyImmediate(enemyData);
+            Object.DestroyImmediate(root);
+        }
+
+        [Test]
+        public void ReworkedClassAssetsExposeTheirBuildMechanics()
+        {
+            CharacterData knight = AssetDatabase.LoadAssetAtPath<CharacterData>(
+                "Assets/GameData/Characters/Caballero.asset");
+            CharacterData mage = AssetDatabase.LoadAssetAtPath<CharacterData>(
+                "Assets/GameData/Characters/Mago.asset");
+            CharacterData rogue = AssetDatabase.LoadAssetAtPath<CharacterData>(
+                "Assets/GameData/Characters/Picaro.asset");
+
+            CollectionAssert.AreEquivalent(
+                new[]
+                {
+                    SubclassPassiveType.DamageCardRamp,
+                    SubclassPassiveType.StackDamageBuffs,
+                    SubclassPassiveType.ArmorToDamageAndRetain
+                },
+                knight.subclasses.Select(subclass => subclass.passiveType)
+            );
+            CollectionAssert.AreEquivalent(
+                new[]
+                {
+                    SubclassPassiveType.MageIceMastery,
+                    SubclassPassiveType.MageFireMastery,
+                    SubclassPassiveType.MageElectricOverload
+                },
+                mage.subclasses.Select(subclass => subclass.passiveType)
+            );
+            CollectionAssert.AreEquivalent(
+                new[]
+                {
+                    SubclassPassiveType.WeaknessCriticalDamage,
+                    SubclassPassiveType.PoisonAmplifier,
+                    SubclassPassiveType.BleedAmplifier
+                },
+                rogue.subclasses.Select(subclass => subclass.passiveType)
+            );
+
+            CardData spark = AssetDatabase.LoadAssetAtPath<CardData>(
+                "Assets/Scripts/Cartas/Cartas S.O/Mago/Chispa.asset");
+            CardData missile = AssetDatabase.LoadAssetAtPath<CardData>(
+                "Assets/Scripts/Cartas/Cartas S.O/Mago/MisilArcano.asset");
+            CardData barrier = AssetDatabase.LoadAssetAtPath<CardData>(
+                "Assets/Scripts/Cartas/Cartas S.O/Mago/BarreraArcana.asset");
+            CardData fireball = AssetDatabase.LoadAssetAtPath<CardData>(
+                "Assets/Scripts/Cartas/Cartas S.O/Mago/BoladeFuego.asset");
+            CardData dagger = AssetDatabase.LoadAssetAtPath<CardData>(
+                "Assets/Scripts/Cartas/Cartas S.O/Picaro/Punal.asset");
+            CardData plunder = AssetDatabase.LoadAssetAtPath<CardData>(
+                "Assets/Scripts/Cartas/Cartas S.O/Picaro/Saqueo.asset");
+            CardData execution = AssetDatabase.LoadAssetAtPath<CardData>(
+                "Assets/Scripts/Cartas/Cartas S.O/Picaro/Ejecucion.asset");
+
+            Assert.AreEqual("Descarga", spark.cardName);
+            Assert.AreEqual("Rayo Canalizado", missile.cardName);
+            Assert.AreEqual(2, missile.cost);
+            Assert.AreEqual("Escarcha Arcana", barrier.cardName);
+            Assert.AreEqual("Combustion", fireball.cardName);
+            Assert.AreEqual("Corte Expuesto", dagger.cardName);
+            Assert.AreEqual("Golpe de Saqueo", plunder.cardName);
+            Assert.AreEqual(2, plunder.cost);
+            Assert.AreEqual("Remate Preciso", execution.cardName);
+
+            Assert.IsTrue(HasMechanic(
+                spark,
+                CombatMechanicAction.ApplyEnemyStatus,
+                EnemyStatusType.Stun
+            ));
+            Assert.IsTrue(HasMechanic(barrier, CombatMechanicAction.FreezeCards));
+            Assert.IsTrue(HasMechanic(fireball, CombatMechanicAction.BurnCards));
+            Assert.IsTrue(HasMechanic(
+                dagger,
+                CombatMechanicAction.ApplyEnemyStatus,
+                EnemyStatusType.Weakness
+            ));
+            Assert.IsTrue(
+                HasMechanic(execution, CombatMechanicAction.CriticalDamageFromWeakness)
+            );
         }
 
         [Test]
@@ -636,6 +1104,43 @@ namespace JuegoDeCartas.Tests
             enemy.minDamage = 0;
             enemy.maxDamage = 0;
             return enemy;
+        }
+
+        static GameObject CreateBattleObject(
+            string name,
+            out BattleManager battle,
+            out EnemyData enemyData)
+        {
+            GameObject root = new GameObject(name);
+            battle = root.AddComponent<BattleManager>();
+            battle.player = new Entity();
+            battle.player.stats.maxHealth = 30;
+            battle.player.stats.health = 30;
+            battle.player.stats.maxMana = 3;
+            battle.player.stats.mana = 3;
+            battle.deckManager = root.AddComponent<DeckManager>();
+            battle.turnManager = root.AddComponent<TurnManager>();
+            battle.turnManager.battle = battle;
+            battle.turnManager.currentTurn = TurnManager.Turn.Player;
+
+            enemyData = CreateEnemy(name + "Enemy", 100, 0);
+            battle.waveManager.battleManager = battle;
+            battle.waveManager.enemyWave = new List<EnemyData> { enemyData };
+            battle.waveManager.Initialize();
+            return root;
+        }
+
+        static bool HasMechanic(
+            CardData card,
+            CombatMechanicAction action,
+            EnemyStatusType statusType = EnemyStatusType.Weakness)
+        {
+            return card != null &&
+                   card.effects.Any(effect =>
+                       effect is CombatMechanicEffect mechanic &&
+                       mechanic.action == action &&
+                       (action != CombatMechanicAction.ApplyEnemyStatus ||
+                        mechanic.statusType == statusType));
         }
     }
 

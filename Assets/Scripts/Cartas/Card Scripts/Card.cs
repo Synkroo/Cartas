@@ -12,6 +12,10 @@ namespace JuegoDeCartas.Cards
         public bool preventDestroyOnUse;
         public bool epiphanyUnlocked;
         public int selectedEpiphanyIndex = -1;
+        public bool frozen;
+        public int frozenTurnsRemaining;
+        public bool burned;
+        public int burnCount;
 
         public int effectiveCost => data != null
             ? System.Math.Max(0, data.cost - costReduction)
@@ -45,6 +49,10 @@ namespace JuegoDeCartas.Cards
             preventDestroyOnUse = source.preventDestroyOnUse;
             epiphanyUnlocked = source.epiphanyUnlocked;
             selectedEpiphanyIndex = source.selectedEpiphanyIndex;
+            frozen = false;
+            frozenTurnsRemaining = 0;
+            burned = source.burned;
+            burnCount = source.burnCount;
         }
 
         public void ReduceCost(int amount = 1)
@@ -110,6 +118,29 @@ namespace JuegoDeCartas.Cards
             upgraded = true;
             CollectionProgress.MarkEpiphanySeen(data, optionIndex);
             return true;
+        }
+
+        public void Freeze(int extraPlayerTurns)
+        {
+            frozen = true;
+            frozenTurnsRemaining = System.Math.Max(0, extraPlayerTurns);
+        }
+
+        public void ClearFreeze()
+        {
+            frozen = false;
+            frozenTurnsRemaining = 0;
+        }
+
+        public void MarkBurned()
+        {
+            burned = true;
+            burnCount++;
+        }
+
+        public void ResetBurnCycle()
+        {
+            burnCount = 0;
         }
 
         CardEpiphany ResolveEpiphany()

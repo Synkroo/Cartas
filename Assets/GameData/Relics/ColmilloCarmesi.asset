@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Relics.RelicData
   contentId: 7c0063a867affa345a68d4951d2cf1c9
   relicName: Colmillo carmesi
-  description: Te curas un 10% del dano que infliges.
+  description: Te curas un 10% del daño que infliges.
   icon: {fileID: 21300000, guid: 1173076f04b388f47a6c143b3fe376ed, type: 3}
   rarity: 1
   price: 450

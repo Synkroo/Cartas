@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: PasoSombrio
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
   contentId: 1041abf20c1d48b478ec5019ecd8d893
-  cardName: Paso Sombrio
-  description: Obtiene 5 de armadura y roba 1 carta.
+  cardName: Nube Toxica
+  description: 5 armadura. Roba 1. Aplica Veneno.
   sprite: {fileID: 0}
   cost: 1
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: 0530404815ad02f45a08b010ffbadcab, type: 2}
   - {fileID: 11400000, guid: b6ed2d3661fcc0242b7a6b23f70da75a, type: 2}
+  - {fileID: 11400000, guid: a2acdcf1af124ce988c9cdf6482b6d0d, type: 2}
   upgradeOptions:
   - upgradeName: Desaparicion
     description: Reduce su coste en 1.

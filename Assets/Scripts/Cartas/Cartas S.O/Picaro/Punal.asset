@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: Punal
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
   contentId: 084a201847c627b45a097d00a2f06df4
-  cardName: Punal
-  description: Inflige 7 de dano sin gastar mana.
+  cardName: Corte Expuesto
+  description: 7 daño gratis. +1 Debilidad.
   sprite: {fileID: 0}
   cost: 0
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: c04c20b327a43584f870773914ada377, type: 2}
+  - {fileID: 11400000, guid: 91b33f9d42b646928475198e139dbfe0, type: 2}
   upgradeOptions:
   - upgradeName: Filo oculto
     description: Se reactiva una vez y golpea de nuevo.
@@ -52,8 +53,8 @@ MonoBehaviour:
     bonusEffects: []
   epiphanyOptions:
   - epiphanyName: Filo oculto
-    description: Inflige 7 de dano adicional y roba una carta.
-    cardDescription: 'Epifania: +7 dano y roba 1.'
+    description: Inflige 7 de daño adicional y roba una carta.
+    cardDescription: 'Epifania: +7 daño y roba 1.'
     costReduction: 0
     reactivations: 0
     preventDestroyOnUse: 0

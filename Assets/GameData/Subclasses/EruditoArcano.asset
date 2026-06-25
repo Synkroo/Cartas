@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: EruditoArcano
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
   contentId: df76af60a40f6e3479183f4359d14a6c
-  subclassName: Erudito arcano
+  subclassName: Piromante
   icon: {fileID: 0}
-  description: Convierte las cadenas de hechizos en nuevas opciones.
-  passiveDescription: Cada 3 cartas jugadas en un turno, roba 1 carta.
+  description: Quema cartas para reciclar la mano y encender explosiones.
+  passiveDescription: Cada carta quemada roba 1 carta. Si quemas la misma carta por
+    segunda vez, explota y aplica su efecto sin gastar maná antes de ir a descartes.
   character: {fileID: 11400000, guid: 48ef4c3c10e21b54e9a36e56de1e60b9, type: 2}
-  passiveType: 4
+  passiveType: 12
   amount: 1
-  triggerCount: 3
+  triggerCount: 1
   percentage: 0

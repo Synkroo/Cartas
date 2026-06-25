@@ -16,7 +16,7 @@ MonoBehaviour:
   subclassName: Lider de escuadron
   icon: {fileID: 0}
   description: Coordina mejoras temporales para crear turnos explosivos.
-  passiveDescription: Los aumentos de dano se acumulan y cada nuevo buff reinicia
+  passiveDescription: Los aumentos de daño se acumulan y cada nuevo buff reinicia
     su duracion.
   character: {fileID: 11400000, guid: 90bd81ad475e59d488bbd4d103680eed, type: 2}
   passiveType: 1

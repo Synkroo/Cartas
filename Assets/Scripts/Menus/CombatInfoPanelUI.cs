@@ -79,7 +79,7 @@ namespace JuegoDeCartas.UI
                     statusCount++,
                     playerDamageStatusSprite,
                     damageTurns.ToString(),
-                    "Aumento de dano",
+                    "Aumento de daño",
                     BuildPlayerDamageBuffDescription(damageBonus, damageTurns)
                 );
             }
@@ -130,7 +130,55 @@ namespace JuegoDeCartas.UI
                     enemyArmorStatusSprite,
                     currentArmor.ToString(),
                     "Armadura actual",
-                    "Bloquea los proximos " + currentArmor + " puntos de dano."
+                    "Bloquea los proximos " + currentArmor + " puntos de daño."
+                );
+            }
+
+            int weakness = enemy.GetStatus(Enemies.EnemyStatusType.Weakness);
+            if (weakness > 0)
+            {
+                SetEnemyStatus(
+                    statusCount++,
+                    enemyDamageStatusSprite,
+                    weakness.ToString(),
+                    "Debilidad",
+                    "Cada acumulacion da +2% de daño al consumirla. Baja 1 si no aplicas mas."
+                );
+            }
+
+            int poison = enemy.GetStatus(Enemies.EnemyStatusType.Poison);
+            if (poison > 0)
+            {
+                SetEnemyStatus(
+                    statusCount++,
+                    enemyRegenStatusSprite,
+                    poison.ToString(),
+                    "Veneno",
+                    "No se acumula. Recibe 5% de su vida maxima al empezar su turno."
+                );
+            }
+
+            int bleed = enemy.GetStatus(Enemies.EnemyStatusType.Bleed);
+            if (bleed > 0)
+            {
+                SetEnemyStatus(
+                    statusCount++,
+                    enemyDamageStatusSprite,
+                    bleed.ToString(),
+                    "Sangrado",
+                    "Recibe " + bleed + " de daño al empezar su turno. Se elimina si no aplicas mas."
+                );
+            }
+
+            int stun = enemy.GetStatus(Enemies.EnemyStatusType.Stun);
+            if (stun > 0)
+            {
+                SetEnemyStatus(
+                    statusCount++,
+                    enemyArmorStatusSprite,
+                    stun.ToString(),
+                    "Stun",
+                    "Al llegar a " + BattleManager.StunThreshold + " evita el proximo ataque enemigo."
                 );
             }
 
@@ -151,7 +199,7 @@ namespace JuegoDeCartas.UI
                                 statusCount++,
                                 enemyDamageStatusSprite,
                                 currentBonus.ToString(),
-                                "Aumento de dano infinito",
+                                "Aumento de daño infinito",
                                 BuildEnemyDamageRampDescription(mechanic.damageRampPerTurn, currentBonus)
                             );
                         }
@@ -325,7 +373,7 @@ namespace JuegoDeCartas.UI
             HideChild("Enemigo/ProximaCuracionValor");
             HideChild("Enemigo/Icono Armadura Enemigo");
             HideChild("Enemigo/Icono Curacion Enemigo");
-            HideChild("Enemigo/Icono Dano Enemigo");
+            HideChild("Enemigo/Icono Daño Enemigo");
         }
 
         void HideChild(string relativePath)
@@ -346,7 +394,7 @@ namespace JuegoDeCartas.UI
 
         static string BuildEnemyDamageRampDescription(int damagePerTurn, int currentBonus)
         {
-            return "Escala " + damagePerTurn + " en dano min/max cada turno. Actualmente: +" + currentBonus + ".";
+            return "Escala " + damagePerTurn + " en daño min/max cada turno. Actualmente: +" + currentBonus + ".";
         }
 
         string BuildPlayerDamageBuffDescription(int damageBonus, int damageTurns)
@@ -375,7 +423,7 @@ namespace JuegoDeCartas.UI
             return "Puede revivir " + remainingRevives + " vez/veces. Al revivir pasa a " +
                    mechanic.maxHealthPercentOnRevive + "% de vida maxima y " +
                    mechanic.minDamagePercentOnRevive + "%/" + mechanic.maxDamagePercentOnRevive +
-                   "% de dano min/max.";
+                   "% de daño min/max.";
         }
     }
 }

@@ -13,7 +13,15 @@ namespace JuegoDeCartas.Characters
         RestoreManaEveryCards,
         FirstCardBonusDamage,
         GoldEveryCards,
-        ArmorEveryCards
+        ArmorEveryCards,
+        DamageCardRamp,
+        ArmorToDamageAndRetain,
+        MageIceMastery,
+        MageFireMastery,
+        MageElectricOverload,
+        WeaknessCriticalDamage,
+        PoisonAmplifier,
+        BleedAmplifier
     }
 
     [CreateAssetMenu(fileName = "NuevaSubclase", menuName = "Juego de Cartas/Personajes/Subclase")]

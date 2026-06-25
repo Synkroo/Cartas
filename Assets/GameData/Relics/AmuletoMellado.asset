@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Relics.RelicData
   contentId: 4ea7cb2ad5c25b2459bb5765ff97a505
   relicName: Amuleto mellado
-  description: El primer ataque recibido de cada combate hace 4 menos de dano.
+  description: El primer ataque recibido de cada combate hace 4 menos de daño.
   icon: {fileID: 21300000, guid: 8ce0b7700824c9d44bc16bc8f86b5aba, type: 3}
   rarity: 1
   price: 440
