@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using JuegoDeCartas.Articulos;
 using JuegoDeCartas.Cards;
@@ -160,7 +160,7 @@ namespace JuegoDeCartas.Tests
             CardData[] cards = AssetDatabase
                 .FindAssets(
                     "t:CardData",
-                    new[] { "Assets/_Project/Data/Cards" }
+                    new[] { "Assets/Scripts/Cartas/Cartas S.O" }
                 )
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Select(AssetDatabase.LoadAssetAtPath<CardData>)
@@ -209,7 +209,7 @@ namespace JuegoDeCartas.Tests
         public void CardPrefabShowsFramesAndShortDescriptionWithoutStatusLabel()
         {
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(
-                "Assets/_Project/Prefabs/CardPrefab.prefab"
+                "Assets/Prefabs/CardPrefab.prefab"
             );
             Assert.NotNull(prefab);
 
@@ -303,14 +303,14 @@ namespace JuegoDeCartas.Tests
             epiphanyBonus.armor = 3;
 
             CardData data = ScriptableObject.CreateInstance<CardData>();
-            data.description = "Inflige 10 de daÃ±o.";
+            data.description = "Inflige 10 de daño.";
             data.effects.Add(baseDamage);
             data.epiphanyOptions = new List<CardEpiphany>
             {
                 new CardEpiphany
                 {
                     epiphanyName = "Filo revelado",
-                    description = "Inflige 5 de daÃ±o adicional.",
+                    description = "Inflige 5 de daño adicional.",
                     bonusEffects = new List<CardEffect> { epiphanyBonus }
                 }
             };
@@ -321,7 +321,7 @@ namespace JuegoDeCartas.Tests
                 data.epiphanyOptions[0]
             );
             Assert.AreEqual(
-                "Inflige 15 de daÃ±o. Obtiene 3 de armadura.",
+                "Inflige 15 de daño. Obtiene 3 de armadura.",
                 preview
             );
 
@@ -727,11 +727,11 @@ namespace JuegoDeCartas.Tests
         public void ReworkedClassAssetsExposeTheirBuildMechanics()
         {
             CharacterData knight = AssetDatabase.LoadAssetAtPath<CharacterData>(
-                "Assets/_Project/Data/Characters/Caballero.asset");
+                "Assets/GameData/Characters/Caballero.asset");
             CharacterData mage = AssetDatabase.LoadAssetAtPath<CharacterData>(
-                "Assets/_Project/Data/Characters/Mago.asset");
+                "Assets/GameData/Characters/Mago.asset");
             CharacterData rogue = AssetDatabase.LoadAssetAtPath<CharacterData>(
-                "Assets/_Project/Data/Characters/Picaro.asset");
+                "Assets/GameData/Characters/Picaro.asset");
 
             CollectionAssert.AreEquivalent(
                 new[]
@@ -762,19 +762,19 @@ namespace JuegoDeCartas.Tests
             );
 
             CardData spark = AssetDatabase.LoadAssetAtPath<CardData>(
-                "Assets/_Project/Data/Cards/Mago/Chispa.asset");
+                "Assets/Scripts/Cartas/Cartas S.O/Mago/Chispa.asset");
             CardData missile = AssetDatabase.LoadAssetAtPath<CardData>(
-                "Assets/_Project/Data/Cards/Mago/MisilArcano.asset");
+                "Assets/Scripts/Cartas/Cartas S.O/Mago/MisilArcano.asset");
             CardData barrier = AssetDatabase.LoadAssetAtPath<CardData>(
-                "Assets/_Project/Data/Cards/Mago/BarreraArcana.asset");
+                "Assets/Scripts/Cartas/Cartas S.O/Mago/BarreraArcana.asset");
             CardData fireball = AssetDatabase.LoadAssetAtPath<CardData>(
-                "Assets/_Project/Data/Cards/Mago/BoladeFuego.asset");
+                "Assets/Scripts/Cartas/Cartas S.O/Mago/BoladeFuego.asset");
             CardData dagger = AssetDatabase.LoadAssetAtPath<CardData>(
-                "Assets/_Project/Data/Cards/Picaro/Punal.asset");
+                "Assets/Scripts/Cartas/Cartas S.O/Picaro/Punal.asset");
             CardData plunder = AssetDatabase.LoadAssetAtPath<CardData>(
-                "Assets/_Project/Data/Cards/Picaro/Saqueo.asset");
+                "Assets/Scripts/Cartas/Cartas S.O/Picaro/Saqueo.asset");
             CardData execution = AssetDatabase.LoadAssetAtPath<CardData>(
-                "Assets/_Project/Data/Cards/Picaro/Ejecucion.asset");
+                "Assets/Scripts/Cartas/Cartas S.O/Picaro/Ejecucion.asset");
 
             Assert.AreEqual("Descarga", spark.cardName);
             Assert.AreEqual("Rayo Canalizado", missile.cardName);

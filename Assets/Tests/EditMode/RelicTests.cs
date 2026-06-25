@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using JuegoDeCartas.Managers;
 using JuegoDeCartas.Relics;
@@ -14,8 +14,8 @@ namespace JuegoDeCartas.Tests
 {
     public class RelicTests
     {
-        const string RelicFolder = "Assets/_Project/Data/Relics";
-        const string GameScenePath = "Assets/_Project/Scenes/Game.unity";
+        const string RelicFolder = "Assets/GameData/Relics";
+        const string GameScenePath = "Assets/Scenes/Game.unity";
 
         [Test]
         public void ProjectContainsTwelveConfiguredUniqueRelics()
@@ -331,7 +331,7 @@ namespace JuegoDeCartas.Tests
             RectTransform relicSection =
                 shop.transform.Find("RelicShopSection") as RectTransform;
             RectTransform packPrefab = AssetDatabase
-                .LoadAssetAtPath<GameObject>("Assets/_Project/Prefabs/PackPrefab.prefab")
+                .LoadAssetAtPath<GameObject>("Assets/Prefabs/PackPrefab.prefab")
                 .GetComponent<RectTransform>();
 
             Assert.NotNull(inventoryUI);

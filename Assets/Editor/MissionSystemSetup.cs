@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
@@ -13,9 +13,9 @@ using JuegoDeCartas.UI;
 
 public static class MissionSystemSetup
 {
-    const string MainMenuScenePath = "Assets/_Project/Scenes/MainMenu.unity";
-    const string MissionAssetFolder = "Assets/_Project/Data/Missions";
-    const string MissionPrefabFolder = "Assets/_Project/Prefabs";
+    const string MainMenuScenePath = "Assets/Scenes/MainMenu.unity";
+    const string MissionAssetFolder = "Assets/Scripts/Misiones/Misiones S.O";
+    const string MissionPrefabFolder = "Assets/Scripts/Prefabs";
     const string MissionPrefabPath = MissionPrefabFolder + "/MisionPrefab.prefab";
 
     [MenuItem("Tools/Juego de Cartas/Rebuild Mission System")]
@@ -31,7 +31,7 @@ public static class MissionSystemSetup
 
     static void EnsureFolders()
     {
-        EnsureFolder("Assets/_Project/Data");
+        EnsureFolder("Assets/Scripts/Misiones");
         EnsureFolder(MissionAssetFolder);
         EnsureFolder(MissionPrefabFolder);
     }
@@ -224,7 +224,7 @@ public static class MissionSystemSetup
 
     static List<MissionData> CreateMissionAssets()
     {
-        EnemyData boss = AssetDatabase.LoadAssetAtPath<EnemyData>("Assets/_Project/Data/Enemies/Bosses/KingSlime.asset");
+        EnemyData boss = AssetDatabase.LoadAssetAtPath<EnemyData>("Assets/Scripts/Enemigos/Enemy S.O/Bosses/KingSlime.asset");
         AssetDatabase.DeleteAsset(MissionAssetFolder + "/Mision_01.asset");
         AssetDatabase.DeleteAsset(MissionAssetFolder + "/Mision_02.asset");
         AssetDatabase.DeleteAsset(MissionAssetFolder + "/Mision_03.asset");
@@ -253,7 +253,7 @@ public static class MissionSystemSetup
 
     static EnemyData LoadEnemy(string relativePath)
     {
-        return AssetDatabase.LoadAssetAtPath<EnemyData>("Assets/_Project/Data/Enemies/" + relativePath);
+        return AssetDatabase.LoadAssetAtPath<EnemyData>("Assets/Scripts/Enemigos/Enemy S.O/" + relativePath);
     }
 
     static MissionData CreateMission(
