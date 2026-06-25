@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using JuegoDeCartas.Cards;
 using JuegoDeCartas.Characters;
 using JuegoDeCartas.Progression;
@@ -99,7 +99,7 @@ namespace JuegoDeCartas.Tests
         {
             string[] guids = AssetDatabase.FindAssets(
                 "t:CardData",
-                new[] { "Assets/Scripts/Cartas/Cartas S.O" });
+                new[] { "Assets/_Project/Data/Cards" });
             CardData[] cards = guids
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Select(AssetDatabase.LoadAssetAtPath<CardData>)
@@ -118,7 +118,7 @@ namespace JuegoDeCartas.Tests
         public void RogueIsPlayableContentWithLethalUnlock()
         {
             CharacterData rogue = AssetDatabase.LoadAssetAtPath<CharacterData>(
-                "Assets/GameData/Characters/Picaro.asset");
+                "Assets/_Project/Data/Characters/Picaro.asset");
             DifficultyCompletionUnlockCondition condition =
                 rogue.unlockCondition as DifficultyCompletionUnlockCondition;
 
@@ -211,7 +211,7 @@ namespace JuegoDeCartas.Tests
         [Test]
         public void MainMenuWikiHasItsOwnConfiguredRelicSection()
         {
-            const string scenePath = "Assets/Scenes/MainMenu.unity";
+            const string scenePath = "Assets/_Project/Scenes/MainMenu.unity";
             Scene scene = SceneManager.GetSceneByPath(scenePath);
             bool openedForTest = !scene.IsValid() || !scene.isLoaded;
             if (openedForTest)

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using JuegoDeCartas.Articulos;
 using JuegoDeCartas.Cards;
@@ -34,11 +34,11 @@ namespace JuegoDeCartas.Tests
         public void CreatedCharactersHaveExpectedStatsAndDecks()
         {
             CharacterData knight = AssetDatabase.LoadAssetAtPath<CharacterData>(
-                "Assets/GameData/Characters/Caballero.asset");
+                "Assets/_Project/Data/Characters/Caballero.asset");
             CharacterData mage = AssetDatabase.LoadAssetAtPath<CharacterData>(
-                "Assets/GameData/Characters/Mago.asset");
+                "Assets/_Project/Data/Characters/Mago.asset");
             CharacterData rogue = AssetDatabase.LoadAssetAtPath<CharacterData>(
-                "Assets/GameData/Characters/Picaro.asset");
+                "Assets/_Project/Data/Characters/Picaro.asset");
 
             Assert.NotNull(knight);
             Assert.NotNull(mage);
@@ -157,7 +157,7 @@ namespace JuegoDeCartas.Tests
             SubclassData subclass = ScriptableObject.CreateInstance<SubclassData>();
             subclass.subclassName = "Lider";
             subclass.description = "Descripcion de subclase.";
-            subclass.passiveDescription = "Los aumentos de daño se acumulan.";
+            subclass.passiveDescription = "Los aumentos de daÃ±o se acumulan.";
 
             PlayerFrameHoverTooltip.ResolveIdentityTooltip(
                 character,
@@ -175,7 +175,7 @@ namespace JuegoDeCartas.Tests
             Assert.AreEqual("Caballero", classTitle);
             Assert.AreEqual("Equilibra ataque y defensa.", classDescription);
             Assert.AreEqual("Lider", subclassTitle);
-            Assert.AreEqual("Los aumentos de daño se acumulan.", subclassDescription);
+            Assert.AreEqual("Los aumentos de daÃ±o se acumulan.", subclassDescription);
 
             Object.DestroyImmediate(subclass);
             Object.DestroyImmediate(character);
@@ -186,9 +186,9 @@ namespace JuegoDeCartas.Tests
         {
             CharacterData[] characters =
             {
-                AssetDatabase.LoadAssetAtPath<CharacterData>("Assets/GameData/Characters/Caballero.asset"),
-                AssetDatabase.LoadAssetAtPath<CharacterData>("Assets/GameData/Characters/Mago.asset"),
-                AssetDatabase.LoadAssetAtPath<CharacterData>("Assets/GameData/Characters/Picaro.asset")
+                AssetDatabase.LoadAssetAtPath<CharacterData>("Assets/_Project/Data/Characters/Caballero.asset"),
+                AssetDatabase.LoadAssetAtPath<CharacterData>("Assets/_Project/Data/Characters/Mago.asset"),
+                AssetDatabase.LoadAssetAtPath<CharacterData>("Assets/_Project/Data/Characters/Picaro.asset")
             };
 
             foreach (CharacterData character in characters)
@@ -296,7 +296,7 @@ namespace JuegoDeCartas.Tests
             character.subclasses = new List<SubclassData> { leader };
 
             CardData card = ScriptableObject.CreateInstance<CardData>();
-            card.description = "Ganas 5 de daño durante 3 turnos. No se acumula.";
+            card.description = "Ganas 5 de daÃ±o durante 3 turnos. No se acumula.";
 
             GameObject root = new GameObject("RuntimeDescriptionTest");
             BattleManager battle = root.AddComponent<BattleManager>();
@@ -307,7 +307,7 @@ namespace JuegoDeCartas.Tests
             Assert.IsTrue(battle.ActivateSubclass(leader));
 
             string description = battle.GetRuntimeCardDescription(card);
-            Assert.AreEqual("Ganas 5 de daño durante 3 turnos.", description);
+            Assert.AreEqual("Ganas 5 de daÃ±o durante 3 turnos.", description);
             StringAssert.DoesNotContain("No se acumula", description);
 
             Object.DestroyImmediate(root);
@@ -377,10 +377,10 @@ namespace JuegoDeCartas.Tests
             ItemPackData arcane = LoadPack("SobreArcano");
             ItemPackData forge = LoadPack("SobreForja");
             ArticuloData epiphany = AssetDatabase.LoadAssetAtPath<ArticuloData>(
-                "Assets/Scripts/Articulos/Articulos S.O/DespertarEpifania.asset"
+                "Assets/_Project/Data/Items/DespertarEpifania.asset"
             );
             ArticuloData crossClass = AssetDatabase.LoadAssetAtPath<ArticuloData>(
-                "Assets/Scripts/Articulos/Articulos S.O/PortalDeArquetipos.asset"
+                "Assets/_Project/Data/Items/PortalDeArquetipos.asset"
             );
 
             Assert.NotNull(epiphany);
@@ -1190,7 +1190,7 @@ namespace JuegoDeCartas.Tests
 
         static ItemPackData LoadPack(string name)
         {
-            return AssetDatabase.LoadAssetAtPath<ItemPackData>("Assets/GameData/Packs/" + name + ".asset");
+            return AssetDatabase.LoadAssetAtPath<ItemPackData>("Assets/_Project/Data/Packs/" + name + ".asset");
         }
 
         static void AssertPack(

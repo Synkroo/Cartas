@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using JuegoDeCartas.Articulos;
 using JuegoDeCartas.Challenges;
 using JuegoDeCartas.Characters;
@@ -130,10 +130,10 @@ namespace JuegoDeCartas.Tests
         public void SingleClassChallengeRejectsOtherCharacters()
         {
             CharacterData knight = AssetDatabase.LoadAssetAtPath<CharacterData>(
-                "Assets/GameData/Characters/Caballero.asset"
+                "Assets/_Project/Data/Characters/Caballero.asset"
             );
             CharacterData mage = AssetDatabase.LoadAssetAtPath<CharacterData>(
-                "Assets/GameData/Characters/Mago.asset"
+                "Assets/_Project/Data/Characters/Mago.asset"
             );
             ChallengeData challenge = ScriptableObject.CreateInstance<ChallengeData>();
             challenge.modifier = ChallengeModifier.SingleClass;
@@ -202,10 +202,10 @@ namespace JuegoDeCartas.Tests
             Assert.IsFalse(sealedPack.IsPlayable);
             Assert.IsFalse(enemyEchoes.IsPlayable);
             Assert.IsNull(AssetDatabase.LoadAssetAtPath<ChallengeData>(
-                "Assets/GameData/Challenges/SoloCaballero.asset"
+                "Assets/_Project/Data/Challenges/SoloCaballero.asset"
             ));
             Assert.IsNull(AssetDatabase.LoadAssetAtPath<ChallengeData>(
-                "Assets/GameData/Challenges/SemillaLibre.asset"
+                "Assets/_Project/Data/Challenges/SemillaLibre.asset"
             ));
         }
 
@@ -265,7 +265,7 @@ namespace JuegoDeCartas.Tests
         static ChallengeData LoadChallenge(string name)
         {
             ChallengeData challenge = AssetDatabase.LoadAssetAtPath<ChallengeData>(
-                "Assets/GameData/Challenges/" + name + ".asset"
+                "Assets/_Project/Data/Challenges/" + name + ".asset"
             );
             Assert.NotNull(challenge);
             return challenge;

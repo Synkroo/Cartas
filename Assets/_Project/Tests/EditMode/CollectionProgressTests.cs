@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using JuegoDeCartas.Articulos;
 using JuegoDeCartas.Characters;
@@ -258,7 +258,7 @@ namespace JuegoDeCartas.Tests
             string secondary = stats.GetSecondaryStatsText();
 
             StringAssert.Contains("Enemigos derrotados: 14", primary);
-            StringAssert.Contains("Daño maximo enemigo: 16", secondary);
+            StringAssert.Contains("DaÃ±o maximo enemigo: 16", secondary);
             Assert.IsFalse(primary.Contains("\t"));
             Assert.IsFalse(secondary.Contains("\t"));
 
@@ -368,7 +368,7 @@ namespace JuegoDeCartas.Tests
         [Test]
         public void AllNinePackDefinitionsExist()
         {
-            string[] guids = AssetDatabase.FindAssets("t:ItemPackData", new[] { "Assets/GameData/Packs" });
+            string[] guids = AssetDatabase.FindAssets("t:ItemPackData", new[] { "Assets/_Project/Data/Packs" });
             List<ItemPackData> packs = guids
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Select(AssetDatabase.LoadAssetAtPath<ItemPackData>)
