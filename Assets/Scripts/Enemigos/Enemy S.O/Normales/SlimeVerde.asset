@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
   m_Name: SlimeVerde
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
+  contentId: acf1f1a88fd34d14aa0ca813e73cefad
   enemyName: Slime Verde
   maxHealth: 35
   minDamage: 5
@@ -20,5 +21,5 @@ MonoBehaviour:
   startArmor: 0
   goldRewardOverride: 0
   mechanics: []
-  sprite: {fileID: -4610119021511718180, guid: 6391341c8c38d8f40985b9179901b19e, type: 3}
-  animatorController: {fileID: 0}
+  sprite: {fileID: 6758524338038640891, guid: 42f9552004ea53340a632fa0536ed6ff, type: 3}
+  animatorController: {fileID: 9100000, guid: b1000000000000000000000000000006, type: 2}

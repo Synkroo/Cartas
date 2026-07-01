@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
   m_Name: SlimeMorado
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
+  contentId: c697b5b3e819a0a4b8dc709c3ccab0f2
   enemyName: Slime Morado
   maxHealth: 45
   minDamage: 6
@@ -20,5 +21,5 @@ MonoBehaviour:
   startArmor: 0
   goldRewardOverride: 0
   mechanics: []
-  sprite: {fileID: 1518521799208845435, guid: 6391341c8c38d8f40985b9179901b19e, type: 3}
-  animatorController: {fileID: 0}
+  sprite: {fileID: 7970909259963184619, guid: 42f9552004ea53340a632fa0536ed6ff, type: 3}
+  animatorController: {fileID: 9100000, guid: b1000000000000000000000000000001, type: 2}

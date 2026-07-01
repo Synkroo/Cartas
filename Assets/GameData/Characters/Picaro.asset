@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd8505a6c6b0d846b0e6af17842d894, type: 3}
+  m_Name: Picaro
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.CharacterData
+  contentId: 8bebb5ff9ba7a1c4f8de39aeef561d4b
+  characterName: Picaro
+  portrait: {fileID: 0}
+  description: Especialista en cartas baratas y estados. Su mazo inicial combina
+    Debilidad, Veneno y Sangrado para preparar ejecuciones o controlar al enemigo.
+  mechanicDescription: 'Mecanica: acumular estados negativos y convertirlos en daño
+    critico, control o daño por turno.'
+  maxHealth: 42
+  maxMana: 3
+  cardsPerTurn: 5
+  startingGold: 300
+  startingDeck:
+  - {fileID: 11400000, guid: 084a201847c627b45a097d00a2f06df4, type: 2}
+  - {fileID: 11400000, guid: 084a201847c627b45a097d00a2f06df4, type: 2}
+  - {fileID: 11400000, guid: 084a201847c627b45a097d00a2f06df4, type: 2}
+  - {fileID: 11400000, guid: 8bfaa640a2d58f447937873c30b021c6, type: 2}
+  - {fileID: 11400000, guid: 8bfaa640a2d58f447937873c30b021c6, type: 2}
+  - {fileID: 11400000, guid: 1041abf20c1d48b478ec5019ecd8d893, type: 2}
+  - {fileID: 11400000, guid: 1041abf20c1d48b478ec5019ecd8d893, type: 2}
+  - {fileID: 11400000, guid: c1713dd55b63bc641bb84848649d6154, type: 2}
+  - {fileID: 11400000, guid: c1713dd55b63bc641bb84848649d6154, type: 2}
+  - {fileID: 11400000, guid: 94df614082522b741b9080c0ee5955f5, type: 2}
+  subclasses:
+  - {fileID: 11400000, guid: 54bd3c2c213c39148bf1971335c82037, type: 2}
+  - {fileID: 11400000, guid: 2939f8cdd3b556047b4273d105690449, type: 2}
+  - {fileID: 11400000, guid: a60a5f38f52172b42ba589a8fd5fcf7d, type: 2}
+  unlockedByDefault: 0
+  comingSoon: 0
+  unlockCondition: {fileID: 11400000, guid: 0f3b1e7c92104c5448eaa616dd16f8f5, type: 2}

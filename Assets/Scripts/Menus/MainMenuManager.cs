@@ -1,17 +1,60 @@
 using UnityEngine;
 using UnityEngine.UI;
+using JuegoDeCartas.Challenges;
 using JuegoDeCartas.Missions;
+using JuegoDeCartas.Progression;
+using JuegoDeCartas.Managers;
+using TMPro;
 
 namespace JuegoDeCartas.UI
 {
     public class MainMenuManager : MonoBehaviour
     {
         [SerializeField] MissionSelectionMenu missionMenu;
+        [SerializeField] CharacterSelectionMenu characterMenu;
+        [SerializeField] ChallengeModeMenu challengeMenu;
+        [SerializeField] CollectionMenu collectionMenu;
+        [SerializeField] ProfileMenu profileMenu;
+        [SerializeField] Button challengeButton;
+        [SerializeField] GameObject mainMenuRoot;
         [SerializeField] Button[] mainMenuButtons;
+        [SerializeField] TextMeshProUGUI activeProfileText;
+
+        void OnEnable()
+        {
+            ProfileManager.ProfileChanged += RefreshProfileText;
+            RefreshProfileText();
+        }
+
+        void Awake()
+        {
+            if (challengeButton != null)
+            {
+                challengeButton.onClick.RemoveListener(OpenChallenges);
+                challengeButton.onClick.AddListener(OpenChallenges);
+            }
+        }
+
+        void OnDisable()
+        {
+            ProfileManager.ProfileChanged -= RefreshProfileText;
+        }
 
         public void PlayGame()
         {
+            RunStateCoordinator.Reset();
             SetButtonsInteractable(false);
+
+            if (characterMenu == null)
+                characterMenu = FindAnyObjectByType<CharacterSelectionMenu>(FindObjectsInactive.Include);
+
+            if (characterMenu != null)
+            {
+                if (mainMenuRoot != null)
+                    mainMenuRoot.SetActive(false);
+                characterMenu.Open();
+                return;
+            }
 
             if (missionMenu == null)
                 missionMenu = FindAnyObjectByType<MissionSelectionMenu>(FindObjectsInactive.Include);
@@ -25,11 +68,83 @@ namespace JuegoDeCartas.UI
             Debug.LogWarning("No hay MissionSelectionMenu asignado en MainMenuManager.");
         }
 
+        public void OpenChallenges()
+        {
+            RunStateCoordinator.Reset();
+            SetButtonsInteractable(false);
+            if (mainMenuRoot != null)
+                mainMenuRoot.SetActive(false);
+
+            if (challengeMenu == null)
+                challengeMenu = FindAnyObjectByType<ChallengeModeMenu>(
+                    FindObjectsInactive.Include
+                );
+
+            if (challengeMenu != null)
+                challengeMenu.Open();
+            else
+                ShowMainMenu();
+        }
+
+        public void ReturnFromCharacterSelection()
+        {
+            if (ChallengeRunState.HasConfiguredRun && challengeMenu != null)
+            {
+                challengeMenu.Open();
+                return;
+            }
+
+            ShowMainMenu();
+        }
+
+        public void ShowMainMenu()
+        {
+            if (mainMenuRoot != null)
+                mainMenuRoot.SetActive(true);
+            SetButtonsInteractable(true);
+        }
+
+        public void OpenCollection()
+        {
+            SetButtonsInteractable(false);
+            if (mainMenuRoot != null)
+                mainMenuRoot.SetActive(false);
+
+            if (collectionMenu == null)
+                collectionMenu = FindAnyObjectByType<CollectionMenu>(FindObjectsInactive.Include);
+
+            if (collectionMenu != null)
+                collectionMenu.Open();
+            else
+                ShowMainMenu();
+        }
+
+        public void OpenProfiles()
+        {
+            SetButtonsInteractable(false);
+            if (mainMenuRoot != null)
+                mainMenuRoot.SetActive(false);
+
+            if (profileMenu == null)
+                profileMenu = FindAnyObjectByType<ProfileMenu>(FindObjectsInactive.Include);
+
+            if (profileMenu != null)
+                profileMenu.Open();
+            else
+                ShowMainMenu();
+        }
+
+        void RefreshProfileText()
+        {
+            if (activeProfileText != null)
+                activeProfileText.text = ProfileManager.ActiveProfileName;
+        }
+
         public void CloseMissionMenu()
         {
             if (missionMenu != null)
                 missionMenu.Close();
-            SetButtonsInteractable(true);
+            ShowMainMenu();
         }
 
         void SetButtonsInteractable(bool value)

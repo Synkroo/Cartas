@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05a47fab1d20770468c4266131ee4d03, type: 3}
+  m_Name: TejedorHechizos
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
+  contentId: 61f9c0445067dbf45bfa7c19bb93ece0
+  subclassName: Electromante
+  icon: {fileID: 0}
+  description: Sobrecarga al enemigo acumulando stun hasta bloquear su ataque.
+  passiveDescription: Al llegar a 5 de stun, además del aturdimiento inflige 10 de
+    daño extra. Cada carga de stun aumenta ese daño extra un 10%.
+  character: {fileID: 11400000, guid: 48ef4c3c10e21b54e9a36e56de1e60b9, type: 2}
+  passiveType: 13
+  amount: 10
+  triggerCount: 1
+  percentage: 10

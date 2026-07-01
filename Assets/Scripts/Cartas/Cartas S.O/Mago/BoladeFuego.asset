@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
+  m_Name: BoladeFuego
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
+  contentId: 8b2deebacc9feea4d8d5b7b7ba83cf19
+  cardName: Combustion
+  description: '18 daño. Quema 1 carta: +4 daño. +2 daño por hueco.'
+  sprite: {fileID: 0}
+  cost: 2
+  destroyOnUse: 0
+  effects:
+  - {fileID: 11400000, guid: d0379660ceabe2349ac772591ea1b8d9, type: 2}
+  - {fileID: 11400000, guid: e181e78bb77f4a0e907f0c4bcf46d211, type: 2}
+  - {fileID: 11400000, guid: f12b713fab124227879bc366b01f8531, type: 2}
+  upgradeOptions:
+  - upgradeName: Combustion estable
+    description: Reduce su coste en 1.
+    cardDescription: Coste -1.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Eco igneo
+    description: Lanza una segunda bola de fuego.
+    cardDescription: Bola de fuego x2.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Llama gemela
+    description: Reduce su coste en 1 y se reactiva una vez.
+    cardDescription: Coste -1; 2 usos.
+    costReduction: 1
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Infierno
+    description: Se reactiva dos veces adicionales.
+    cardDescription: Se usa 3 veces.
+    costReduction: 0
+    reactivations: 2
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  epiphanyOptions:
+  - epiphanyName: Supernova
+    description: La explosion inflige 12 de daño adicional.
+    cardDescription: 'Epifania: +12 daño.'
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects:
+    - {fileID: 11400000, guid: 9b90bae7c672a1b4e914a74b727b8e99, type: 2}
+  epiphany:
+    epiphanyName: 
+    description: 
+    cardDescription: 
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []

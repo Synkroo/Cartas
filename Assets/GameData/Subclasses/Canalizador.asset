@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05a47fab1d20770468c4266131ee4d03, type: 3}
+  m_Name: Canalizador
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
+  contentId: d5f4aebca3b451e4b9592c2be9527c03
+  subclassName: Criomante
+  icon: {fileID: 0}
+  description: Guarda cartas congeladas y las rompe para duplicar sus efectos.
+  passiveDescription: Al romper una carta congelada, obtiene su efecto 2 veces. Al
+    empezar el turno y al congelar, gana 5 de armadura por cada carta congelada en
+    mano.
+  character: {fileID: 11400000, guid: 48ef4c3c10e21b54e9a36e56de1e60b9, type: 2}
+  passiveType: 11
+  amount: 5
+  triggerCount: 1
+  percentage: 0

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
   m_Name: SlimeDorado
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
+  contentId: b47c02826ed12e34593e5d9ce7eeab22
   enemyName: Slime Dorado
   maxHealth: 75
   minDamage: 6
@@ -36,5 +37,5 @@ MonoBehaviour:
     armorPercentOnRevive: 0
     minDamagePercentOnRevive: 120
     maxDamagePercentOnRevive: 120
-  sprite: {fileID: -6392734053451439462, guid: 6391341c8c38d8f40985b9179901b19e, type: 3}
+  sprite: {fileID: 5788549341580851702, guid: a40de8003dcf3ad46a5fa8fbb5fb155b, type: 3}
   animatorController: {fileID: 9100000, guid: 9ac1bb997faeb7348b50811a074b7147, type: 2}

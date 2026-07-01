@@ -25,4 +25,6 @@ MemoryCaptures/
 .opencode/
 ProjectSettings/Packages/
 Screenshots/
+Assets/Screenshots/
+Assets/_Recovery/
 mission_setup.log

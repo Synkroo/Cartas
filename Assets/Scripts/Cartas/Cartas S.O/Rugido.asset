@@ -12,10 +12,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: Rugido
   m_EditorClassIdentifier: 
+  contentId: 25184310b7d449f882a03b4c5da3f3da
   cardName: Rugido
-  description: Ganas 5 de dano durante 3 turnos. No se acumula.
+  description: Ganas 5 de daño durante 3 turnos. No se acumula.
   sprite: {fileID: 0}
   cost: 1
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: c0e26f3543d84a1a9d3bbfeb347ee2bf, type: 2}
+  upgradeOptions:
+  - upgradeName: Aliento profundo
+    description: Reduce su coste en 1.
+    cardDescription: Coste -1.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Rugido feroz
+    description: Duplica la bonificacion de daño.
+    cardDescription: Bono de daño x2.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Furia sostenida
+    description: Reduce su coste en 1 y se reactiva una vez.
+    cardDescription: Coste -1; 2 usos.
+    costReduction: 1
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Grito de guerra
+    description: Se reactiva dos veces adicionales.
+    cardDescription: Se usa 3 veces.
+    costReduction: 0
+    reactivations: 2
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  epiphanyOptions:
+  - epiphanyName: Voz ancestral
+    description: Gana 3 de armadura y 3 de daño durante 3 turnos.
+    cardDescription: 'Epifania: +3 armadura; +3 daño 3 turnos.'
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects:
+    - {fileID: 11400000, guid: 15c880a789152ce499764cae3bc574c6, type: 2}
+  epiphany:
+    epiphanyName: 
+    description: 
+    cardDescription: 
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []

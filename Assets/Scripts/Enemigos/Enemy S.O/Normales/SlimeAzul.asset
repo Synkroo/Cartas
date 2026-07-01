@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
   m_Name: SlimeAzul
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
-  enemyName: Slime Azul
+  contentId: a01e5eb851ff80b4883f25a924632142
+  enemyName: Slime Azul Oscuro
   maxHealth: 40
   minDamage: 5
   maxDamage: 9
@@ -20,5 +21,5 @@ MonoBehaviour:
   startArmor: 0
   goldRewardOverride: 0
   mechanics: []
-  sprite: {fileID: 565486141694143457, guid: 6391341c8c38d8f40985b9179901b19e, type: 3}
-  animatorController: {fileID: 0}
+  sprite: {fileID: 5595540713971567145, guid: 42f9552004ea53340a632fa0536ed6ff, type: 3}
+  animatorController: {fileID: 9100000, guid: b1000000000000000000000000000008, type: 2}

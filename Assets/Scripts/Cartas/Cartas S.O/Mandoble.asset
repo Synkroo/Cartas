@@ -12,10 +12,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: Mandoble
   m_EditorClassIdentifier: 
+  contentId: 4d06ce7c3df745c88843b71bff25cf71
   cardName: Mandoble
-  description: Golpe pesado que hace 20 de dano.
+  description: Golpe pesado que hace 20 de daño.
   sprite: {fileID: 0}
   cost: 2
   destroyOnUse: 0
   effects:
   - {fileID: 11400000, guid: 7a5a2d5e1b2a43c4a05699b716c0f3fd, type: 2}
+  upgradeOptions:
+  - upgradeName: Contrapeso
+    description: Reduce su coste en 1.
+    cardDescription: Coste -1.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Impacto brutal
+    description: Ataca una segunda vez.
+    cardDescription: Ataque x2.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Golpe de ejecucion
+    description: Reduce su coste en 1 y se reactiva una vez.
+    cardDescription: Coste -1; 2 usos.
+    costReduction: 1
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Cataclismo
+    description: Se reactiva dos veces adicionales.
+    cardDescription: Se usa 3 veces.
+    costReduction: 0
+    reactivations: 2
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  epiphanyOptions:
+  - epiphanyName: Veredicto
+    description: Despues del golpe, inflige 14 de daño adicional.
+    cardDescription: 'Epifania: +14 daño.'
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects:
+    - {fileID: 11400000, guid: ebde471e7838eb640837e9c13af03731, type: 2}
+  epiphany:
+    epiphanyName: 
+    description: 
+    cardDescription: 
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []

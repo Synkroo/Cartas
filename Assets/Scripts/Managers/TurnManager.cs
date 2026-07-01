@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ namespace JuegoDeCartas.Managers
         public TextMeshProUGUI turnText;
         public TextMeshProUGUI roundText;
         public TextMeshProUGUI enemyNextAttackText;
+        public TextMeshProUGUI enemyNextAttackShadowText;
 
         [Header("State")]
         public Turn currentTurn;
@@ -35,15 +37,25 @@ namespace JuegoDeCartas.Managers
         private int previewMinDamage;
         private int previewMaxDamage;
         private int previewTurnsSurvived;
+        private int previewWeakness;
+        private int previewPoison;
+        private int previewBleed;
+        private int previewStun;
 
         public void StartGame()
         {
+            if (battle == null || battle.IsBattleEnded)
+                return;
+
             UpdateRoundUI();
             StartPlayerTurn();
         }
 
         public void StartPlayerTurn()
         {
+            if (battle == null || battle.IsBattleEnded || battle.player == null || battle.deckManager == null)
+                return;
+
             currentTurn = Turn.Player;
 
             turnCount++;
@@ -59,15 +71,14 @@ namespace JuegoDeCartas.Managers
                 battle.statsTracker.RegisterMaxArmor(player.stats.armor);
 
             player.stats.mana = player.stats.maxMana;
-            player.stats.armor = 0;
+            player.stats.armor = battle.GetArmorAtPlayerTurnStart(player.stats.armor);
 
             if (battle.armorPerTurn > 0)
-            {
-                player.stats.armor += battle.armorPerTurn;
-                if (battle.statsTracker != null)
-                    battle.statsTracker.RegisterArmorGained(battle.armorPerTurn);
-            }
+                battle.GainPlayerArmor(battle.armorPerTurn);
+            if (battle.relicInventory != null)
+                battle.relicInventory.OnPlayerTurnStarted();
 
+            battle.ReturnFrozenCardsToHand();
             battle.deckManager.DrawStartingHand();
             battle.RenderHand();
             RefreshEnemyIntentPreview(true);
@@ -78,13 +89,14 @@ namespace JuegoDeCartas.Managers
 
         public void EndPlayerTurn()
         {
-            if (currentTurn != Turn.Player || isExecuting)
+            if (battle == null || battle.IsBattleEnded || battle.deckManager == null || currentTurn != Turn.Player || isExecuting)
                 return;
 
             battle.AdvancePlayerDamageBonusTurn();
             isExecuting = true;
             currentTurn = Turn.Enemy;
 
+            battle.AdvanceFrozenCardsForPlayerTurnEnd();
             battle.deckManager.DiscardHand();
 
             battle.RenderHand();
@@ -98,6 +110,12 @@ namespace JuegoDeCartas.Managers
 
             yield return new WaitForSeconds(0.5f);
 
+            if (battle == null || battle.IsBattleEnded)
+            {
+                isExecuting = false;
+                yield break;
+            }
+
             if (battle.enemy == null)
             {
                 isExecuting = false;
@@ -106,26 +124,43 @@ namespace JuegoDeCartas.Managers
             }
 
             battle.enemy.BeginTurn();
+            battle.ApplyEnemyTurnStartStatuses();
             battle.UpdateUI();
+
+            if (battle.enemy == null || battle.enemy.stats.health <= 0)
+            {
+                isExecuting = false;
+                yield break;
+            }
 
             yield return new WaitForSeconds(0.5f);
 
-            ExecuteEnemyAttack();
+            if (!battle.ConsumeEnemyStunForTurn())
+                ExecuteEnemyAttack();
 
             yield return new WaitForSeconds(0.5f);
 
             isExecuting = false;
+            if (battle == null || battle.IsBattleEnded)
+                yield break;
+
             StartPlayerTurn();
         }
 
         void ExecuteEnemyAttack()
         {
-            battle.DamagePlayer(pendingEnemyDamage);
+            if (battle == null || battle.IsBattleEnded)
+                return;
+
+            battle.DamagePlayer(battle.ModifyEnemyAttackDamage(pendingEnemyDamage));
             battle.UpdateUI();
         }
 
         public void NextRound()
         {
+            if (battle == null || battle.IsBattleEnded || battle.player == null)
+                return;
+
             roundCount++;
             turnCount = 0;
 
@@ -183,8 +218,7 @@ namespace JuegoDeCartas.Managers
             {
                 pendingEnemyDamage = 0;
                 previewEnemyReference = null;
-                if (enemyNextAttackText != null)
-                    enemyNextAttackText.text = "-";
+                SetEnemyIntentText("-");
                 return;
             }
 
@@ -193,19 +227,53 @@ namespace JuegoDeCartas.Managers
 
             if (!force && PreviewStateMatchesCurrentEnemy())
             {
-                if (enemyNextAttackText != null)
-                    enemyNextAttackText.text = pendingEnemyDamage + " DMG";
+                SetEnemyIntentText(BuildEnemyIntentText());
                 return;
             }
 
-            pendingEnemyDamage = Mathf.Max(0, battle.enemy.RollProjectedNextAttackDamage());
+            pendingEnemyDamage =
+                Mathf.Max(0, battle.enemy.RollProjectedNextAttackDamage());
             CachePreviewState();
 
             if (battle.statsTracker != null)
-                battle.statsTracker.RegisterMaxEnemyDamage(pendingEnemyDamage);
+                battle.statsTracker.RegisterMaxEnemyDamage(
+                    battle.ModifyEnemyAttackDamage(pendingEnemyDamage)
+                );
 
+            SetEnemyIntentText(BuildEnemyIntentText());
+        }
+
+        void SetEnemyIntentText(string text)
+        {
             if (enemyNextAttackText != null)
-                enemyNextAttackText.text = pendingEnemyDamage + " DMG";
+                enemyNextAttackText.text = text;
+
+            if (enemyNextAttackShadowText != null)
+                enemyNextAttackShadowText.text = text;
+        }
+
+        string BuildEnemyIntentText()
+        {
+            if (battle == null || battle.enemy == null)
+                return "-";
+
+            var parts = new List<string>
+            {
+                battle.ModifyEnemyAttackDamage(pendingEnemyDamage) + " de daño"
+            };
+
+            if (battle.enemy.GetStatus(JuegoDeCartas.Enemies.EnemyStatusType.Stun) >=
+                BattleManager.StunThreshold)
+            {
+                parts.Add("aturdido");
+            }
+
+            int nextArmor = Mathf.Max(0, battle.enemy.GetProjectedNextTurnArmorGain());
+
+            if (nextArmor > 0)
+                parts.Add(nextArmor + " de armadura");
+
+            return string.Join(" ", parts);
         }
 
         bool PreviewStateMatchesCurrentEnemy()
@@ -214,7 +282,19 @@ namespace JuegoDeCartas.Managers
                    previewDamageModifier == battle.enemy.damageModifier &&
                    previewMinDamage == battle.enemy.currentMinDamage &&
                    previewMaxDamage == battle.enemy.currentMaxDamage &&
-                   previewTurnsSurvived == battle.enemy.turnsSurvived;
+                   previewTurnsSurvived == battle.enemy.turnsSurvived &&
+                   previewWeakness == battle.enemy.GetStatus(
+                       JuegoDeCartas.Enemies.EnemyStatusType.Weakness
+                   ) &&
+                   previewPoison == battle.enemy.GetStatus(
+                       JuegoDeCartas.Enemies.EnemyStatusType.Poison
+                   ) &&
+                   previewBleed == battle.enemy.GetStatus(
+                       JuegoDeCartas.Enemies.EnemyStatusType.Bleed
+                   ) &&
+                   previewStun == battle.enemy.GetStatus(
+                       JuegoDeCartas.Enemies.EnemyStatusType.Stun
+                   );
         }
 
         void CachePreviewState()
@@ -224,6 +304,18 @@ namespace JuegoDeCartas.Managers
             previewMinDamage = battle.enemy.currentMinDamage;
             previewMaxDamage = battle.enemy.currentMaxDamage;
             previewTurnsSurvived = battle.enemy.turnsSurvived;
+            previewWeakness = battle.enemy.GetStatus(
+                JuegoDeCartas.Enemies.EnemyStatusType.Weakness
+            );
+            previewPoison = battle.enemy.GetStatus(
+                JuegoDeCartas.Enemies.EnemyStatusType.Poison
+            );
+            previewBleed = battle.enemy.GetStatus(
+                JuegoDeCartas.Enemies.EnemyStatusType.Bleed
+            );
+            previewStun = battle.enemy.GetStatus(
+                JuegoDeCartas.Enemies.EnemyStatusType.Stun
+            );
         }
     }
 }

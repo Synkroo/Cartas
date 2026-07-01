@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
+  m_Name: PasoSombrio
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Cards.CardData
+  contentId: 1041abf20c1d48b478ec5019ecd8d893
+  cardName: Nube Toxica
+  description: 5 armadura. Roba 1. Aplica Veneno.
+  sprite: {fileID: 0}
+  cost: 1
+  destroyOnUse: 0
+  effects:
+  - {fileID: 11400000, guid: 0530404815ad02f45a08b010ffbadcab, type: 2}
+  - {fileID: 11400000, guid: b6ed2d3661fcc0242b7a6b23f70da75a, type: 2}
+  - {fileID: 11400000, guid: a2acdcf1af124ce988c9cdf6482b6d0d, type: 2}
+  upgradeOptions:
+  - upgradeName: Desaparicion
+    description: Reduce su coste en 1.
+    cardDescription: Coste -1.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Paso largo
+    description: Repite armadura y robo.
+    cardDescription: Efecto x2.
+    costReduction: 0
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Sombra persistente
+    description: Reduce su coste en 1 y se reactiva una vez.
+    cardDescription: Coste -1; 2 usos.
+    costReduction: 1
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Omnipresencia
+    description: Se reactiva dos veces adicionales.
+    cardDescription: Se usa 3 veces.
+    costReduction: 0
+    reactivations: 2
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  epiphanyOptions:
+  - epiphanyName: Desaparicion
+    description: Gana 9 de armadura adicional y recupera 2 de vida.
+    cardDescription: 'Epifania: +9 armadura y cura 2.'
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects:
+    - {fileID: 11400000, guid: 03afc65c7e5a362408eb792b97606ae0, type: 2}
+  epiphany:
+    epiphanyName: 
+    description: 
+    cardDescription: 
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []

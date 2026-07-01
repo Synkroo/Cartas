@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05a47fab1d20770468c4266131ee4d03, type: 3}
+  m_Name: EruditoArcano
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
+  contentId: df76af60a40f6e3479183f4359d14a6c
+  subclassName: Piromante
+  icon: {fileID: 0}
+  description: Quema cartas para reciclar la mano y encender explosiones.
+  passiveDescription: Cada carta quemada roba 1 carta. Si quemas la misma carta por
+    segunda vez, explota y aplica su efecto sin gastar maná antes de ir a descartes.
+  character: {fileID: 11400000, guid: 48ef4c3c10e21b54e9a36e56de1e60b9, type: 2}
+  passiveType: 12
+  amount: 1
+  triggerCount: 1
+  percentage: 0

@@ -23,25 +23,34 @@ namespace JuegoDeCartas.UI
         public Action onCancel;
         public Action onClose;
 
+        [Header("Layout")]
+        public Vector2 minimumGridSpacing = new Vector2(34f, 40f);
+        public Vector3 selectionCardScale = new Vector3(0.68f, 1.02f, 0.68f);
+        public bool closeWhenClickOutside = true;
+        public RectTransform clickInsideArea;
+
         TextMeshProUGUI tituloText;
         GridLayoutGroup grid;
 
+        public bool IsConfigured => panel != null && contentParent != null && cardPrefab != null;
+
         void Awake()
         {
-            panel = gameObject;
-            contentParent = transform.Find("Scroll View/Viewport/Content");
-            tituloText = transform.Find("Cabecero/Titulo")?.GetComponent<TextMeshProUGUI>();
+            if (panel == null)
+                panel = gameObject;
+
+            if (contentParent == null)
+                contentParent = transform.Find("Scroll View/Viewport/Content");
+
+            if (tituloText == null)
+                tituloText = transform.Find("Cabecero/Titulo")?.GetComponent<TextMeshProUGUI>();
+
             if (contentParent != null) grid = contentParent.GetComponent<GridLayoutGroup>();
+            if (clickInsideArea == null && contentParent != null)
+                clickInsideArea = contentParent as RectTransform;
 
             if (battle == null)
-                battle = FindObjectOfType<BattleManager>();
-
-            if (cardPrefab == null)
-            {
-#if UNITY_EDITOR
-                cardPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Scripts/Prefabs/CardPrefab.prefab");
-#endif
-            }
+                battle = FindAnyObjectByType<BattleManager>();
 
             var volverBtn = transform.Find("Cabecero/BotonVolver")?.GetComponent<Button>();
             if (volverBtn != null)
@@ -51,11 +60,43 @@ namespace JuegoDeCartas.UI
             }
         }
 
+        void Update()
+        {
+            if (!closeWhenClickOutside ||
+                panel == null ||
+                !panel.activeSelf ||
+                !Input.GetMouseButtonDown(0))
+            {
+                return;
+            }
+
+            RectTransform insideArea = clickInsideArea != null
+                ? clickInsideArea
+                : contentParent as RectTransform;
+            if (insideArea != null &&
+                RectTransformUtility.RectangleContainsScreenPoint(
+                    insideArea,
+                    Input.mousePosition
+                ))
+            {
+                return;
+            }
+
+            Close();
+        }
+
         public void OpenForSelection(List<Card> cards, string title, Action<Card> onSelect, Action onCancelAction)
         {
-            if (cardPrefab == null)
+            if (!IsConfigured)
             {
-                Debug.LogError("[CardSelectionUI] cardPrefab is not assigned. Cannot open selection.");
+                Debug.LogError("[CardSelectionUI] Missing panel, contentParent, or cardPrefab. Cannot open selection.");
+                onCancelAction?.Invoke();
+                return;
+            }
+
+            if (cards == null || cards.Count == 0)
+            {
+                onCancelAction?.Invoke();
                 return;
             }
 
@@ -63,7 +104,14 @@ namespace JuegoDeCartas.UI
             onCancel = onCancelAction;
 
             for (int i = contentParent.childCount - 1; i >= 0; i--)
-                Destroy(contentParent.GetChild(i).gameObject);
+            {
+                Transform child = contentParent.GetChild(i);
+                child.SetParent(null, false);
+                if (Application.isPlaying)
+                    Destroy(child.gameObject);
+                else
+                    DestroyImmediate(child.gameObject);
+            }
 
             panel.SetActive(true);
 
@@ -72,16 +120,16 @@ namespace JuegoDeCartas.UI
             if (tituloText != null)
                 tituloText.text = title;
 
-            int totalCards = cards.Count;
-            int columns = 5;
-            int rows = Mathf.CeilToInt((float)totalCards / columns);
-
             Canvas.ForceUpdateCanvases();
 
             if (grid != null)
             {
                 float cols = grid.constraintCount;
                 var contentRT = contentParent as RectTransform;
+                grid.spacing = new Vector2(
+                    Mathf.Max(grid.spacing.x, minimumGridSpacing.x),
+                    Mathf.Max(grid.spacing.y, minimumGridSpacing.y)
+                );
                 float cellW = (contentRT.rect.width - (cols - 1) * grid.spacing.x) / cols;
                 if (cellW > 0)
                     grid.cellSize = new Vector2(cellW, cellW / 0.7f);
@@ -89,6 +137,9 @@ namespace JuegoDeCartas.UI
 
             foreach (var card in cards)
             {
+                if (card == null || card.data == null)
+                    continue;
+
                 GameObject obj = Instantiate(cardPrefab, contentParent);
 
                 CardView view = obj.GetComponent<CardView>();
@@ -98,14 +149,18 @@ namespace JuegoDeCartas.UI
 
                     Button btn = obj.GetComponent<Button>();
                     if (btn == null)
-                        btn = obj.AddComponent<Button>();
+                    {
+                        Debug.LogError("El prefab de carta seleccionable necesita un componente Button.", obj);
+                        Destroy(obj);
+                        continue;
+                    }
 
                     Card captured = card;
                     btn.onClick.RemoveAllListeners();
                     btn.onClick.AddListener(() => SelectCard(captured));
                 }
 
-                obj.transform.localScale = new Vector3(0.7f, 1.05f, 0.7f);
+                obj.transform.localScale = selectionCardScale;
 
                 CardHover hover = obj.GetComponent<CardHover>();
                 if (hover != null)
@@ -136,20 +191,28 @@ namespace JuegoDeCartas.UI
 
         void SelectCard(Card card)
         {
+            Action<Card> selected = onCardSelected;
+            onCardSelected = null;
             onCancel = null;
-            onCardSelected?.Invoke(card);
-            Close();
+            HideAndNotifyClosed();
+            selected?.Invoke(card);
         }
 
         public void Close()
         {
-            Debug.Log("[CardSelectionUI] Close() called, panel=" + panel.name);
-            panel.SetActive(false);
-            onCardSelected = null;
             var cancel = onCancel;
+            onCardSelected = null;
             onCancel = null;
-            onClose?.Invoke();
+            HideAndNotifyClosed();
             cancel?.Invoke();
+        }
+
+        void HideAndNotifyClosed()
+        {
+            if (panel != null)
+                panel.SetActive(false);
+
+            onClose?.Invoke();
         }
     }
 }

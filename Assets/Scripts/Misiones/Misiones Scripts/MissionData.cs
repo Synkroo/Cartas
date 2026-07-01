@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using JuegoDeCartas.Enemies;
+using JuegoDeCartas.Characters;
+using JuegoDeCartas.Progression;
 
 namespace JuegoDeCartas.Missions
 {
     [CreateAssetMenu(fileName = "NuevaMision", menuName = "Juego de Cartas/Misiones/Mision")]
-    public class MissionData : ScriptableObject
+    public class MissionData : StableContentData
     {
         [Header("Info")]
         public string missionName;
@@ -33,13 +35,68 @@ namespace JuegoDeCartas.Missions
 
         public bool IsDifficultyCompleted(MissionDifficulty difficulty)
         {
-            return PlayerPrefs.GetInt(GetCompletionKey(difficulty), 0) == 1;
+            return ProfileManager.IsTemporary ||
+                   ProfilePrefs.GetIntMigrating(
+                       GetCompletionKey(difficulty),
+                       GetLegacyCompletionKey(difficulty),
+                       0
+                   ) == 1;
         }
 
         public void MarkCompleted(MissionDifficulty difficulty)
         {
-            PlayerPrefs.SetInt(GetCompletionKey(difficulty), 1);
-            PlayerPrefs.Save();
+            MarkCompleted(difficulty, CharacterRunState.SelectedCharacter);
+        }
+
+        public void MarkCompleted(MissionDifficulty difficulty, CharacterData character)
+        {
+            ProfilePrefs.SetInt(GetCompletionKey(difficulty), 1);
+            ProfilePrefs.SetInt(GetGlobalCompletionKey(difficulty), 1);
+            if (character != null)
+            {
+                ProfilePrefs.SetInt(GetCharacterCompletionKey(difficulty, character), 1);
+                ProfilePrefs.SetInt(GetGlobalCharacterCompletionKey(difficulty, character), 1);
+            }
+            ProfilePrefs.Save();
+        }
+
+        public bool IsDifficultyCompletedByCharacter(MissionDifficulty difficulty, CharacterData character)
+        {
+            return character != null &&
+                   (ProfileManager.IsTemporary ||
+                    ProfilePrefs.GetIntMigrating(
+                        GetCharacterCompletionKey(difficulty, character),
+                        GetLegacyCharacterCompletionKey(
+                            difficulty,
+                            character
+                        ),
+                        0
+                    ) == 1);
+        }
+
+        public static bool IsAnyDifficultyCompleted(MissionDifficulty difficulty)
+        {
+            return ProfileManager.IsTemporary ||
+                   ProfilePrefs.GetInt(GetGlobalCompletionKey(difficulty), 0) == 1;
+        }
+
+        public static bool IsAnyDifficultyCompletedByCharacter(
+            MissionDifficulty difficulty,
+            CharacterData character)
+        {
+            return character != null &&
+                   (ProfileManager.IsTemporary ||
+                    ProfilePrefs.GetIntMigrating(
+                        GetGlobalCharacterCompletionKey(
+                            difficulty,
+                            character
+                        ),
+                        GetLegacyGlobalCharacterCompletionKey(
+                            difficulty,
+                            character
+                        ),
+                        0
+                    ) == 1);
         }
 
         public float GetEnemyStatMultiplier(MissionDifficulty difficulty)
@@ -52,9 +109,56 @@ namespace JuegoDeCartas.Missions
             return difficulty >= MissionDifficulty.Media ? 1.2f : 1f;
         }
 
+        void OnValidate()
+        {
+            EnsureContentId();
+            combatCount = Mathf.Max(1, combatCount);
+            miniBossFrequency = Mathf.Max(1, miniBossFrequency);
+        }
+
         string GetCompletionKey(MissionDifficulty difficulty)
         {
+            return "MissionCompleted_" + ContentId + "_" + difficulty;
+        }
+
+        string GetLegacyCompletionKey(MissionDifficulty difficulty)
+        {
             return "MissionCompleted_" + name + "_" + difficulty;
+        }
+
+        static string GetGlobalCompletionKey(MissionDifficulty difficulty)
+        {
+            return "AnyMissionCompleted_" + difficulty;
+        }
+
+        string GetCharacterCompletionKey(MissionDifficulty difficulty, CharacterData character)
+        {
+            return "MissionCompleted_" + ContentId + "_" + difficulty +
+                   "_" + ContentIdUtility.GetId(character);
+        }
+
+        string GetLegacyCharacterCompletionKey(
+            MissionDifficulty difficulty,
+            CharacterData character)
+        {
+            return "MissionCompleted_" + name + "_" + difficulty +
+                   "_" + character.name;
+        }
+
+        static string GetGlobalCharacterCompletionKey(
+            MissionDifficulty difficulty,
+            CharacterData character)
+        {
+            return "AnyMissionCompleted_" + difficulty + "_" +
+                   ContentIdUtility.GetId(character);
+        }
+
+        static string GetLegacyGlobalCharacterCompletionKey(
+            MissionDifficulty difficulty,
+            CharacterData character)
+        {
+            return "AnyMissionCompleted_" + difficulty + "_" +
+                   character.name;
         }
     }
 }

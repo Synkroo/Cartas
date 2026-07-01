@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273ec2d1544d2a3418a576ab0bdfda26, type: 3}
   m_Name: DuplicarCartaMejoras
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Articulos.ArticuloData
+  contentId: 6ccdf836c613a844997bbdabbd53df85
   nombre: Espejo Perfecto
-  precio: 0
   rareza: 2
   imagen: {fileID: 0}
   descripcion: Duplica una carta de tu mazo conservando sus mejoras.
   tipoEfecto: 12
   cantidad: 1
+  cardPool: []

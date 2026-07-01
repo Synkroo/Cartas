@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
   m_Name: SlimeDeFuego
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
-  enemyName: Slime de Fuego
+  contentId: 8e0bff2c1da9a6445b4f24bb883c5a01
+  enemyName: Slime Igneo
   maxHealth: 65
   minDamage: 7
   maxDamage: 12
@@ -29,12 +30,12 @@ MonoBehaviour:
     cardsToAdd: 0
     cardDestination: 0
     shuffleIntoDrawPile: 0
-    firstTriggerTurn: 0
-    triggerEveryXTurns: 0
+    firstTriggerTurn: 1
+    triggerEveryXTurns: 1
     reviveCount: 0
-    maxHealthPercentOnRevive: 0
+    maxHealthPercentOnRevive: 1
     armorPercentOnRevive: 0
     minDamagePercentOnRevive: 0
     maxDamagePercentOnRevive: 0
-  sprite: {fileID: 1934026264422326969, guid: 6391341c8c38d8f40985b9179901b19e, type: 3}
+  sprite: {fileID: -8961528746857462508, guid: a40de8003dcf3ad46a5fa8fbb5fb155b, type: 3}
   animatorController: {fileID: 9100000, guid: 0878af117a8e1a340af2f9341aa81d53, type: 2}

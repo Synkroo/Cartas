@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05a47fab1d20770468c4266131ee4d03, type: 3}
+  m_Name: Bastion
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Characters.SubclassData
+  contentId: dcc2bc9298639d741abdfe1a377c23da
+  subclassName: Bastion
+  icon: {fileID: 0}
+  description: Convierte la defensa en daño y mantiene parte del escudo.
+  passiveDescription: Al ganar armadura, inflige al enemigo un 50% de la armadura
+    obtenida y conserva el 50% al comenzar un nuevo turno.
+  character: {fileID: 11400000, guid: 90bd81ad475e59d488bbd4d103680eed, type: 2}
+  passiveType: 10
+  amount: 0
+  triggerCount: 1
+  percentage: 50

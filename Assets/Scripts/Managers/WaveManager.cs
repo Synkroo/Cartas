@@ -4,6 +4,8 @@ using UnityEngine;
 using JuegoDeCartas.Enemies;
 using JuegoDeCartas.Stats;
 using JuegoDeCartas.UI;
+using JuegoDeCartas.Progression;
+using JuegoDeCartas.Challenges;
 
 namespace JuegoDeCartas.Managers
 {
@@ -20,8 +22,13 @@ namespace JuegoDeCartas.Managers
 
         readonly List<EnemyData> runtimeWave = new List<EnemyData>();
         private int currentEnemyIndex = 0;
+        private bool pendingPostDeathTransition;
+        private bool pendingWaveCleared;
 
         public Enemy enemy { get; private set; }
+        public int CompletedCombatCount => currentEnemyIndex;
+        public int TotalCombatCount => runtimeWave.Count > 0 ? runtimeWave.Count : Mathf.Max(1, totalCombats);
+        public int SubclassSelectionCombat => Mathf.Max(1, (TotalCombatCount + 1) / 2);
 
         public UIManager uiManager;
         public GameManager gameManager;
@@ -36,6 +43,8 @@ namespace JuegoDeCartas.Managers
         public void Initialize()
         {
             currentEnemyIndex = 0;
+            pendingPostDeathTransition = false;
+            pendingWaveCleared = false;
             BuildRuntimeWave();
             SpawnNext();
         }
@@ -72,6 +81,12 @@ namespace JuegoDeCartas.Managers
 
             for (int combatNumber = 1; combatNumber <= lastCombatIndex; combatNumber++)
             {
+                if (ChallengeRunState.IsBossRush)
+                {
+                    runtimeWave.Add(finalBoss);
+                    continue;
+                }
+
                 if (combatNumber == lastCombatIndex)
                 {
                     runtimeWave.Add(finalBoss);
@@ -101,52 +116,62 @@ namespace JuegoDeCartas.Managers
             {
                 enemy = null;
                 if (enemyHealthBar != null)
-                    enemyHealthBar.enabled = false;
+                    enemyHealthBar.SetVisible(false);
                 return;
             }
 
             enemy = new Enemy();
             enemy.Initialize(runtimeWave[currentEnemyIndex], battleManager);
             currentEnemyIndex++;
+            CollectionProgress.MarkEnemySeen(enemy.data);
+            ProfilePrefs.Save();
 
             if (uiManager != null)
-                uiManager.SetEnemySprite(enemy.currentSprite);
+                uiManager.SetEnemyVisual(enemy.data.enemyName, enemy.currentSprite, enemy.currentAnimatorController);
 
             if (enemyHealthBar != null)
-                enemyHealthBar.enabled = true;
+            {
+                enemyHealthBar.SetEnemyTier(enemy.data.enemyTier);
+                enemyHealthBar.SetVisible(true);
+            }
         }
 
-        public void DamageEnemy(int damage, out bool died)
+        public DamageResult DamageEnemy(int damage)
         {
-            died = false;
-            if (enemy == null) return;
+            if (enemy == null)
+                return DamageResult.Ignored(Mathf.Max(0, damage));
 
-            died = enemy.TakeDamage(damage);
+            DamageResult result = enemy.TakeDamage(damage);
 
-            if (died)
+            if (result.defeated)
             {
                 if (enemy.TryHandleDefeat())
                 {
-                    died = false;
-
                     if (uiManager != null)
-                        uiManager.SetEnemySprite(enemy.currentSprite);
+                        uiManager.SetEnemyVisual(enemy.data.enemyName, enemy.currentSprite, enemy.currentAnimatorController);
 
                     if (enemyHealthBar != null)
-                        enemyHealthBar.enabled = true;
+                    {
+                        enemyHealthBar.SetEnemyTier(enemy.data.enemyTier);
+                        enemyHealthBar.SetVisible(true);
+                    }
 
-                    return;
+                    return result.WithRevive();
                 }
 
                 enemy.stats.health = 0;
                 HandleDeath();
             }
+
+            return result;
         }
 
         void HandleDeath()
         {
             if (statsTracker != null)
                 statsTracker.RegisterEnemyDefeated();
+            if (enemy != null)
+                CollectionProgress.MarkEnemyDefeated(enemy.data);
 
             int gold = 0;
             if (enemy != null && enemy.data != null)
@@ -161,28 +186,66 @@ namespace JuegoDeCartas.Managers
                     gold = 150;
             }
 
+            if (battleManager != null &&
+                battleManager.relicInventory != null)
+            {
+                gold += battleManager.relicInventory.OnEnemyDefeated();
+            }
+
             if (gold > 0 && gameManager != null)
                 gameManager.dinero += gold;
 
             OnGoldEarned?.Invoke(gold);
             OnEnemyDefeated?.Invoke();
 
-            bool noMoreEnemies = currentEnemyIndex >= runtimeWave.Count;
+            pendingPostDeathTransition = true;
+            pendingWaveCleared = currentEnemyIndex >= runtimeWave.Count;
 
-            if (noMoreEnemies)
+            if (pendingWaveCleared)
             {
                 if (enemyHealthBar != null)
-                    enemyHealthBar.enabled = false;
+                    enemyHealthBar.SetVisible(false);
+            }
 
+            if (battleManager != null)
+                battleManager.RequestPostCombatTransition();
+            else
+                FlushPostDeathTransition();
+        }
+
+        public void FlushPostDeathTransition()
+        {
+            if (!pendingPostDeathTransition)
+                return;
+
+            bool waveCleared = pendingWaveCleared;
+            pendingPostDeathTransition = false;
+            pendingWaveCleared = false;
+
+            if (waveCleared)
+            {
                 if (statsTracker != null)
                     statsTracker.PopulateStatsText();
-
                 OnWaveCleared?.Invoke();
                 return;
             }
 
             if (battleManager != null)
                 battleManager.ResetTemporaryCombatEffects();
+
+            if (ChallengeRunState.IsShopDisabled)
+            {
+                bool needsSubclassSelection =
+                    battleManager != null &&
+                    !JuegoDeCartas.Characters.CharacterRunState.HasSubclass &&
+                    CompletedCombatCount == SubclassSelectionCombat;
+
+                if (needsSubclassSelection && gameManager != null)
+                    gameManager.OpenShop();
+                else if (battleManager != null)
+                    battleManager.ContinueAfterShop();
+                return;
+            }
 
             if (gameManager != null)
                 gameManager.OpenShop();
@@ -218,7 +281,7 @@ namespace JuegoDeCartas.Managers
             if (candidates.Count == 0)
                 return null;
 
-            int randomIndex = UnityEngine.Random.Range(0, candidates.Count);
+            int randomIndex = RunRandom.Range(0, candidates.Count);
             return candidates[randomIndex];
         }
 
@@ -227,7 +290,7 @@ namespace JuegoDeCartas.Managers
             for (int i = 0; i < wave.Count; i++)
             {
                 EnemyData temp = wave[i];
-                int randomIndex = UnityEngine.Random.Range(i, wave.Count);
+                int randomIndex = RunRandom.Range(i, wave.Count);
                 wave[i] = wave[randomIndex];
                 wave[randomIndex] = temp;
             }

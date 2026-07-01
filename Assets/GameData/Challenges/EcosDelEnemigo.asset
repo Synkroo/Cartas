@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c83c181dc7341aa80fc2616546f5641, type: 3}
+  m_Name: EcosDelEnemigo
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Challenges.ChallengeData
+  contentId: e9f31a4b272a4df9a9d88df41127a346
+  challengeName: Ecos del enemigo
+  description: La mecanica especial de cada minijefe permanece activa en los combates
+    siguientes y se acumula hasta el jefe final.
+  image: {fileID: 0}
+  difficulty: 2
+  implemented: 0
+  ruleSummary: Las mecanicas de minijefes derrotados se convierten en modificadores
+    permanentes de la run.
+  encounterMission: {fileID: 11400000, guid: 24b96661fa5b0f04f92be79e53f0bb0f, type: 2}
+  modifier: 0
+  requiredCharacter: {fileID: 0}
+  combatCountOverride: 0

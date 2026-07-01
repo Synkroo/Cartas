@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using JuegoDeCartas.Cards;
 using JuegoDeCartas.Enemies;
+using JuegoDeCartas.Challenges;
 
 namespace JuegoDeCartas.Managers
 {
@@ -25,9 +26,18 @@ namespace JuegoDeCartas.Managers
             hand.Clear();
             discard.Clear();
 
+            cardsPerTurn = Mathf.Max(0, cardsPerTurn);
+
+            if (startingDeck == null)
+            {
+                OnDeckChanged?.Invoke();
+                return;
+            }
+
             foreach (var cardData in startingDeck)
             {
-                deck.Add(new Card(cardData));
+                if (cardData != null)
+                    deck.Add(new Card(cardData));
             }
 
             Shuffle(deck);
@@ -36,6 +46,9 @@ namespace JuegoDeCartas.Managers
 
         public void DrawCards(int amount)
         {
+            if (amount <= 0)
+                return;
+
             for (int i = 0; i < amount; i++)
             {
                 if (deck.Count == 0)
@@ -87,18 +100,37 @@ namespace JuegoDeCartas.Managers
 
         public void DiscardHand()
         {
-            discard.AddRange(hand);
-            hand.Clear();
+            if (hand == null || discard == null)
+                return;
+
+            for (int i = hand.Count - 1; i >= 0; i--)
+            {
+                Card card = hand[i];
+                if (card == null)
+                {
+                    hand.RemoveAt(i);
+                    continue;
+                }
+
+                if (card.frozen)
+                    continue;
+
+                discard.Add(card);
+                hand.RemoveAt(i);
+            }
 
             OnDeckChanged?.Invoke();
         }
 
         public void Shuffle(List<Card> list)
         {
+            if (list == null)
+                return;
+
             for (int i = 0; i < list.Count; i++)
             {
                 Card temp = list[i];
-                int randomIndex = UnityEngine.Random.Range(i, list.Count);
+                int randomIndex = RunRandom.Range(i, list.Count);
                 list[i] = list[randomIndex];
                 list[randomIndex] = temp;
             }

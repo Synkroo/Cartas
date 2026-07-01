@@ -30,12 +30,25 @@ namespace JuegoDeCartas.UI
         public Image imagenSprite;
         public Image fondoPanel;
 
-        static readonly Color colorComun = new Color(0f, 0.5f, 1f);
-        static readonly Color colorRaro = new Color(0f, 0.7f, 0f);
-        static readonly Color colorEpico = new Color(0.6f, 0f, 0.7f);
-        static readonly Color colorFondoComun = new Color(0f, 0.25f, 0.5f, 0.5f);
-        static readonly Color colorFondoRaro = new Color(0f, 0.3f, 0f, 0.5f);
-        static readonly Color colorFondoEpico = new Color(0.25f, 0f, 0.3f, 0.5f);
+        [Header("Costs")]
+        public int commonCost = 200;
+        public int rareCost = 400;
+        public int epicCost = 800;
+        public int fallbackCost = 300;
+        public string currencySuffix = "\u20ac";
+
+        [Header("Rarity Text")]
+        public string commonLabel = "Comun";
+        public string rareLabel = "Raro";
+        public string epicLabel = "Epico";
+
+        [Header("Rarity Colors")]
+        public Color commonColor = new Color(0f, 0.5f, 1f);
+        public Color rareColor = new Color(0f, 0.7f, 0f);
+        public Color epicColor = new Color(0.6f, 0f, 0.7f);
+        public Color commonBackgroundColor = new Color(0f, 0.25f, 0.5f, 0.5f);
+        public Color rareBackgroundColor = new Color(0f, 0.3f, 0f, 0.5f);
+        public Color epicBackgroundColor = new Color(0.25f, 0f, 0.3f, 0.5f);
 
         Coroutine hoverRoutine;
 
@@ -62,7 +75,7 @@ namespace JuegoDeCartas.UI
                 nombreText.text = item.nombre;
 
             if (precioText != null)
-                precioText.text = GetRarezaCost(item.rareza) + "€";
+                precioText.text = GetRarezaCost(item.rareza) + currencySuffix;
 
             if (rarezaText != null)
             {
@@ -145,10 +158,10 @@ namespace JuegoDeCartas.UI
         {
             int baseCost = r switch
             {
-                Rareza.Comun => 200,
-                Rareza.Raro => 400,
-                Rareza.Epico => 800,
-                _ => 300
+                Rareza.Comun => commonCost,
+                Rareza.Raro => rareCost,
+                Rareza.Epico => epicCost,
+                _ => fallbackCost
             };
 
             return Mathf.RoundToInt(baseCost * MissionRunState.ShopCostMultiplier);
@@ -158,10 +171,10 @@ namespace JuegoDeCartas.UI
         {
             return r switch
             {
-                Rareza.Comun => colorComun,
-                Rareza.Raro => colorRaro,
-                Rareza.Epico => colorEpico,
-                _ => colorComun
+                Rareza.Comun => commonColor,
+                Rareza.Raro => rareColor,
+                Rareza.Epico => epicColor,
+                _ => commonColor
             };
         }
 
@@ -169,10 +182,10 @@ namespace JuegoDeCartas.UI
         {
             return r switch
             {
-                Rareza.Comun => colorFondoComun,
-                Rareza.Raro => colorFondoRaro,
-                Rareza.Epico => colorFondoEpico,
-                _ => colorFondoComun
+                Rareza.Comun => commonBackgroundColor,
+                Rareza.Raro => rareBackgroundColor,
+                Rareza.Epico => epicBackgroundColor,
+                _ => commonBackgroundColor
             };
         }
 
@@ -180,20 +193,20 @@ namespace JuegoDeCartas.UI
         {
             return r switch
             {
-                Rareza.Comun => "Comun",
-                Rareza.Raro => "Raro",
-                Rareza.Epico => "Epico",
+                Rareza.Comun => commonLabel,
+                Rareza.Raro => rareLabel,
+                Rareza.Epico => epicLabel,
                 _ => ""
             };
         }
 
         public void OnBuy()
         {
-            if (item == null || shopManager == null || battle == null) return;
+            if (item == null || shopManager == null || battle == null || battle.gameManager == null) return;
 
             if (ItemEffectApplier.NeedsSelection(item.tipoEfecto))
             {
-                if (selectionUI == null) return;
+                if (selectionUI == null || !selectionUI.IsConfigured) return;
 
                 List<Card> source = ItemEffectApplier.GetSelectionSource(item, battle);
                 if (source == null || source.Count == 0) return;
@@ -215,24 +228,39 @@ namespace JuegoDeCartas.UI
                     selectionUI.OpenForSelection(source, item.descripcion,
                         (selected) =>
                         {
-                            var upgradeUI = shopManager.upgradeSelectionUI;
-                            if (upgradeUI != null)
+                            if (selected == null)
                             {
-                                upgradeUI.Show(selected, () =>
-                                {
-                                    if (capturedButton != null)
-                                        capturedButton.interactable = false;
-                                    capturedGO.SetActive(false);
-                                    if (battle != null)
-                                        battle.RenderHand();
-                                });
+                                Refund(capturedBattle, shopManager, spent);
+                                if (capturedButton != null)
+                                    capturedButton.interactable = true;
+                                return;
                             }
+
+                            var upgradeUI = shopManager.upgradeSelectionUI;
+                            if (upgradeUI != null && upgradeUI.IsConfigured && upgradeUI.Show(selected, () =>
+                            {
+                                ItemEffectApplier.CompleteSelectedUpgrade(capturedItem, capturedBattle);
+                                if (capturedButton != null)
+                                    capturedButton.interactable = false;
+                                capturedGO.SetActive(false);
+                            }, () =>
+                            {
+                                Refund(capturedBattle, shopManager, spent);
+                                if (capturedButton != null)
+                                    capturedButton.interactable = true;
+                            }))
+                            {
+                                return;
+                            }
+
+                            ItemEffectApplier.ApplyToSelected(capturedItem, capturedBattle, selected);
+                            if (capturedButton != null)
+                                capturedButton.interactable = false;
+                            capturedGO.SetActive(false);
                         },
                         () =>
                         {
-                            capturedBattle.gameManager.dinero += spent;
-                            if (shopManager != null)
-                                shopManager.UpdateDineroUI();
+                            Refund(capturedBattle, shopManager, spent);
                             if (capturedButton != null)
                                 capturedButton.interactable = true;
                         }
@@ -243,6 +271,14 @@ namespace JuegoDeCartas.UI
                     selectionUI.OpenForSelection(source, item.descripcion,
                         (selected) =>
                         {
+                            if (selected == null)
+                            {
+                                Refund(capturedBattle, shopManager, spent);
+                                if (capturedButton != null)
+                                    capturedButton.interactable = true;
+                                return;
+                            }
+
                             ItemEffectApplier.ApplyToSelected(capturedItem, capturedBattle, selected);
                             if (capturedButton != null)
                                 capturedButton.interactable = false;
@@ -250,9 +286,7 @@ namespace JuegoDeCartas.UI
                         },
                         () =>
                         {
-                            capturedBattle.gameManager.dinero += spent;
-                            if (shopManager != null)
-                                shopManager.UpdateDineroUI();
+                            Refund(capturedBattle, shopManager, spent);
                             if (capturedButton != null)
                                 capturedButton.interactable = true;
                         }
@@ -274,6 +308,15 @@ namespace JuegoDeCartas.UI
 
                 gameObject.SetActive(false);
             }
+        }
+
+        static void Refund(BattleManager capturedBattle, ShopManager shopManager, int spent)
+        {
+            if (capturedBattle != null && capturedBattle.gameManager != null)
+                capturedBattle.gameManager.dinero += spent;
+
+            if (shopManager != null)
+                shopManager.UpdateDineroUI();
         }
     }
 }

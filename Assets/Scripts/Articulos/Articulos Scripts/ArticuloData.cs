@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
+using JuegoDeCartas.Cards;
+using JuegoDeCartas.Progression;
 
 namespace JuegoDeCartas.Articulos
 {
     [CreateAssetMenu(fileName = "NuevoArticulo", menuName = "Tienda/Articulo")]
-    public class ArticuloData : ScriptableObject
+    public class ArticuloData : StableContentData
     {
         public string nombre;
         public Rareza rareza;
@@ -11,6 +14,16 @@ namespace JuegoDeCartas.Articulos
         [TextArea] public string descripcion;
         public TipoEfectoArticulo tipoEfecto;
         public int cantidad;
+
+        [Header("Card Pool")]
+        [Tooltip("Pool opcional usado por articulos que ofrecen cartas externas.")]
+        public List<CardData> cardPool = new List<CardData>();
+
+        void OnValidate()
+        {
+            EnsureContentId();
+            cantidad = Mathf.Max(0, cantidad);
+        }
     }
 
     public enum Rareza
@@ -36,6 +49,8 @@ namespace JuegoDeCartas.Articulos
         DuplicarCarta,
         DuplicarCartaMejoras,
         ReducirCoste,
-        DescartarCarta
+        DescartarCarta,
+        DespertarEpifania,
+        AgregarCartaOtraClase
     }
 }

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d7ae47a9b33da41a7a0930a6c0f862, type: 3}
+  m_Name: SobreVitalidad
+  m_EditorClassIdentifier: JuegoDeCartas::JuegoDeCartas.Articulos.ItemPackData
+  contentId: f6938c25b88ecae45a9508c91b6a9ca2
+  packName: Sobre de vitalidad
+  description: Curacion, vida maxima y efectos defensivos persistentes.
+  image: {fileID: 0}
+  displayRarity: 1
+  shopAppearanceWeight: 20
+  price: 250
+  choiceCount: 4
+  allowedEffects: 00000000030000000600000007000000
+  rarityWeights:
+  - rarity: 0
+    weight: 60
+  - rarity: 1
+    weight: 35
+  - rarity: 2
+    weight: 5

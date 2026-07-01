@@ -17,13 +17,16 @@ namespace JuegoDeCartas.Cards
 
         void Awake()
         {
-            rectTransform = GetComponent<RectTransform>();
-            originalScale = rectTransform.localScale;
+            EnsureInitialized();
             targetScale = originalScale;
         }
 
         void Update()
         {
+            EnsureInitialized();
+            if (rectTransform == null)
+                return;
+
             targetScale = isHovering ? originalScale * hoverScale : originalScale;
             rectTransform.localScale = Vector3.Lerp(
                 rectTransform.localScale,
@@ -34,8 +37,24 @@ namespace JuegoDeCartas.Cards
 
         public void RefreshState()
         {
+            EnsureInitialized();
+            if (rectTransform == null)
+                return;
+
             targetScale = isHovering ? originalScale * hoverScale : originalScale;
             rectTransform.localScale = targetScale;
+        }
+
+        void EnsureInitialized()
+        {
+            if (rectTransform != null)
+                return;
+
+            rectTransform = GetComponent<RectTransform>();
+            if (rectTransform == null)
+                return;
+
+            originalScale = rectTransform.localScale;
         }
 
         public void SetHover(bool value)

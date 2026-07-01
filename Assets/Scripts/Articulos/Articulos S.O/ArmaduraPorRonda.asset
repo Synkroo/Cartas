@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273ec2d1544d2a3418a576ab0bdfda26, type: 3}
   m_Name: ArmaduraPorRonda
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Articulos.ArticuloData
+  contentId: 8020ffa1d4fd3a44faf28b323f13b8e0
   nombre: Coraza Eterna
-  precio: 0
-  rareza: 1
+  rareza: 0
   imagen: {fileID: 0}
   descripcion: Obtienes 3 de armadura al inicio de cada turno.
   tipoEfecto: 6
   cantidad: 3
+  cardPool: []

@@ -12,9 +12,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0992c7cc6453b4b4d88fc7ce37f26de1, type: 3}
   m_Name: Basura
   m_EditorClassIdentifier: 
+  contentId: d4d2f2d3a1b44d8f9e7c123456789abc
   cardName: Basura
   description: Literalmente basura, usala para descartarla
   sprite: {fileID: 0}
   cost: 1
   destroyOnUse: 1
   effects: []
+  upgradeOptions:
+  - upgradeName: Reciclar
+    description: Cuesta 0 y roba 1 carta.
+    cardDescription: Cuesta 0; roba 1.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects:
+    - {fileID: 11400000, guid: b6ed2d3661fcc0242b7a6b23f70da75a, type: 2}
+  - upgradeName: Chatarra util
+    description: Cuesta 0 y obtiene 3 de armadura.
+    cardDescription: Cuesta 0; +3 armadura.
+    costReduction: 1
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects:
+    - {fileID: 11400000, guid: 0f8cdcb571c9da24aacf410a1f6552cc, type: 2}
+  - upgradeName: Reciclaje agresivo
+    description: Reduce su coste en 1 y se reactiva una vez.
+    cardDescription: Coste -1; 2 usos.
+    costReduction: 1
+    reactivations: 1
+    preventDestroyOnUse: 0
+    bonusEffects: []
+  - upgradeName: Residuo infinito
+    description: Se reactiva dos veces y deja de destruirse al usarla.
+    cardDescription: 3 usos; no se destruye.
+    costReduction: 0
+    reactivations: 2
+    preventDestroyOnUse: 1
+    bonusEffects: []
+  epiphanyOptions:
+  - epiphanyName: Alquimia imposible
+    description: La carta deja de destruirse, da 40 de oro y recupera 1 de mana.
+    cardDescription: 'Epifania: no se destruye; +40 oro y 1 mana.'
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 1
+    bonusEffects:
+    - {fileID: 11400000, guid: 9307fcb216d9a4a4a9c27ef00571a453, type: 2}
+  epiphany:
+    epiphanyName: 
+    description: 
+    cardDescription: 
+    costReduction: 0
+    reactivations: 0
+    preventDestroyOnUse: 0
+    bonusEffects: []

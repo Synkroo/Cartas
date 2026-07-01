@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using JuegoDeCartas.Managers;
 
 namespace JuegoDeCartas.UI
 {
@@ -7,6 +8,7 @@ namespace JuegoDeCartas.UI
     {
         [Header("Menu")]
         public GameObject optionsMenu;
+        public SettingsMenuUI settingsMenu;
 
         [Header("Key")]
         public KeyCode toggleKey = KeyCode.Escape;
@@ -24,14 +26,18 @@ namespace JuegoDeCartas.UI
 
         void Start()
         {
-            menuTransform.localScale = closedScale;
+            CacheSettingsMenu();
 
-            optionsMenu.SetActive(false);
+            if (menuTransform != null)
+                menuTransform.localScale = closedScale;
+
+            if (optionsMenu != null)
+                optionsMenu.SetActive(false);
         }
 
         void Update()
         {
-            if (Input.GetKeyDown(toggleKey))
+            if (optionsMenu != null && Input.GetKeyDown(toggleKey))
             {
                 if (optionsMenu.activeSelf)
                     ResumeGame();
@@ -42,10 +48,16 @@ namespace JuegoDeCartas.UI
 
         public void OpenMenu()
         {
+            CacheSettingsMenu();
+            if (optionsMenu == null)
+                return;
+
             previousTimeScale = Time.timeScale;
             Time.timeScale = 0f;
 
             optionsMenu.SetActive(true);
+            if (settingsMenu != null)
+                settingsMenu.Bind(this);
 
             if (currentRoutine != null)
                 StopCoroutine(currentRoutine);
@@ -55,6 +67,9 @@ namespace JuegoDeCartas.UI
 
         public void ResumeGame()
         {
+            if (optionsMenu == null)
+                return;
+
             if (currentRoutine != null)
                 StopCoroutine(currentRoutine);
 
@@ -70,8 +85,51 @@ namespace JuegoDeCartas.UI
             Time.timeScale = previousTimeScale;
         }
 
+        void CacheSettingsMenu()
+        {
+            if (settingsMenu == null && optionsMenu != null)
+                settingsMenu = optionsMenu.GetComponentInChildren<SettingsMenuUI>(true);
+
+            if (settingsMenu == null)
+                settingsMenu = FindBestSettingsMenu();
+
+            if (settingsMenu == null)
+                return;
+
+            optionsMenu = settingsMenu.gameObject;
+            if (menuTransform == null)
+            {
+                Transform panel = optionsMenu.transform.Find("Panel");
+                menuTransform = panel as RectTransform;
+            }
+        }
+
+        static SettingsMenuUI FindBestSettingsMenu()
+        {
+            SettingsMenuUI[] menus = FindObjectsByType<SettingsMenuUI>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None
+            );
+            SettingsMenuUI fallback = null;
+            for (int i = 0; i < menus.Length; i++)
+            {
+                if (menus[i] == null)
+                    continue;
+
+                if (menus[i].gameObject.name == "OptionsMenu")
+                    return menus[i];
+
+                if (fallback == null)
+                    fallback = menus[i];
+            }
+            return fallback;
+        }
+
         IEnumerator ScaleMenu(Vector3 targetScale)
         {
+            if (menuTransform == null)
+                yield break;
+
             Vector3 startScale = menuTransform.localScale;
 
             float time = 0f;
@@ -92,6 +150,8 @@ namespace JuegoDeCartas.UI
         }
         public void BackToMenu()
         {
+            Time.timeScale = 1f;
+            RunStateCoordinator.Reset();
             UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
         }
 

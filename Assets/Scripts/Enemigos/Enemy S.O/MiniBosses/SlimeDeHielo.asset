@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
   m_Name: SlimeDeHielo
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
+  contentId: 4bbbe1eca8a61614c9b30016c7b839ca
   enemyName: Slime de Hielo
   maxHealth: 70
   minDamage: 6
@@ -20,9 +21,9 @@ MonoBehaviour:
   startArmor: 14
   goldRewardOverride: 0
   mechanics:
-  - mechanicName: Capas de escarcha
+  - mechanicName: ArmaduraPorTurno
     mechanicType: 1
-    armorPerTurn: 3
+    armorPerTurn: 5
     healPerTurn: 0
     damageRampPerTurn: 0
     junkCard: {fileID: 0}
@@ -36,5 +37,5 @@ MonoBehaviour:
     armorPercentOnRevive: 0
     minDamagePercentOnRevive: 120
     maxDamagePercentOnRevive: 120
-  sprite: {fileID: 7334587556932229253, guid: 6391341c8c38d8f40985b9179901b19e, type: 3}
+  sprite: {fileID: -6739160514793003808, guid: a40de8003dcf3ad46a5fa8fbb5fb155b, type: 3}
   animatorController: {fileID: 9100000, guid: b20e91d84eb45ba42a5a783d0e72fc07, type: 2}

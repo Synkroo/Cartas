@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35695a0454c80df449f7d8c8ce977015, type: 3}
   m_Name: SlimeNaranja
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Enemies.EnemyData
+  contentId: dec79bf02b2e0b8478d1077a1e8e1bc8
   enemyName: Slime Naranja
   maxHealth: 25
   minDamage: 4
@@ -20,5 +21,5 @@ MonoBehaviour:
   startArmor: 0
   goldRewardOverride: 0
   mechanics: []
-  sprite: {fileID: 6174710216954596254, guid: 6391341c8c38d8f40985b9179901b19e, type: 3}
-  animatorController: {fileID: 0}
+  sprite: {fileID: 1518521799208845435, guid: 42f9552004ea53340a632fa0536ed6ff, type: 3}
+  animatorController: {fileID: 9100000, guid: b1000000000000000000000000000004, type: 2}

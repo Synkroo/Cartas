@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273ec2d1544d2a3418a576ab0bdfda26, type: 3}
   m_Name: DescartarCarta
   m_EditorClassIdentifier: Assembly-CSharp::JuegoDeCartas.Articulos.ArticuloData
+  contentId: 5b96ec153d57408ab74f929b8d6b48d8
   nombre: Pergamino de Descarte
   rareza: 1
   imagen: {fileID: 0}
   descripcion: Elimina una carta de tu mazo actual.
   tipoEfecto: 14
   cantidad: 1
+  cardPool: []
