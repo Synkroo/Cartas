@@ -273,7 +273,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -328,11 +328,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 218
-        width: 51
-        height: 57
+        y: 220
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -349,12 +349,12 @@ TextureImporter:
       name: Slime-Sdheet_1
       rect:
         serializedVersion: 2
-        x: 53
-        y: 218
-        width: 49
-        height: 57
+        x: 52
+        y: 220
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -372,11 +372,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 104
-        y: 218
+        y: 220
         width: 52
-        height: 57
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -394,11 +394,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 156
-        y: 218
-        width: 51
-        height: 57
+        y: 220
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -416,11 +416,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 208
-        y: 218
+        y: 220
         width: 52
-        height: 57
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -437,12 +437,12 @@ TextureImporter:
       name: Slime-Sdheet_5
       rect:
         serializedVersion: 2
-        x: 261
-        y: 218
-        width: 50
-        height: 57
+        x: 260
+        y: 220
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -459,12 +459,12 @@ TextureImporter:
       name: Slime-Sdheet_6
       rect:
         serializedVersion: 2
-        x: 313
-        y: 218
-        width: 49
-        height: 57
+        x: 312
+        y: 220
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -482,11 +482,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 364
-        y: 218
-        width: 51
-        height: 57
+        y: 220
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -504,18 +504,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 164
+        y: 165
         width: 52
-        height: 53
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0e4ac67a731b972a0800000000000000
+      spriteID: 3f26c2aacc08e6c4888be00d2c4acc48
       internalID: -6739160514793003808
       vertices: []
       indices: 
@@ -526,18 +526,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 52
-        y: 164
+        y: 165
         width: 52
-        height: 53
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0411944126d5c0e30800000000000000
+      spriteID: 3d94d73c4a5302b41a12be9d51bff42d
       internalID: 4471051205900570944
       vertices: []
       indices: 
@@ -548,18 +548,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 104
-        y: 164
-        width: 51
-        height: 53
+        y: 165
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: cfc50c0b869e017f0800000000000000
+      spriteID: 3f45a529f362d4a4ab0a3a51fddcaf53
       internalID: -643758110862713604
       vertices: []
       indices: 
@@ -569,19 +569,19 @@ TextureImporter:
       name: Slime-Sdheet_11
       rect:
         serializedVersion: 2
-        x: 155
-        y: 164
-        width: 53
-        height: 53
+        x: 156
+        y: 165
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d31ae5fcc15849510800000000000000
+      spriteID: 6e8a4c61f4345ea49bfed90b5a3b10c3
       internalID: 1555014130134327613
       vertices: []
       indices: 
@@ -592,18 +592,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 208
-        y: 164
+        y: 165
         width: 52
-        height: 53
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 386dbf0a5ee3cdad0800000000000000
+      spriteID: 5dc4dbb7d18b7fd4d8754426532a95f1
       internalID: -2676194922595625341
       vertices: []
       indices: 
@@ -614,18 +614,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 260
-        y: 164
+        y: 165
         width: 52
-        height: 53
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7a94cb28f4fdc2970800000000000000
+      spriteID: 73402b503c127654e9dd880736f7fc52
       internalID: 8731599310153337255
       vertices: []
       indices: 
@@ -635,19 +635,19 @@ TextureImporter:
       name: Slime-Sdheet_14
       rect:
         serializedVersion: 2
-        x: 313
-        y: 164
-        width: 51
-        height: 53
+        x: 312
+        y: 165
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 37459a8a4fc2134d0800000000000000
+      spriteID: b153260a5315a1642b4807d9a740a369
       internalID: -3156692434496695181
       vertices: []
       indices: 
@@ -657,19 +657,19 @@ TextureImporter:
       name: Slime-Sdheet_15
       rect:
         serializedVersion: 2
-        x: 365
-        y: 164
-        width: 50
-        height: 53
+        x: 364
+        y: 165
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: bce047095abc15da0800000000000000
+      spriteID: c3a07a9e9458e7e4d82d50bddc204739
       internalID: -5957756920080888117
       vertices: []
       indices: 
@@ -680,18 +680,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 108
+        y: 110
         width: 52
         height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0e0f5d6038d75b290800000000000000
+      spriteID: d066c7ec80f393a4fa439410fa6c4384
       internalID: -7875250371678572320
       vertices: []
       indices: 
@@ -701,19 +701,19 @@ TextureImporter:
       name: Slime-Sdheet_17
       rect:
         serializedVersion: 2
-        x: 53
-        y: 108
-        width: 49
+        x: 52
+        y: 110
+        width: 52
         height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6ecbd901c14f74010800000000000000
+      spriteID: d7cebcefec7352347a116414fa8c4824
       internalID: 1173174629328338150
       vertices: []
       indices: 
@@ -723,19 +723,19 @@ TextureImporter:
       name: Slime-Sdheet_18
       rect:
         serializedVersion: 2
-        x: 103
-        y: 108
+        x: 104
+        y: 110
         width: 52
         height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 926322b3cf878b1d0800000000000000
+      spriteID: 5c9f062062355c0478d0a9b7d893c32f
       internalID: -3334782499348662743
       vertices: []
       indices: 
@@ -746,18 +746,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 156
-        y: 108
-        width: 51
+        y: 110
+        width: 52
         height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7ede041072584bc30800000000000000
+      spriteID: 067f50dad5b635746afa94e9c591b2f1
       internalID: 4374267540654845415
       vertices: []
       indices: 
@@ -768,18 +768,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 208
-        y: 108
+        y: 110
         width: 52
         height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 897ab30c0939c0eb0800000000000000
+      spriteID: eeaa61c918a6d6a43a9b888194e730cb
       internalID: -4752261256873007208
       vertices: []
       indices: 
@@ -790,18 +790,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 260
-        y: 108
+        y: 110
         width: 52
         height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b41bdf742ec3d0360800000000000000
+      spriteID: 47a7f3caede933640a1a69ebf34337bc
       internalID: 7137427927020187979
       vertices: []
       indices: 
@@ -811,19 +811,19 @@ TextureImporter:
       name: Slime-Sdheet_22
       rect:
         serializedVersion: 2
-        x: 314
-        y: 108
-        width: 48
+        x: 312
+        y: 110
+        width: 52
         height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c7e7eb335dd80ba50800000000000000
+      spriteID: a926b9c2e30c77741884da688e4b4b7f
       internalID: 6534879006150262396
       vertices: []
       indices: 
@@ -833,19 +833,19 @@ TextureImporter:
       name: Slime-Sdheet_23
       rect:
         serializedVersion: 2
-        x: 365
-        y: 108
-        width: 50
-        height: 54
+        x: 364
+        y: 110
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 81f2b7fd39e4944b0800000000000000
+      spriteID: 3ea002967be1de94f9ebfb7d09e302f6
       internalID: -5455743076566094056
       vertices: []
       indices: 
@@ -855,19 +855,19 @@ TextureImporter:
       name: Slime-Sdheet_24
       rect:
         serializedVersion: 2
-        x: 3
-        y: 0
-        width: 44
-        height: 35
+        x: 0
+        y: 55
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6f97fb505fe055050800000000000000
+      spriteID: 2a27140c85a95ea489d2a03151d5c532
       internalID: 5788549341580851702
       vertices: []
       indices: 
@@ -877,19 +877,19 @@ TextureImporter:
       name: Slime-Sdheet_25
       rect:
         serializedVersion: 2
-        x: 54
-        y: 0
-        width: 48
-        height: 38
+        x: 52
+        y: 55
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8f3859d09214f79e0800000000000000
+      spriteID: 73cb1fa946e947f4092adeeb62320f03
       internalID: -1621505696252722184
       vertices: []
       indices: 
@@ -899,19 +899,19 @@ TextureImporter:
       name: Slime-Sdheet_26
       rect:
         serializedVersion: 2
-        x: 105
-        y: 0
-        width: 48
-        height: 39
+        x: 104
+        y: 55
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 261f7ba6e98986090800000000000000
+      spriteID: 5c2def4f0577dc143805a5714932ca4b
       internalID: -8041009328507326110
       vertices: []
       indices: 
@@ -922,18 +922,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 156
-        y: 0
-        width: 51
-        height: 39
+        y: 55
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: af5cb79322b4f2f40800000000000000
+      spriteID: 99e7ff0464b0380449d6f72447d960ef
       internalID: 5705861863267091962
       vertices: []
       indices: 
@@ -943,19 +943,19 @@ TextureImporter:
       name: Slime-Sdheet_28
       rect:
         serializedVersion: 2
-        x: 207
-        y: 0
-        width: 53
-        height: 39
+        x: 208
+        y: 55
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f83db0eea38ac8a80800000000000000
+      spriteID: dd5e729f92b2013438a4b78d94963051
       internalID: -8463204628680682609
       vertices: []
       indices: 
@@ -966,18 +966,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 260
-        y: 0
+        y: 55
         width: 52
-        height: 39
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 74b929d7f403c1f00800000000000000
+      spriteID: c9603dd1486cc3a458c55eb7422c0cb7
       internalID: 1088798327884127047
       vertices: []
       indices: 
@@ -987,19 +987,19 @@ TextureImporter:
       name: Slime-Sdheet_30
       rect:
         serializedVersion: 2
-        x: 313
-        y: 0
-        width: 51
-        height: 39
+        x: 312
+        y: 55
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8ff013bb91f0c81f0800000000000000
+      spriteID: e375803632bbd21428082f769f0748ce
       internalID: -1041440810640273416
       vertices: []
       indices: 
@@ -1009,20 +1009,196 @@ TextureImporter:
       name: Slime-Sdheet_31
       rect:
         serializedVersion: 2
-        x: 365
-        y: 0
-        width: 49
-        height: 39
+        x: 364
+        y: 55
+        width: 52
+        height: 55
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f66f7d33f74c330e0800000000000000
+      spriteID: ac9ab61476d3a4f4a8ab94bedf96464d
       internalID: -2291271734791768465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 52
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3840cd4d895b3064897e995a5bfb85ca
+      internalID: 2163044950010656058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_33
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 0
+        width: 52
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca8ddfc329650ae4681d43cfe150a4e4
+      internalID: -1964800777088646268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_34
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 0
+        width: 52
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a034b703e1b41cb4883462e313d4cdbb
+      internalID: -3721300671697311214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_35
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 0
+        width: 52
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4420c916493990b46b5b769e75ea53bf
+      internalID: 8136649392853577004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_36
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 0
+        width: 52
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 588d7798f9b6c874c96a2eaa6712f4dd
+      internalID: -9218668833813227119
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_37
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 0
+        width: 52
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02ef0b6ae5742ba45b3f4e23bd413753
+      internalID: 8983816024807445234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_38
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 0
+        width: 52
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97f60312bb423b6459fd569be5a6571e
+      internalID: -7548907076427269787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime-Sdheet_39
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 0
+        width: 52
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec0887ba36c0a1447b49517cf663d2ad
+      internalID: -8134670692363516687
       vertices: []
       indices: 
       edges: []
@@ -1031,7 +1207,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 43e8daff6943a934e9780df6b101fc99
+    spriteID: d202d942046c821449cf7fd088a9e358
     internalID: 0
     vertices: []
     indices: 
@@ -1039,7 +1215,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":8.0,"y":5.0},"gridSpriteSize":{"x":52.0,"y":55.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Slime-Sdheet_0: -8961528746857462508
       Slime-Sdheet_1: 4647519899686996525
@@ -1076,35 +1254,8 @@ TextureImporter:
       Slime-Sdheet_38: -7548907076427269787
       Slime-Sdheet_39: -8134670692363516687
       Slime-Sdheet_4: -8435830874455702707
-      Slime-Sdheet_40: -4503473979344831170
-      Slime-Sdheet_41: -5544471833720688586
-      Slime-Sdheet_42: 4760283180357255327
-      Slime-Sdheet_43: -1725297324189879496
-      Slime-Sdheet_44: 3511137685760070477
-      Slime-Sdheet_45: -8640661001875341490
-      Slime-Sdheet_46: 4181222756026727426
-      Slime-Sdheet_47: 312940384844998626
-      Slime-Sdheet_48: -3255251693643614940
-      Slime-Sdheet_49: 7499395617050178304
       Slime-Sdheet_5: 886672614126678370
-      Slime-Sdheet_50: -7447403975774206253
-      Slime-Sdheet_51: -408622864787891943
-      Slime-Sdheet_52: -2967810140289323522
-      Slime-Sdheet_53: 7280854841874461388
-      Slime-Sdheet_54: 516940270332689891
-      Slime-Sdheet_55: 5293264972023761765
-      Slime-Sdheet_56: 1323430223238274459
-      Slime-Sdheet_57: -5817845603550658940
-      Slime-Sdheet_58: -4853111816183355720
-      Slime-Sdheet_59: -168426968667046374
       Slime-Sdheet_6: -4711118950556072730
-      Slime-Sdheet_60: -6121396083574661473
-      Slime-Sdheet_61: -4692221897557177127
-      Slime-Sdheet_62: -754109692369065805
-      Slime-Sdheet_63: 4242936770445347524
-      Slime-Sdheet_64: -6864874766487854808
-      Slime-Sdheet_65: 8862905526553542031
-      Slime-Sdheet_66: -4211437288738513088
       Slime-Sdheet_7: -1277067346313170942
       Slime-Sdheet_8: -6739160514793003808
       Slime-Sdheet_9: 4471051205900570944
